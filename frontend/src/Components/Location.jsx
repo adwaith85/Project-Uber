@@ -6,9 +6,7 @@ import { TbSquareDotFilled } from "react-icons/tb";
 function Location() {
     return (<>
     
-        <div className="p-5  h-1/4 bg-white flex items-center ">
-            <h1 className=" m-3 text-[2.4rem] font-semibold">Go anywhere with Uber</h1>
-        </div>
+       
         <div className=' flex flex-col gap-[20px] relative'>
             <div className=" flex justify-center bg-white  ">
                 <div className="relative w-[90%]">
@@ -41,10 +39,7 @@ function Location() {
                     />
                 </div>
             </div>
-            <div className="">
-                <button className='border rounded-xl bg-black text-m text-white ml-5  h-12 w-36'>See prices</button>
-                <button className='ml-10 underline underline-offset-8'>log in to see your recent activity</button>
-            </div>
+            
             
         </div>
 
