@@ -3,16 +3,68 @@ import Navbar from '../Components/Navbar'
 
 function Login() {
   return (<>
-  <Navbar/>
-    <div className="w-[100%] h-[100vh]  ">
-    <h2 className='text-4xl text-center p-[50px]  -mb-[40px] font-medium text-red-950 '>LOGIN</h2>
-    <form action="" className="text-center rounded-xl p-8 shadow-[0_10px_39px_rgba(0,12,29,0.37)] backdrop-blur-md bg-[var(--color-surface)] border border-[rgba(27,164,0,0.18)]  gap-[20px] w-[70%] h-[30%] max-w-[28rem] my-8 mx-auto flex flex-col items-center">
-        <input required className="rounded-[5px] text-center border user-valid:border-green-500"  type="text" placeholder='username' />
-        <input required className="rounded-[5px] text-center border user-valid:border-green-500" type="text" placeholder='email/number' />
-        <input required className="rounded-[5px] text-center border user-valid:border-green-500" type="text" placeholder='password' />
-        <button className='text-md rounded-[5px] border bg-sky-500 hover:bg-sky-700'>SUBMIT</button>
-    </form>
+    
+   <div className=" h-screen flex flex-col  -ml-15 items-center">
+      {/* Uber Header */}
+      <div className="w-142 bg-black py-3  px-6">
+        <h1 className="text-white p-1 ml-17 text-2xl font-medium">Uber</h1>
+      </div>
 
+      {/* Form Section */}
+      <div className="w-full max-w-md px-6 mt-4 -ml-4">
+        <h2 className="text-xl  mb-6">
+          What's your phone number or email?
+        </h2>
+
+        {/* Input */}
+        <div className="flex w-[476px]  border-none h-12 items-center bg-gray-200 rounded-lg px-4 py-3 -mt-3 mb-4 border border-gray-300">
+          <input
+            type="text"
+            placeholder="Enter phone number or email"
+            className="flex-1   bg-transparent outline-none text-gray-700 placeholder-gray-500"
+          />
+          {/* icon placeholder (you can replace with an actual icon) */}
+          <span className="text-gray-400">🔒</span>
+        </div>
+
+        {/* Continue Button */}
+        <button className="w-[476px]  bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition mb-5">
+          Continue
+        </button>
+
+        {/* Divider */}
+        <div className="flex w-120 items-center mb-3">
+          <div className="flex-1  h-px bg-gray-950"></div>
+          <span className="px-3 text-gray-500 text-sm">or</span>
+          <div className="flex-1 h-px bg-gray-950"></div>
+        </div>
+
+        {/* Google Button */}
+        <button className="w-[476px] border-none h-12  flex items-center justify-center gap-2 bg-gray-200 py-3 rounded-lg font-medium mb-2 border border-gray-300 hover:bg-gray-200">
+          <img
+            src="https://www.svgrepo.com/show/355037/google.svg"
+            alt="Google"
+            className="w-5 h-5"
+          />
+          Continue with Google
+        </button>
+
+        {/* Apple Button */}
+        <button className="w-[476px] border-none  h-12 flex items-center justify-center gap-2 bg-gray-200 py-3 rounded-lg font-medium border border-gray-300 hover:bg-gray-200">
+          <img
+            src="https://www.svgrepo.com/show/349442/apple.svg"
+            alt="Apple"
+            className="w-5 h-5"
+          />
+          Continue with Apple
+        </button>
+
+        {/* Disclaimer */}
+        <p className="text-xs text-gray-800 mt-9">
+          By continuing, you agree to calls, including by autodialer, WhatsApp,
+          or texts from Uber and its affiliates.
+        </p>
+      </div>
     </div>
   </>)
 }

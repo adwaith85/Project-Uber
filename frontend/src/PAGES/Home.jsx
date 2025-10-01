@@ -93,6 +93,66 @@ function Home() {
   />
 </div>
 
+         <div className="p-6">
+      {/* Heading */}
+      <h2 className="text-[27px] font-bold mb-4">Plan for later</h2>
+
+      {/* Card */}
+      <div className="bg-[#b7d8de] p-6 rounded-xl shadow-md">
+        <h2 className="text-[30px] font-bold pt-6 pb-5 mb-4">
+          Get your ride right with Uber Reserve
+        </h2>
+
+        <h4 className="text-base text-[18px] font-medium -mt-1 mb-4">Choose date and time</h4>
+          <div className='flex gap-37 -mt-2'>
+            <h6 className='text-gray-500'>Date</h6>
+            <h6 className='text-gray-500 '>Time</h6>
+            </div>
+          
+        {/* Input Fields */}
+        <div className="flex gap-1.5 mb-6">
+          
+          {/* Date */}
+          <div className="flex items-center bg-gray-100 rounded-lg px-3 py-3 w-44">
+            <span className="mr-2">📅</span>
+            
+            <input
+              type="date"
+              placeholder='Date'
+              className="w-32 outline-none bg-transparent text-black"
+            />
+          </div>
+
+          {/* Time */}
+          <div className="flex items-center bg-gray-100 rounded-lg px-3 py-3 w-44">
+            <span className="mr-2">🕒</span>
+            <select
+              name="Time"
+              className="w-full outline-none bg-transparent text-black"
+              defaultValue=""
+            >
+              <option value="" disabled>
+                Time
+              </option>
+              <option value="10:00PM">10:00 PM</option>
+              <option value="10:15PM">10:15 PM</option>
+              <option value="10:30PM">10:30 PM</option>
+              <option value="10:45PM">10:45 PM</option>
+              <option value="11:00PM">11:00 PM</option>
+              <option value="11:15PM">11:15 PM</option>
+              <option value="11:30PM">11:30 PM</option>
+              <option value="11:45PM">11:45 PM</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Button */}
+        <button className="w-[357px] bg-black text-white py-3 rounded-md font-semibold hover:bg-gray-800 transition">
+          Next
+        </button>
+      </div>
+    </div>
+
     </>)
 }
 
