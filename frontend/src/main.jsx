@@ -8,9 +8,9 @@ import CustomRoute from './Router.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <CustomRoute/>
-  {/* <Login/> */}
-  {/* <Location/> */}
-  {/* <Home/> */}
+    <CustomRoute />
+    {/* <Login/> */}
+    {/* <Location/> */}
+    {/* <Home/> */}
   </StrictMode>,
 )

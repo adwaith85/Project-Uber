@@ -2,11 +2,12 @@ import React from 'react'
 import { BiSolidNavigation } from "react-icons/bi";
 import { FaDotCircle } from "react-icons/fa";
 import { TbSquareDotFilled } from "react-icons/tb";
+import { Link } from "react-router-dom"
 
 function Location() {
     return (<>
-    
-       
+        
+
         <div className=' flex flex-col gap-[20px] relative'>
             <div className=" flex justify-center bg-white  ">
                 <div className="relative w-[90%]">
@@ -23,9 +24,9 @@ function Location() {
                         className=" w-full bg-gray-200 text-left pl-12 pr-12 py-3 border-none rounded-xl outline-none"
                     />
                 </div>
-               
+
             </div>
-            
+
             <div className="flex justify-center bg-white ">
                 <div className="relative w-[90%]">
 
@@ -40,7 +41,7 @@ function Location() {
                 </div>
             </div>
             
-            
+
         </div>
 
     </>)

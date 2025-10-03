@@ -1,10 +1,11 @@
 import React from 'react'
 import Navbar from '../Components/Navbar'
+import { Link } from "react-router-dom"
 
 function Login() {
   return (<>
-    
-   <div className=" h-screen flex flex-col  -ml-15 items-center">
+
+    <div className=" h-screen flex flex-col  -ml-15 items-center">
       {/* Uber Header */}
       <div className="w-142 bg-black py-3  px-6">
         <h1 className="text-white p-1 ml-17 text-2xl font-medium">Uber</h1>
@@ -23,14 +24,25 @@ function Login() {
             placeholder="Enter phone number or email"
             className="flex-1   bg-transparent outline-none text-gray-700 placeholder-gray-500"
           />
-          {/* icon placeholder (you can replace with an actual icon) */}
+         
+          <span className="text-gray-400">🔒</span>
+        </div>
+        <div className="flex w-[476px]  border-none h-12 items-center bg-gray-200 rounded-lg px-4 py-3 -mt-3 mb-4 border border-gray-300">
+          <input
+            type="text"
+            placeholder="Enter password"
+            className="flex-1   bg-transparent outline-none text-gray-700 placeholder-gray-500"
+          />
+      
           <span className="text-gray-400">🔒</span>
         </div>
 
-        {/* Continue Button */}
+
+    
+        <Link to="/UserHome">
         <button className="w-[476px]  bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition mb-5">
           Continue
-        </button>
+        </button></Link>
 
         {/* Divider */}
         <div className="flex w-120 items-center mb-3">
