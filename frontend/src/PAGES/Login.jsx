@@ -7,7 +7,7 @@ function Login() {
 
     <div className=" h-screen flex flex-col  -ml-15 items-center">
       {/* Uber Header */}
-      <div className="w-142 bg-black py-3  px-6">
+      <div className="w-full bg-black py-3  px-6">
         <h1 className="text-white p-1 ml-17 text-2xl font-medium">Uber</h1>
       </div>
 

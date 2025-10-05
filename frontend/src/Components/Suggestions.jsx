@@ -3,10 +3,10 @@ import { Link } from "react-router-dom"
 function Suggestions() {
   return (
     <>
-     <div className="p-6">
+     <div className="p-6 ">
       <h2 className="text-2xl font-bold mb-6">Suggestions</h2>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 md:w-[50%] ">
 
         <div className="flex justify-between items-center bg-gray-100 p-6 rounded-2xl ">
           <div>

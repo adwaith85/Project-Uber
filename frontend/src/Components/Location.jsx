@@ -8,9 +8,9 @@ function Location() {
     return (<>
         
 
-        <div className=' flex flex-col gap-[20px] relative'>
+        <div className=' flex flex-col gap-[20px] relative md:w-[30%] md:ml-2'>
             <div className=" flex justify-center bg-white  ">
-                <div className="relative w-[90%]">
+                <div className="relative w-[90%] ">
 
                     <FaDotCircle
                         className="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 object-cover"
