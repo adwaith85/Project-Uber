@@ -11,14 +11,14 @@ function Home() {
             <h1 className=" m-3 text-[2.4rem] font-semibold md:-mb-2 md:text-[2rem]">Go anywhere with Uber</h1>
         </div>
     <Location />
-    <div className="p-5 -ml-4">
-                <Link to="/BookRide" className='border rounded-lg p-3 bg-black text-md text-white ml-5  h-12 w-36 md:text-[14px]'>See Prices</Link>
+    <div className="p-5 -ml-4 flex flex-wrap">
+                <Link to="/BookRide" className='border rounded-lg p-3 bg-black text-md text-white ml-5  md:text-[14px]'>See Prices</Link>
                 {/* <button className='border rounded-xl bg-black text-m text-white ml-5  h-12 w-36'>See prices</button> */}
                 <Link to={'/Login'} className='ml-10 underline underline-offset-8 md:ml-3 md:text-[15px]'>log in to see your recent activity</Link>
                 {/* <button className='ml-10 underline underline-offset-8'>log in to see your recent activity</button> */}
             </div>
    <Suggestions/>
-    <div className="max-w-xl mx-auto text-center py-12 ">
+    <div className="w-[100%] mx-auto text-center py-12 ">
 
       <h2 className="text-[25px] -ml-10 font-bold mb-4">
         Log in to see your account details

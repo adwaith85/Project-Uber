@@ -5,6 +5,7 @@ import BookRide from "./Components/BookRide";
 import NavbarX from "./Components/NavbarX";
 import UserHome from "./PAGES/UserHome";
 import Suggestions from "./Components/Suggestions";
+import AccountManager from "./PAGES/AccountManager";
 
 function CustomRoute() {
     return <>
@@ -14,8 +15,8 @@ function CustomRoute() {
                 <Route path="/Login" element={<Login />} />
                 <Route path="/BookRide" element={<BookRide />} />
                 <Route path="/NavbarX" element={<NavbarX />} />
-                <Route path="/UserHome" element={<UserHome/>} />
-                
+                <Route path="/UserHome" element={<UserHome />} />
+                <Route path="/AccountManager" element={<AccountManager />} />
             </Routes>
         </BrowserRouter>
     </>

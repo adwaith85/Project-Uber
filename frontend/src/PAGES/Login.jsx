@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 function Login() {
   return (<>
 
-    <div className=" h-screen flex flex-col  -ml-15 items-center">
+    <div className="w-[100%] h-screen flex flex-col  items-center">
       {/* Uber Header */}
       <div className="w-full bg-black py-3  px-6">
         <h1 className="text-white p-1 ml-17 text-2xl font-medium">Uber</h1>
@@ -18,7 +18,7 @@ function Login() {
         </h2>
 
         {/* Input */}
-        <div className="flex w-[476px]  border-none h-12 items-center bg-gray-200 rounded-lg px-4 py-3 -mt-3 mb-4 border border-gray-300">
+        <div className="flex w-[100%]  border-none h-12 items-center bg-gray-200 rounded-lg px-4 py-3 -mt-3 mb-4 border border-gray-300">
           <input
             type="text"
             placeholder="Enter phone number or email"
@@ -27,7 +27,7 @@ function Login() {
          
           <span className="text-gray-400">🔒</span>
         </div>
-        <div className="flex w-[476px]  border-none h-12 items-center bg-gray-200 rounded-lg px-4 py-3 -mt-3 mb-4 border border-gray-300">
+        <div className="flex w-[100%]  border-none h-12 items-center bg-gray-200 rounded-lg px-4 py-3 -mt-3 mb-4 border border-gray-300">
           <input
             type="text"
             placeholder="Enter password"
@@ -40,19 +40,19 @@ function Login() {
 
     
         <Link to="/UserHome">
-        <button className="w-[476px]  bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition mb-5">
+        <button className="w-[100%]  bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition mb-5">
           Continue
         </button></Link>
 
         {/* Divider */}
-        <div className="flex w-120 items-center mb-3">
+        <div className="flex w-[100%] items-center mb-3">
           <div className="flex-1  h-px bg-gray-950"></div>
           <span className="px-3 text-gray-500 text-sm">or</span>
           <div className="flex-1 h-px bg-gray-950"></div>
         </div>
 
         {/* Google Button */}
-        <button className="w-[476px] border-none h-12  flex items-center justify-center gap-2 bg-gray-200 py-3 rounded-lg font-medium mb-2 border border-gray-300 hover:bg-gray-200">
+        <button className="w-[100%] border-none h-12  flex items-center justify-center gap-2 bg-gray-200 py-3 rounded-lg font-medium mb-2 border border-gray-300 hover:bg-gray-200">
           <img
             src="https://www.svgrepo.com/show/355037/google.svg"
             alt="Google"
@@ -62,7 +62,7 @@ function Login() {
         </button>
 
         {/* Apple Button */}
-        <button className="w-[476px] border-none  h-12 flex items-center justify-center gap-2 bg-gray-200 py-3 rounded-lg font-medium border border-gray-300 hover:bg-gray-200">
+        <button className="w-[100%] border-none  h-12 flex items-center justify-center gap-2 bg-gray-200 py-3 rounded-lg font-medium border border-gray-300 hover:bg-gray-200">
           <img
             src="https://www.svgrepo.com/show/349442/apple.svg"
             alt="Apple"
