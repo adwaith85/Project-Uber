@@ -1,8 +1,31 @@
-import React from 'react'
+import api from '../Api/Axiosclient'
+import React, { useRef } from 'react'
 import Navbar from '../Components/Navbar'
 import { Link } from "react-router-dom"
+import { useNavigate } from 'react-router-dom'
+import UserStore from '../Store/UserStore'
 
 function Login() {
+  const { addToken } = UserStore()
+  const EmailRef = useRef("")
+  const PasswordRef = useRef("")
+  const nav = useNavigate()
+
+  const Onsubmit = async () => {
+    try {
+      const response = await api.post("/login", {
+        email: EmailRef.current.value,
+        password: PasswordRef.current.value,
+      })
+      addToken(response.data.token)
+      console.log("logged in:", response.data);
+      if (response.data == "user not found") {
+        nav("/Register")
+      }
+    } catch (error) {
+      console.error("login error:", error.response?.data || error.message);
+    }
+  }
   return (<>
 
     <div className="w-[100%] h-screen flex flex-col  items-center">
@@ -23,8 +46,9 @@ function Login() {
             type="text"
             placeholder="Enter phone number or email"
             className="flex-1   bg-transparent outline-none text-gray-700 placeholder-gray-500"
+            ref={EmailRef}
           />
-         
+
           <span className="text-gray-400">🔒</span>
         </div>
         <div className="flex w-[100%]  border-none h-12 items-center bg-gray-200 rounded-lg px-4 py-3 -mt-3 mb-4 border border-gray-300">
@@ -32,17 +56,20 @@ function Login() {
             type="text"
             placeholder="Enter password"
             className="flex-1   bg-transparent outline-none text-gray-700 placeholder-gray-500"
+            ref={PasswordRef}
           />
-      
+
           <span className="text-gray-400">🔒</span>
         </div>
 
 
-    
-        <Link to="/UserHome">
-        <button className="w-[100%]  bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition mb-5">
+
+
+        <button className="w-[100%]  bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition mb-5"
+          onClick={Onsubmit}
+        >
           Continue
-        </button></Link>
+        </button>
 
         {/* Divider */}
         <div className="flex w-[100%] items-center mb-3">

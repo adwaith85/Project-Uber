@@ -6,6 +6,8 @@ import NavbarX from "./Components/NavbarX";
 import UserHome from "./PAGES/UserHome";
 import Suggestions from "./Components/Suggestions";
 import AccountManager from "./PAGES/AccountManager";
+import PersonalInfo from "./Components/PersonalInfo";
+import Register from "./PAGES/Register";
 
 function CustomRoute() {
     return <>
@@ -17,6 +19,8 @@ function CustomRoute() {
                 <Route path="/NavbarX" element={<NavbarX />} />
                 <Route path="/UserHome" element={<UserHome />} />
                 <Route path="/AccountManager" element={<AccountManager />} />
+                <Route path="/PersonalInfo" element={<PersonalInfo />} />
+                <Route path="/Register" element={<Register />} />
             </Routes>
         </BrowserRouter>
     </>
