@@ -1,9 +1,17 @@
-
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import { FaUser } from "react-icons/fa";
 import { GrShieldSecurity } from "react-icons/gr";
 import { RiGitRepositoryPrivateFill } from "react-icons/ri";
+import api from '../Api/Axiosclient';
+import UserStore from '../Store/UserStore';
+
+
 function AccountHome() {
+
+    const [userdata, SetUsrData] = useState({})
+    const user=UserStore((state)=>state.user)
+    
+
     return (
         <div className="w-full h-full ">
             {/* profile img name etc */}
@@ -16,10 +24,10 @@ function AccountHome() {
                     />
                 </div>
                 <h2 className="text-[1.2rem] font-semibold tracking-wider text-center mt-[10px] ">
-                    ....
+                    {user?.name ?? "not found"}
                 </h2>
                 <h2 className="text-[0.9rem]  tracking-wider text-center text-gray-500  ">
-                    ....
+                    {user?.email ?? "not found"}
                 </h2>
             </div>
             {/* Home buttons */}

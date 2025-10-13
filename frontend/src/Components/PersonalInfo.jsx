@@ -2,36 +2,43 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../Api/Axiosclient';
 import UserStore from '../Store/UserStore';
+import { Link } from "react-router-dom"
 
 
 function PersonalInfo() {
 
     const Navigate = useNavigate()
 
-    const [userdata,SetUsrData]=useState({})
+    // const [userdata, SetUsrData] = useState({})
 
 
-  const {token}=UserStore()
-    const Onsubmit=async()=>{
-        try{
-            const response=await api.get("/GetDetails",{
-  headers: {
-    Authorization: `Bearer ${token}`  // ✅ Important
-  }
-})
-            console.log(response.data)
+    const adduser=UserStore((state)=>state.adduser)
+    const user=UserStore((state)=>state.user)
+    // const { token } = UserStore()
+    // const Onsubmit = async () => {
+    //     try {
+    //         const response = await api.get("/GetDetails", {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`  // ✅ Important
+    //             }
+    //         })
+    //         console.log(response.data)
 
-            SetUsrData(response.data)
-        }catch(error){
-            res.send(error)
-        }
-    }
- useEffect(()=>{
-    Onsubmit()
- },[])
+    //         SetUsrData(response.data)
+    //         adduser(response.data)
+    //     } catch (error) {
+    //         res.send(error)
+    //     }
+    // }
+    // useEffect(() => {
+    //     Onsubmit()
+    // }, [])
     return (
-        <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md font-sans">
+        <div className="relative max-w-md mx-auto p-6 bg-white rounded-lg shadow-md font-sans">
             <h2 className="text-2xl font-bold mb-6">Personal info</h2>
+            <button className='absolute top-6 right-10 float-left'>
+                <Link to="/UpdateForm">edit</Link>
+            </button>
 
             {/* Profile Picture */}
             <div className="relative w-20 h-20 mb-6">
@@ -57,7 +64,7 @@ function PersonalInfo() {
             <div className="mb-4">
                 <p className="text-sm text-gray-500">Name</p>
                 <div onClick={() => Navigate("/account/updatename")} className="flex items-center justify-between  cursor-pointer">
-                    <p className="text-lg">{userdata?.name??"not found"}</p>
+                    <p className="text-lg">{user?.name ?? "not found"}</p>
                     <span className="text-gray-400">&gt;</span>
                 </div>
             </div>
@@ -67,7 +74,7 @@ function PersonalInfo() {
                 <p className="text-sm text-gray-500">Phone number</p>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <p className="text-lg">+91 000000000</p>
+                        <p className="text-lg">{user?.number ?? "not found"}</p>
                         <span title="Unverified">
                             ⚠️
                         </span>
@@ -81,7 +88,7 @@ function PersonalInfo() {
                 <p className="text-sm text-gray-500">Email</p>
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <p className="text-lg">.......</p>
+                        <p className="text-lg">{user?.email ?? "not found"}</p>
                         <span title="Verified">✅</span>
                     </div>
                     <span className="text-gray-400">&gt;</span>

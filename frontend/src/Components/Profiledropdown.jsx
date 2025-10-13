@@ -2,9 +2,11 @@ import React from 'react'
 import { useState } from "react";
 import { Link } from "react-router-dom"
 import { ChevronDown, User, HelpCircle, Wallet, BookOpen, Settings, Car, Truck } from "lucide-react";
-import { Navigate, useNavigate } from 'react-router-dom';
-
+import {  useNavigate } from 'react-router-dom';
+import UserStore from '../Store/UserStore';
 function Profiledropdown() {
+    const logout=UserStore((state)=>state.logout)
+    const user=UserStore((state)=>state.user)
     const [isOpen, setIsOpen] = useState(false);
     const Navigate = useNavigate()
     return (
@@ -13,8 +15,10 @@ function Profiledropdown() {
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center space-x-2 bg-black text-white px-4 py-2 rounded-full"
-            >
-                <span>....</span>
+            >{
+                user? <span>{user.name}</span>:<></>
+            }
+               
                 <ChevronDown className="w-4 h-4" />
             </button>
 
@@ -24,7 +28,7 @@ function Profiledropdown() {
                     {/* User Info */}
                     <div className="flex justify-between items-center border-b pb-3 mb-3">
                         <div>
-                            <h3 className="font-bold text-lg">adwaith</h3>
+                            <h3 className="font-bold text-lg">{user.name}</h3>
                         </div>
                         <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
                             <User className="w-6 h-6 text-gray-500" />
@@ -61,7 +65,9 @@ function Profiledropdown() {
                             <Truck className="w-5 h-5" />
                             <span>Drive & deliver</span>
                         </button>
-                        <button className="w-full h-[3rem] text-red-500 bg-gray-100 rounded-lg ">
+                        <button onClick={()=>{logout()
+                            Navigate("/")
+                        }} className="w-full h-[3rem] text-red-500 bg-gray-100 rounded-lg ">
                             <Link to="/">Sign out</Link>
                              </button>
                     </div>

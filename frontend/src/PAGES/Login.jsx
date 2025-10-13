@@ -18,8 +18,10 @@ function Login() {
         password: PasswordRef.current.value,
       })
       addToken(response.data.token)
-      console.log("logged in:", response.data);
-      if (response.data == "user not found") {
+      console.log("logged in:", response.data.token);
+      if (response.data.token) {
+        nav("/UserHome")
+      }else{
         nav("/Register")
       }
     } catch (error) {
@@ -53,7 +55,7 @@ function Login() {
         </div>
         <div className="flex w-[100%]  border-none h-12 items-center bg-gray-200 rounded-lg px-4 py-3 -mt-3 mb-4 border border-gray-300">
           <input
-            type="text"
+            type="password"
             placeholder="Enter password"
             className="flex-1   bg-transparent outline-none text-gray-700 placeholder-gray-500"
             ref={PasswordRef}
@@ -64,7 +66,7 @@ function Login() {
 
 
 
-
+        
         <button className="w-[100%]  bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition mb-5"
           onClick={Onsubmit}
         >

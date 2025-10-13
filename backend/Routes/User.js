@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.post("/login", Login)
 router.post("/register", Register)
-router.post("/updateuser", UpdateUser)
+router.post("/updateuser",LoginCheck, UpdateUser)
 router.get("/GetDetails",LoginCheck,GetDetails)
 
 export default router

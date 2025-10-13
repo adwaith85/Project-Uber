@@ -5,6 +5,11 @@ const UserStore = create(
     persist(
         (set) => ({
             token: null,
+            user:null,
+            adduser:(userdata)=>
+                set((state)=>({
+                    user:userdata,
+                })),
             addToken: (item) =>
                 set((state) => ({
                     token: item,
@@ -12,6 +17,11 @@ const UserStore = create(
             removeToken: () =>
                 set((state) => ({
                     token: null,
+                })),
+            logout:()=>
+                set((state)=>({
+                    token:null,
+                    user:null,
                 })),
         }),
         {
