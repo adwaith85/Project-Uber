@@ -9,6 +9,8 @@ import AccountManager from "./PAGES/AccountManager";
 import PersonalInfo from "./Components/PersonalInfo";
 import Register from "./PAGES/Register";
 import UpdateForm from "./Components/UpdateForm";
+import ProfileUpdate from "./Components/ProfileUpdate";
+import UpdateNumber from "./Components/UpdateNumber";
 
 function CustomRoute() {
     return <>
@@ -23,6 +25,8 @@ function CustomRoute() {
                 <Route path="/PersonalInfo" element={<PersonalInfo />} />
                 <Route path="/Register" element={<Register />} />
                 <Route path="/UpdateForm" element={<UpdateForm />} />
+                <Route path="/ProfileUpdate" element={<ProfileUpdate />} />
+                <Route path="/UpdateNumber" element={<UpdateNumber />} />
             </Routes>
         </BrowserRouter>
     </>

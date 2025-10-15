@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import api from "../Api/Axiosclient"
 import UserStore from '../Store/UserStore'
+import { Link } from 'react-router-dom'
 function UpdateForm() {
     const [firstname, setFirstName] = useState("")
     const [lastname, setLastName] = useState("")
-    const {token} = UserStore()
+    const { token } = UserStore()
     console.log(token)
     const UpdateData = async () => {
         try {
@@ -72,7 +73,7 @@ function UpdateForm() {
                 className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-900 transition"
                 onClick={UpdateData}
             >
-                Update
+                <Link to="/AccountManager">Update</Link>
             </button>
         </div>
 

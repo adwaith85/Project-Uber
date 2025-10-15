@@ -22,6 +22,7 @@ function Login() {
       if (response.data.token) {
         nav("/UserHome")
       }else{
+        alert("email not exist or wrong password, if not registered pls kindly register")
         nav("/Register")
       }
     } catch (error) {

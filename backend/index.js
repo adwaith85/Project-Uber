@@ -11,7 +11,7 @@ const app = express()
 mongoose.connect(MONGO_URL)
 app.use(express.json())
 app.use(cors())
-
+app.use("/uploads", express.static("uploads"));
 app.use(UserRoute)
 
 
