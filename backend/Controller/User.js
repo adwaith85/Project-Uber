@@ -71,30 +71,7 @@ export const UpdateUser = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-// export const UpdateUser = async (req, res) => {
-//   try {
-//     const { number, profileimg, address, name } = req.body;
 
-//     // Find user by authenticated email
-//     const user = await UserModel.findOne({ email: req.user.email });
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     // Update only fields that are provided
-//     // if (number) user.number = number;
-//     if (profileimg) user.profileimg = profileimg;
-//     if (address) user.address = address;
-//     if (name) user.name = name;
-
-//     await user.save();
-//     res.status(200).json({ message: "User updated successfully" });
-
-//   } catch (error) {
-//     console.error("Error updating user:", error);
-//     res.status(500).json({ message: "Internal Server Error" });
-//   }
-// };
 
 export const GetDetails = async (req, res) => {
   try {

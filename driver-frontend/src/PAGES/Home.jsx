@@ -1,9 +1,17 @@
-import React from 'react'
+import React, { useState } from "react";
+import Navbar from "../Components/Navbar";
+
 
 function Home() {
+  
   return (
-    <div>Home</div>
-  )
+    <div className="flex flex-col h-screen bg-gray-100 text-gray-900">
+      <Navbar/>
+      <main className="flex-1 overflow-y-auto p-6 space-y-6">
+
+      </main>
+    </div>
+  ); 
 }
 
-export default Home
+export default Home;

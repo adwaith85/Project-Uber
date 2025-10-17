@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   number: { type: String},
   profileimg:{type:String},
-  address:{type:String},
+  
 });
 
 // Use a normal function so "this" refers to the document
