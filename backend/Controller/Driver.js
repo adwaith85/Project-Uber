@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import DriverModel from "../Model/Driver.js";
 
-// ✅ DRIVER LOGIN
+
 export const DriverLogin = async (req, res) => {
   const { email, password } = req.body;
 
@@ -35,8 +35,6 @@ export const DriverLogin = async (req, res) => {
 };
 
 
-
-// ✅ DRIVER REGISTER
 export const DriverRegister = async (req, res) => {
   try {
     const { name, email, number, password } = req.body;
@@ -60,18 +58,16 @@ export const DriverRegister = async (req, res) => {
 
 
 
-// ✅ UPDATE DRIVER DETAILS
 export const UpdateDriver = async (req, res) => {
   try {
     const { name, number, carnumber } = req.body;
     const file = req.file;
 
-    const driver = await DriverModel.findOne({ email: req.driver.email });
+    const driver = await DriverModel.findOne({ email: req.user.email });
     if (!driver) {
       return res.status(404).json({ message: "Driver not found" });
     }
 
-    // Update only the provided fields
     if (name) driver.name = name;
     if (number) driver.number = number;
     if (carnumber) driver.carnumber = carnumber;
@@ -91,22 +87,19 @@ export const UpdateDriver = async (req, res) => {
 
 
 
-// ✅ GET DRIVER DETAILS
 export const Details = async (req, res) => {
   try {
-    // 1️⃣ Ensure driver info exists from JWT middleware
-    if (!req.driver || !req.driver.email) {
+
+    if (!req.user || !req.user.email) {
       console.error("Missing driver info in request");
       return res.status(401).json({ message: "Unauthorized - invalid or missing token" });
     }
 
-    // 2️⃣ Fetch driver from DB
-    const driver = await DriverModel.findOne({ email: req.driver.email });
+    const driver = await DriverModel.findOne({ email: req.user.email });
     if (!driver) {
       return res.status(404).json({ message: "Driver not found" });
     }
 
-    // 3️⃣ Construct absolute image URL
     const baseUrl = `${req.protocol}://${req.get("host")}`;
     const driverData = {
       ...driver._doc,

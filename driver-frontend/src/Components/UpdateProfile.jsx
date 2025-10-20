@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import api from "../Api/Axiosclient"; 
-import UserStore from "../Store/UserStore"; 
+import DriverStore from "../Store/DriverStore";
+import api from "../API/AxiosClient"
 
-function ProfileUpdate() {
-  const { token } = UserStore(); 
+function UpdateProfile() {
+  const { token } = DriverStore();
   const [profileImg, setProfileImg] = useState(null);
   const [preview, setPreview] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("");
@@ -37,7 +37,7 @@ function ProfileUpdate() {
 
     try {
       setUploadStatus("Uploading...");
-      const response = await api.post("/updateuser", formData, {
+      const response = await api.post("/UpdateDriver", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -100,14 +100,14 @@ function ProfileUpdate() {
       {/* Link to Account Manager */}
       <div className="mt-4 text-center">
         <Link
-          to="/AccountManager"
+          to="/Profile"
           className="text-sm text-blue-600 hover:underline"
         >
-          Back to Account Manager
+          Back to Profile
         </Link>
       </div>
     </div>
   );
 }
 
-export default ProfileUpdate;
+export default UpdateProfile

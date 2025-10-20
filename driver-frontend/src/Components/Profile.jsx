@@ -3,7 +3,9 @@ import Navbar from "./Navbar";
 import { Pencil } from "lucide-react";
 import { useQuery } from '@tanstack/react-query';
 import DriverStore from "../Store/DriverStore";
-import Api from "../API/AxiosClient"
+import api from "../API/AxiosClient"
+import { Link } from "react-router-dom";
+
 
 function Profile() {
   const token = DriverStore((state) => state.token);
@@ -11,7 +13,7 @@ function Profile() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['driver'],
     queryFn: async () => {
-      const res = await Api.get('/Details', {
+      const res = await api.get('/Details', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -50,7 +52,8 @@ function Profile() {
               // onClick={handleImageClick}
               className="absolute bottom-0 right-[calc(50%-56px)] bg-black text-white p-1.5 rounded-full hover:bg-gray-800 transition"
             >
-              <Pencil className="w-4 h-4" />
+              <Link to="/UpdateProfile">
+                <Pencil className="w-4 h-4" /></Link>
             </button>
 
             <input
@@ -61,7 +64,7 @@ function Profile() {
               className="hidden"
             />
 
-            <h2 className="mt-4 text-2xl font-semibold text-gray-900">adwaith</h2>
+            <h2 className="mt-4 text-2xl font-semibold text-gray-900">{data?.name ?? "not found"}</h2>
             <p className="text-gray-500 text-sm">Driver</p>
           </div>
 
@@ -74,7 +77,7 @@ function Profile() {
                 <p className="text-gray-900 font-medium">{data?.name ?? "not found"}</p>
               </div>
               <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                <Pencil className="w-4 h-4 text-gray-600" />
+                <Link to="/UpdateName"><Pencil className="w-4 h-4 text-gray-600" /></Link>
               </button>
             </div>
 
@@ -84,9 +87,9 @@ function Profile() {
                 <p className="text-gray-600 text-sm">Email</p>
                 <p className="text-gray-900 font-medium">{data?.email ?? "not found"}</p>
               </div>
-              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+              {/* <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                 <Pencil className="w-4 h-4 text-gray-600" />
-              </button>
+              </button> */}
             </div>
 
             {/* Phone Number */}
@@ -96,7 +99,7 @@ function Profile() {
                 <p className="text-gray-900 font-medium">+91 {data?.number ?? "not found"}</p>
               </div>
               <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                <Pencil className="w-4 h-4 text-gray-600" />
+                <Link to="/UpdateNumber"><Pencil className="w-4 h-4 text-gray-600" /></Link>
               </button>
             </div>
 
@@ -107,7 +110,7 @@ function Profile() {
                 <p className="text-gray-900 font-medium">{data?.carnumber ?? "not found"}</p>
               </div>
               <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                <Pencil className="w-4 h-4 text-gray-600" />
+                <Link to="/UpdateNumber"> <Pencil className="w-4 h-4 text-gray-600" /></Link>
               </button>
             </div>
           </div>

@@ -16,10 +16,10 @@ function Login() {
 
     try {
       const response = await Api.post("/login", {
-        email: emailRef.current.value,
-        password: passwordRef.current.value,
+        email: emailRef.current?.value,
+        password: passwordRef.current?.value,
       });
-
+      console.log(response.data.token)
       if (response.data.token) {
         addToken(response.data.token); // store token
         navigate("/"); // redirect to dashboard

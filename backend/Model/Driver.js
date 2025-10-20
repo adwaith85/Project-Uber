@@ -31,11 +31,15 @@ const DriverSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    role:{
+      type:String,
+      enum:["driver"],
+      default:"driver",
+    }
   },
   { timestamps: true }
 );
 
-// ✅ Hash password only if it's modified or new
 DriverSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   try {
@@ -47,12 +51,10 @@ DriverSchema.pre("save", async function (next) {
   }
 });
 
-// ✅ Method to compare passwords
 DriverSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-// ✅ Hide password when converting to JSON
 DriverSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;

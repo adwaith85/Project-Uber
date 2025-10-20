@@ -2,6 +2,7 @@ import NavbarX from '../Components/NavbarX'
 import Location from '../Components/Location'
 import { Link } from "react-router-dom"
 import Suggestions from '../Components/Suggestions'
+import CurrentLocationMap from '../Components/CurrentLocationMap'
 
 function UserHome() {
   return (<>
@@ -22,6 +23,9 @@ function UserHome() {
       <div className='w-90% h-100 bg-blue-400 mt-5'></div>
       <div>
         <Suggestions />
+      </div>
+      <div className="">
+        <CurrentLocationMap/>
       </div>
     </div>
 
