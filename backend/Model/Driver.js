@@ -31,12 +31,26 @@ const DriverSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    role:{
-      type:String,
-      enum:["driver"],
-      default:"driver",
-    }
+    role: {
+      type: String,
+      enum: ["driver"],
+      default: "driver",
+    },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number],
+        default: [0, 0],
+      },
+    },
+
   },
+
+
   { timestamps: true }
 );
 

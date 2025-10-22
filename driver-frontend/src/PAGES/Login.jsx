@@ -14,21 +14,43 @@ function Login() {
     e.preventDefault();
     setMessage(""); // clear previous message
 
-    try {
-      const response = await Api.post("/login", {
-        email: emailRef.current?.value,
-        password: passwordRef.current?.value,
-      });
-      console.log(response.data.token)
-      if (response.data.token) {
-        addToken(response.data.token); // store token
-        navigate("/"); // redirect to dashboard
-      } else {
-        setMessage("Login failed. Please check your credentials.");
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const location = {
+          type: "Point",
+          coordinates: [position.coords.longitude, position.coords.latitude],
+        }
+        try {
+          const response = await Api.post(
+            "/driverlogin",
+            JSON.stringify({
+              email: emailRef.current?.value,
+              password: passwordRef.current?.value,
+              location: location,
+            }),
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          console.log(response.data.token)
+          if (response.data.token) {
+            addToken(response.data.token); // store token
+            navigate("/"); // redirect to dashboard
+          } else {
+            setMessage("Login failed. Please check your credentials.");
+          }
+        } catch (error) {
+          setMessage(error.response?.data?.message || "Login failed. Please try again.");
+        }
+      },
+      (error) => {
+        console.error("geolocation error", error)
       }
-    } catch (error) {
-      setMessage(error.response?.data?.message || "Login failed. Please try again.");
-    }
+    )
+
   };
 
   return (
@@ -80,7 +102,7 @@ function Login() {
 
         {/* Extra Links */}
         <div className="mt-6 text-center text-gray-400 text-sm">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <button
             onClick={() => navigate("/register")}
             className="text-white hover:underline"

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 export const LoginCheck = async (req, res, next) => {
-  console.log("middle", process.env.JWT_SECRET);
+  // console.log("middle", process.env.JWT_SECRET);
 
   try {
     const authHeader = req.headers['authorization'];

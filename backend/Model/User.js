@@ -6,9 +6,20 @@ const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  number: { type: String},
-  profileimg:{type:String},
-  
+  number: { type: String },
+  profileimg: { type: String },
+  location: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point",
+    },
+    coordinates: {
+      type: [Number],
+      default: [0, 0],
+    },
+  },
+
 });
 
 // Use a normal function so "this" refers to the document

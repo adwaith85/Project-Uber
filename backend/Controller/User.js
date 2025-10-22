@@ -4,7 +4,7 @@ import UserModel from "../Model/User.js"
 
 
 export const Login = async (req, res) => {
-  const { email, password } = req.body
+  const { email, password, location } = req.body
 
   console.log("secret", process.env.JWT_SECRET)
   try {
@@ -12,6 +12,14 @@ export const Login = async (req, res) => {
     if (user) {
       const isMatch = await user.comparePassword(password)
       if (isMatch) {
+        if (location && location.type == "Point" && Array.isArray(location.coordinates) && location.coordinates.length == 2) {
+          user.location = {
+            type: "Point",
+            coordinates: location.coordinates,
+          };
+          user.markModified("location");
+          await user.save();
+        }
         const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: '24h' })
         res.json({
           status: "Login done",
@@ -28,6 +36,46 @@ export const Login = async (req, res) => {
     return res.status(500).send("server error")
   }
 };
+
+
+export const UpdateLocation = async (req, res) => {
+  const { email, location } = req.body
+  try {
+    const user = await UserModel.findOne({ email })
+    if (!user) {
+      return res.status(400).json({ message: "user not found" })
+    }
+    if (
+      location &&
+      location.type === "Point" &&
+      Array.isArray(location.coordinates) &&
+      location.coordinates.length === 2
+    ) {
+      user.location = {
+        type: "Point",
+        coordinates: location.coordinates,
+      };
+      user.markModified("location");
+      await user.save();
+      return res.status(200).json({
+        status: "Success",
+        message: "location updated successfully",
+      })
+    } else {
+      return res.status(400).json({
+        status: "error",
+        message: "location update failed",
+      })
+    }
+  } catch (error) {
+    console.error("error while updating location", error.message, error.stack)
+    res.status(500).json({ status: "error", message: error.message })
+  }
+}
+
+
+
+
 
 export const Register = async (req, res) => {
   try {
