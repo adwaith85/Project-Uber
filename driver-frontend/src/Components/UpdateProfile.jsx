@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import DriverStore from "../Store/DriverStore";
-import api from "../API/AxiosClient"
+import api from "../api/AxiosClient";
+
 
 function UpdateProfile() {
   const { token } = DriverStore();

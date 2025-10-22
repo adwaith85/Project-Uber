@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Api from "../api/AxiosClient.js"; // your axios instance
+ // your axios instance
 import DriverStore from "../Store/DriverStore.js";
+import api from "../api/AxiosClient.js";
 
 function Register() {
   const nameRef = useRef("");
@@ -16,7 +17,7 @@ function Register() {
     setMessage("");
 
     try {
-      const response = await Api.post("/driverregister", {
+      const response = await api.post("/driverregister", {
         name: nameRef.current.value,
         email: emailRef.current.value,
         number: numberRef.current.value,

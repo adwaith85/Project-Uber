@@ -3,8 +3,9 @@ import Navbar from "./Navbar";
 import { Pencil } from "lucide-react";
 import { useQuery } from '@tanstack/react-query';
 import DriverStore from "../Store/DriverStore";
-import api from "../API/AxiosClient"
+
 import { Link } from "react-router-dom";
+import api from "../api/AxiosClient";
 
 
 function Profile() {

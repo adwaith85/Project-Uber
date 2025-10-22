@@ -3,13 +3,14 @@ import Navbar from "../Components/Navbar";
 import CurrentLocationMap from "../Components/CurrentLocationMap";
 import DriverStore from "../Store/DriverStore";
 import { useMutation } from "@tanstack/react-query"
+import api from "../api/AxiosClient";
 
 function Home() {
 
   const token = DriverStore((state) => state.token)
   const locationMutation = useMutation({
     mutationFn: async (formdata) => {
-      return await Api.put("/updatelocation", formdata, {
+      return await api.put("/updatelocation", formdata, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

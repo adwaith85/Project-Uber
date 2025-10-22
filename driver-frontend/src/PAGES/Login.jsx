@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Api from "../api/AxiosClient.js"; // your axios instance
+ // your axios instance
 import DriverStore from "../Store/DriverStore"; // default import
+import api from "../api/AxiosClient";
 
 function Login() {
   const emailRef = useRef("");
@@ -21,7 +22,7 @@ function Login() {
           coordinates: [position.coords.longitude, position.coords.latitude],
         }
         try {
-          const response = await Api.post(
+          const response = await api.post(
             "/driverlogin",
             JSON.stringify({
               email: emailRef.current?.value,
