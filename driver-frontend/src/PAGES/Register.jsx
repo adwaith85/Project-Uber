@@ -1,8 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
- // your axios instance
 import DriverStore from "../Store/DriverStore.js";
-import api from "../api/AxiosClient.js";
+import api from "../api/axiosClient.js";
 
 function Register() {
   const nameRef = useRef("");

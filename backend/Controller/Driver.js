@@ -47,14 +47,15 @@ export const DriverLogin = async (req, res) => {
 
 
 export const UpdateLocation = async (req, res) => {
-  const { email, location } = req.body
+  const { location } = req.body
   try {
     const email=req.user?.email;
     if(!email){
       return res.status(400).json({status:"error",message:"missing email in token"});
     }
+    
+    const driver = await DriverModel.findOne({email})
 
-    const driver = await DriverModel.findOne({ email })
     if (!driver) {
       return res.status(400).json({ message: "user not found" })
     }

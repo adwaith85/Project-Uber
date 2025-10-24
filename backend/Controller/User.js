@@ -41,6 +41,10 @@ export const Login = async (req, res) => {
 export const UpdateLocation = async (req, res) => {
   const { email, location } = req.body
   try {
+     const email=req.user?.email;
+    if(!email){
+      return res.status(400).json({status:"error",message:"missing email in token"});
+    }
     const user = await UserModel.findOne({ email })
     if (!user) {
       return res.status(400).json({ message: "user not found" })

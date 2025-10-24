@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { Link } from 'react-router-dom'
 import DriverStore from "../Store/DriverStore"
-import api from '../api/AxiosClient'
+import api from '../api/axiosClient'
 function UpdateName() {
     const [firstname, setFirstName] = useState("")
     const [lastname, setLastName] = useState("")

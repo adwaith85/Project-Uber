@@ -3,7 +3,8 @@ import Navbar from "../Components/Navbar";
 import CurrentLocationMap from "../Components/CurrentLocationMap";
 import DriverStore from "../Store/DriverStore";
 import { useMutation } from "@tanstack/react-query"
-import api from "../api/AxiosClient";
+import api from "../api/axiosClient";
+
 
 
 function Home() {
@@ -34,7 +35,7 @@ function Home() {
       (position) => {
         const location = {
           type: "Point",
-          coordinates: [position.coords.longitute, position.coords.latitude],
+          coordinates: [position.coords.longitude, position.coords.latitude],
         }
         locationMutation.mutate({ location })
       },
