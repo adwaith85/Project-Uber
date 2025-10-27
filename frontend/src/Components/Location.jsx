@@ -40,13 +40,13 @@ function Location({ onPickupSelect, onDropoffSelect }) {
   };
 
   return (
-    <div className="flex flex-col gap-[20px] relative md:w-[30%] md:ml-2">
-      {/* Pickup */}
+    <div className="flex flex-col w-full -ml-2 gap-[20px] relative md:w-[60%] md:ml-2">
+
       <div className="flex justify-center bg-white">
-        <div className="relative w-[90%]">
+        <div className="relative w-[90%] ">
           <FaDotCircle className="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6" />
-          <BiSolidNavigation className="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6" />
-          <div className="w-[1.8px] h-[50px] bg-black mt-1 absolute z-2 left-[22.7px] top-6"></div>
+          <BiSolidNavigation className="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 lg:-right-17 " />
+          <div className="w-[1.8px] h-[50px] bg-black mt-1 absolute z-2 left-[22.7px] top-6 "></div>
           <input
             type="text"
             placeholder="Pickup location"
@@ -55,10 +55,10 @@ function Location({ onPickupSelect, onDropoffSelect }) {
               setPickup(e.target.value);
               fetchPlaces(e.target.value, "pickup");
             }}
-            className="w-full bg-gray-200 text-left pl-12 pr-12 py-3 border-none rounded-xl outline-none"
+            className="w-full bg-gray-200 text-left pl-12 pr-12 py-3 border-none rounded-xl outline-none md:w-[350px] md:pl-13  md:text-left "
           />
-          {suggestions.length > 0 && (
-            <ul className="absolute bg-white border rounded-xl mt-1 max-h-48 overflow-y-auto w-full z-10">
+          {/* {suggestions.length > 0 && (
+            <ul className="absolute bg-white border rounded-3xl mt-1 max-h-48 overflow-y-auto w-full z-10">
               {suggestions.map((s, i) => (
                 <li
                   key={i}
@@ -69,11 +69,10 @@ function Location({ onPickupSelect, onDropoffSelect }) {
                 </li>
               ))}
             </ul>
-          )}
+          )} */}
         </div>
       </div>
 
-      {/* Dropoff */}
       <div className="flex justify-center bg-white">
         <div className="relative w-[90%]">
           <TbSquareDotFilled className="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6" />
@@ -85,23 +84,24 @@ function Location({ onPickupSelect, onDropoffSelect }) {
               setDropoff(e.target.value);
               fetchPlaces(e.target.value, "dropoff");
             }}
-            className="w-full bg-gray-200 text-left pl-12 pr-12 py-3 border-none rounded-xl outline-none"
+            className="w-full bg-gray-200 text-left pl-12 pr-12 py-3 border-none rounded-xl outline-none md:w-[350px] md:pl-13 "
           />
-          {suggestions.length > 0 && (
-            <ul className="absolute bg-white border rounded-xl mt-1 max-h-48 overflow-y-auto w-full z-10">
-              {suggestions.map((s, i) => (
-                <li
-                  key={i}
-                  onClick={() => handleSelect(s)}
-                  className="p-2 hover:bg-gray-100 cursor-pointer text-sm"
-                >
-                  {s.name}
-                </li>
-              ))}
-            </ul>
-          )}
+
         </div>
       </div>
+      {suggestions.length > 0 && (
+        <ul className="lg:w-full md:ml-[50px] absolute bg-white border rounded-xl mt-30 max-h-48 overflow-y-auto ml-[50px] z-20">
+          {suggestions.map((s, i) => (
+            <div
+              key={i}
+              onClick={() => handleSelect(s)}
+              className="p-2 hover:bg-gray-100 cursor-pointer text-sm"
+            >
+              {s.name}
+            </div>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

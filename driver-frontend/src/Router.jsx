@@ -20,6 +20,7 @@ function CustomRoute() {
                 <Route path="/UpdateProfile" element={<UpdateProfile />} />
                 <Route path="/UpdateName" element={<UpdateName />} />
                 <Route path="/UpdateNumber" element={<UpdateNumber />} />
+                
             </Routes>
         </BrowserRouter>
     </>
