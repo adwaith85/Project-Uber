@@ -1,72 +1,89 @@
-import React, { useState, useEffect } from 'react';
-import { FaCar } from "react-icons/fa";
-import {
-  GoogleMap,
-  Marker,
-  useJsApiLoader,
-} from '@react-google-maps/api';
+// CurrentLocationMap.jsx
+import React, { useEffect, useState, useRef } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import io from 'socket.io-client';
+import 'leaflet/dist/leaflet.css';
 
-const containerStyle = {
-  width: '100%',
-  height: '400px',
+// Custom car icon
+const carIcon = new L.Icon({
+  iconUrl: '/car.png',
+  iconSize: [50, 50],
+  iconAnchor: [25, 25],
+});
+
+const RecenterMap = ({ position }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (position) map.setView(position, map.getZoom(), { animate: true });
+  }, [position, map]);
+  return null;
 };
 
 const CurrentLocationMap = () => {
   const [location, setLocation] = useState(null);
   const [error, setError] = useState(null);
-
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: 'AIzaSyAckZqFHLtXwxQuaIrxkByBZTq2XUqywNg', // Replace with your API key
-  });
+  const socketRef = useRef(null); // ✅ keep socket persistent
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-        },
-        (err) => {
-          setError('Unable to retrieve location');
-          console.error(err);
-        }
-      );
-    } else {
-      setError('Geolocation not supported');
-    }
+    // Create socket connection
+    socketRef.current = io('http://localhost:8080', {
+      transports: ['websocket'], // Use websocket to avoid polling issues
+    });
+
+    socketRef.current.on('connect', () => {
+      console.log('🚗 Client connected:', socketRef.current.id);
+    });
+
+    socketRef.current.on('disconnect', () => {
+      console.log('❌ Client disconnected:', socketRef.current.id);
+    });
+
+    return () => {
+      socketRef.current.disconnect(); // Only disconnect on unmount
+    };
   }, []);
 
-  if (loadError) return <div>Error loading maps</div>;
-  if (!isLoaded) return <div>Loading map...</div>;
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setError('Geolocation is not supported by your browser');
+      return;
+    }
+
+    const watcher = navigator.geolocation.watchPosition(
+      (pos) => {
+        const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        setLocation([coords.lat, coords.lng]);
+
+        // ✅ Send location updates to server
+        if (socketRef.current && socketRef.current.connected) {
+          socketRef.current.emit('location:update', coords);
+        }
+      },
+      (err) => {
+        console.error(err);
+        setError('Unable to retrieve your location');
+      },
+      { enableHighAccuracy: true }
+    );
+
+    return () => navigator.geolocation.clearWatch(watcher);
+  }, []);
 
   return (
-    <div>
-      {error && <p>{error}</p>}
+    <div style={{ width: '100%', height: '400px' }}>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       {location ? (
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={location}
-          zoom={15}
-        >
-          <Marker
-            position={location}
-            icon={{
-              url: "/car.png",
-              scaledSize: new window.google.maps.Size(50, 50),
-              rotation: 90, // angle in degrees
-            }}
-            options={{
-              icon: {
-                url: "/car.png",
-                scaledSize: new window.google.maps.Size(50, 50),
-                rotation: 90,
-                anchor: new window.google.maps.Point(25, 25),
-              },
-            }}
+        <MapContainer center={location} zoom={15} style={{ height: '100%', width: '100%' }}>
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
           />
-        </GoogleMap>
+          <Marker position={location} icon={carIcon}>
+            <Popup>You are here 🚗</Popup>
+          </Marker>
+          <RecenterMap position={location} />
+        </MapContainer>
       ) : (
         <p>Fetching current location...</p>
       )}
@@ -74,4 +91,4 @@ const CurrentLocationMap = () => {
   );
 };
 
-export default CurrentLocationMap
+export default CurrentLocationMap;

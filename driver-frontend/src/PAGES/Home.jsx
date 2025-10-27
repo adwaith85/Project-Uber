@@ -45,12 +45,12 @@ function Home() {
     )
   }
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      updateLocation()
-    }, 10000);
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     updateLocation()
+  //   }, 10000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <div className="flex flex-col h-screen bg-gray-100 text-gray-900">
