@@ -9,11 +9,8 @@ import UserStore from '../Store/UserStore';
 
 function AccountHome() {
 
-    // const [userdata, SetUsrData] = useState({})
-    // const user=UserStore((state)=>state.user)
     const token = UserStore((state) => state.token);
 
-    // Fetch user details
     const { data, isLoading, error } = useQuery({
         queryKey: ['user'],
         queryFn: async () => {

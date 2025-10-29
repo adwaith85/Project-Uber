@@ -7,11 +7,9 @@ import "leaflet/dist/leaflet.css";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
-// Default marker fallback
 const DefaultIcon = L.icon({ iconUrl, shadowUrl: iconShadow });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-// Custom icons
 const carIcon = new L.Icon({
   iconUrl: "/carimg.png",
   iconSize: [50, 50],
@@ -24,13 +22,12 @@ const userIcon = new L.Icon({
   iconAnchor: [25, 25],
 });
 
-// ---------- FitBounds Helper (runs only once or when route/pickup/dropoff changes) ----------
 function FitBounds({ route, pickupLocation, dropoffLocation, currentLocation }) {
   const map = useMap();
   const hasFitted = useRef(false);
 
   useEffect(() => {
-    if (hasFitted.current) return; // ✅ Prevent re-fitting every update
+    if (hasFitted.current) return; 
 
     const validPoints = [
       ...(route?.filter(p => p?.lat && p?.lng).map(p => [p.lat, p.lng]) || []),
@@ -52,7 +49,6 @@ function FitBounds({ route, pickupLocation, dropoffLocation, currentLocation }) 
   return null;
 }
 
-// ---------- Smoothly Follow Driver ----------
 function FollowDriver({ driverLocation }) {
   const map = useMap();
   const prevLocation = useRef(null);
@@ -60,7 +56,6 @@ function FollowDriver({ driverLocation }) {
   useEffect(() => {
     if (!driverLocation) return;
 
-    // Only pan if the marker moves significantly (not every small GPS jitter)
     const prev = prevLocation.current;
     if (
       !prev ||
@@ -75,13 +70,11 @@ function FollowDriver({ driverLocation }) {
   return null;
 }
 
-// ---------- Main Component ----------
 const CurrentLocationMap = ({ currentLocation, pickupLocation, dropoffLocation, route }) => {
   const [driverLocation, setDriverLocation] = useState(null);
   const socketRef = useRef(null);
 
   useEffect(() => {
-    // ✅ Connect to backend
     socketRef.current = io("http://localhost:8080", {
       transports: ["websocket"],
       reconnection: true,
@@ -95,7 +88,6 @@ const CurrentLocationMap = ({ currentLocation, pickupLocation, dropoffLocation, 
       console.log("❌ Disconnected from Socket.IO");
     });
 
-    // ✅ Listen for driver live location
     socketRef.current.on("driver:location", (location) => {
       if (location?.lat && location?.lng) {
         setDriverLocation(location);
@@ -107,7 +99,6 @@ const CurrentLocationMap = ({ currentLocation, pickupLocation, dropoffLocation, 
     };
   }, []);
 
-  // Choose initial map center
   const center =
     driverLocation
       ? [driverLocation.lat, driverLocation.lng]
@@ -117,7 +108,7 @@ const CurrentLocationMap = ({ currentLocation, pickupLocation, dropoffLocation, 
           ? [pickupLocation.lat, pickupLocation.lng]
           : dropoffLocation
             ? [dropoffLocation.lat, dropoffLocation.lng]
-            : [20.5937, 78.9629]; // Default center (India)
+            : [20.5937, 78.9629]; 
 
   return (
     <div className="rounded-2xl overflow-hidden shadow-md mt-4 md:w-[100%]">
@@ -133,21 +124,18 @@ const CurrentLocationMap = ({ currentLocation, pickupLocation, dropoffLocation, 
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          {/* Passenger Current Location */}
           {currentLocation && (
             <Marker position={[currentLocation.lat, currentLocation.lng]} icon={userIcon}>
               <Popup>Your Location 🚶</Popup>
             </Marker>
           )}
 
-          {/* Driver Live Location */}
           {driverLocation && (
             <Marker position={[driverLocation.lat, driverLocation.lng]} icon={carIcon}>
               <Popup>Driver 🚗</Popup>
             </Marker>
           )}
 
-          {/* Pickup & Dropoff */}
           {pickupLocation && (
             <Marker position={[pickupLocation.lat, pickupLocation.lng]} icon={userIcon}>
               <Popup>Pickup 📍</Popup>
@@ -160,7 +148,6 @@ const CurrentLocationMap = ({ currentLocation, pickupLocation, dropoffLocation, 
             </Marker>
           )}
 
-          {/* Route Path */}
           {route && route.length > 0 && (
             <Polyline
               positions={route.map((p) => [p.lat, p.lng])}
@@ -170,7 +157,6 @@ const CurrentLocationMap = ({ currentLocation, pickupLocation, dropoffLocation, 
             />
           )}
 
-          {/* Run fit once, then follow driver dynamically */}
           <FitBounds
             route={route}
             pickupLocation={pickupLocation}
