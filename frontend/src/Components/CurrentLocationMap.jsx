@@ -10,25 +10,34 @@ import iconShadow from "leaflet/dist/images/marker-shadow.png";
 const DefaultIcon = L.icon({ iconUrl, shadowUrl: iconShadow });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-const carIcon = new L.Icon({
+const startIcon = new L.Icon({
+  iconUrl: "/start.png",
+  iconSize: [50, 50],
+  iconAnchor: [25, 25],
+});
+
+const dropIcon = new L.Icon({
+  iconUrl: "/drop.png",
+  iconSize: [50, 50],
+  iconAnchor: [25, 25],
+});
+
+const driverIcon = new L.Icon({
   iconUrl: "/carimg.png",
   iconSize: [50, 50],
   iconAnchor: [25, 25],
 });
 
 const userIcon = new L.Icon({
-  iconUrl: "/person1.png",
-  iconSize: [50, 50],
-  iconAnchor: [25, 25],
+  iconUrl: "/user.png", // optional: replace with your user icon
+  iconSize: [40, 40],
+  iconAnchor: [20, 20],
 });
 
 function FitBounds({ route, pickupLocation, dropoffLocation, currentLocation }) {
   const map = useMap();
-  const hasFitted = useRef(false);
 
   useEffect(() => {
-    if (hasFitted.current) return; 
-
     const validPoints = [
       ...(route?.filter(p => p?.lat && p?.lng).map(p => [p.lat, p.lng]) || []),
       pickupLocation?.lat && pickupLocation?.lng ? [pickupLocation.lat, pickupLocation.lng] : null,
@@ -42,8 +51,6 @@ function FitBounds({ route, pickupLocation, dropoffLocation, currentLocation }) 
     } else if (validPoints.length === 1) {
       map.flyTo(validPoints[0], 14, { animate: true });
     }
-
-    hasFitted.current = true;
   }, [route, pickupLocation, dropoffLocation, currentLocation, map]);
 
   return null;
@@ -74,6 +81,7 @@ const CurrentLocationMap = ({ currentLocation, pickupLocation, dropoffLocation, 
   const [driverLocation, setDriverLocation] = useState(null);
   const socketRef = useRef(null);
 
+  // Connect to Socket.IO for driver location updates
   useEffect(() => {
     socketRef.current = io("http://localhost:8080", {
       transports: ["websocket"],
@@ -99,6 +107,8 @@ const CurrentLocationMap = ({ currentLocation, pickupLocation, dropoffLocation, 
     };
   }, []);
 
+  // const defaultCenter = [10.8505, 76.2711];
+
   const center =
     driverLocation
       ? [driverLocation.lat, driverLocation.lng]
@@ -108,14 +118,14 @@ const CurrentLocationMap = ({ currentLocation, pickupLocation, dropoffLocation, 
           ? [pickupLocation.lat, pickupLocation.lng]
           : dropoffLocation
             ? [dropoffLocation.lat, dropoffLocation.lng]
-            : [20.5937, 78.9629]; 
+            : [11.9635, 75.3208]; // fallback: kerala
 
   return (
     <div className="rounded-2xl overflow-hidden shadow-md mt-4 md:w-[100%]">
       {center ? (
         <MapContainer
           center={center}
-          zoom={13}
+          zoom={12}
           scrollWheelZoom={true}
           className="h-[400px] w-full z-0"
         >
@@ -131,19 +141,19 @@ const CurrentLocationMap = ({ currentLocation, pickupLocation, dropoffLocation, 
           )}
 
           {driverLocation && (
-            <Marker position={[driverLocation.lat, driverLocation.lng]} icon={carIcon}>
+            <Marker position={[driverLocation.lat, driverLocation.lng]} icon={driverIcon}>
               <Popup>Driver 🚗</Popup>
             </Marker>
           )}
 
           {pickupLocation && (
-            <Marker position={[pickupLocation.lat, pickupLocation.lng]} icon={userIcon}>
+            <Marker position={[pickupLocation.lat, pickupLocation.lng]} icon={startIcon}>
               <Popup>Pickup 📍</Popup>
             </Marker>
           )}
 
           {dropoffLocation && (
-            <Marker position={[dropoffLocation.lat, dropoffLocation.lng]}>
+            <Marker position={[dropoffLocation.lat, dropoffLocation.lng]} icon={dropIcon}>
               <Popup>Dropoff 🎯</Popup>
             </Marker>
           )}

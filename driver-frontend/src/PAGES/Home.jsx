@@ -56,7 +56,7 @@ function Home() {
     <div className="flex flex-col h-screen bg-gray-100 text-gray-900">
       <Navbar />
       <main className="flex-1 overflow-y-auto p-6 space-y-6">
-        <div className="">
+        <div className="w-[95%] ">
           <CurrentLocationMap />
         </div>
       </main>
