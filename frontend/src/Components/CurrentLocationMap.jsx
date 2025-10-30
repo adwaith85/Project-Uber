@@ -29,7 +29,7 @@ const driverIcon = new L.Icon({
 });
 
 const userIcon = new L.Icon({
-  iconUrl: "/user.png", // optional: replace with your user icon
+  iconUrl: "/user.png", 
   iconSize: [40, 40],
   iconAnchor: [20, 20],
 });

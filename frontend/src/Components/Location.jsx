@@ -7,7 +7,7 @@ function Location({ onPickupSelect, onDropoffSelect }) {
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [query, setQuery] = useState({ value: "", type: "" }); // track current input for debounce
+  const [query, setQuery] = useState({ value: "", type: "" }); 
 
   const fetchPlaces = async (searchQuery, type) => {
     if (!searchQuery) return setSuggestions([]);
@@ -29,7 +29,6 @@ function Location({ onPickupSelect, onDropoffSelect }) {
     }
   };
 
-  // Debounce effect
   useEffect(() => {
     if (!query.value) return setSuggestions([]);
 
@@ -38,7 +37,7 @@ function Location({ onPickupSelect, onDropoffSelect }) {
     }, 1000); // 2 seconds debounce
 
     return () => {
-      clearTimeout(handler); // cleanup previous timeout if user types again
+      clearTimeout(handler); 
     };
   }, [query]);
 
