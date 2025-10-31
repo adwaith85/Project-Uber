@@ -9,10 +9,10 @@ function UpdateCartype() {
     const { token } = DriverStore()
     const UpdateData = async () => {
         try {
-            const name = `${firstname} ${lastname}`.trim()
+            const cartype = `${firstname} ${lastname}`.trim()
             const response = await api.post(
                 '/UpdateDriver',
-                { name },
+                { cartype },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
