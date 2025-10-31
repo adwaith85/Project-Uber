@@ -58,8 +58,7 @@ function Location({ onPickupSelect, onDropoffSelect }) {
       <div className="flex justify-center bg-white">
         <div className="relative w-[90%] ">
           <FaDotCircle className="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6" />
-          <BiSolidNavigation className="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 lg:-right-17 " />
-          <div className="w-[1.8px] h-[50px] bg-black mt-1 absolute z-2 left-[22.7px] top-6 "></div>
+          <BiSolidNavigation className="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 md:left-77 " />
           <input
             type="text"
             placeholder="Pickup location"

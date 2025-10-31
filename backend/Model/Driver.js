@@ -31,6 +31,10 @@ const DriverSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    cartype: {
+      type: String,
+      trim: true,
+    },
     role: {
       type: String,
       enum: ["driver"],
@@ -74,6 +78,9 @@ DriverSchema.methods.toJSON = function () {
   delete obj.password;
   return obj;
 };
+
+
+DriverSchema.index({ location: "2dsphere" });
 
 const DriverModel = mongoose.model("Driver", DriverSchema);
 export default DriverModel;

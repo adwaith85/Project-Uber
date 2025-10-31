@@ -91,6 +91,15 @@ function Profile() {
                 <Pencil className="w-4 h-4 text-gray-600" />
               </button> */}
             </div>
+            <div className="flex justify-between items-center border-b pb-2">
+              <div>
+                <p className="text-gray-600 text-sm">Car-Type</p>
+                <p className="text-gray-900 font-medium">{data?.cartype ?? "not found"}</p>
+              </div>
+              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                <Link to="/updatecartype"><Pencil className="w-4 h-4 text-gray-600" /></Link>
+              </button>
+            </div>
 
             {/* Phone Number */}
             <div className="flex justify-between items-center border-b pb-2">

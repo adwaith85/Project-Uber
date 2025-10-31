@@ -116,7 +116,7 @@ export const DriverRegister = async (req, res) => {
 
 export const UpdateDriver = async (req, res) => {
   try {
-    const { name, number, carnumber } = req.body;
+    const { name, number, carnumber,cartype } = req.body;
     const file = req.file;
 
     const driver = await DriverModel.findOne({ email: req.user.email });
@@ -127,6 +127,7 @@ export const UpdateDriver = async (req, res) => {
     if (name) driver.name = name;
     if (number) driver.number = number;
     if (carnumber) driver.carnumber = carnumber;
+    if (cartype) driver.cartype = cartype;
     if (file) driver.profileimg = `/uploads/${file.filename}`;
 
     await driver.save();
@@ -174,3 +175,32 @@ export const Details = async (req, res) => {
   }
 };
 
+
+
+
+export const nearby=async (req, res) => {
+  try {
+    const { lat, lng } = req.query
+    if (!lat || !lng) {
+      return res.status(400).json({ error: "Latitude and longitude are required" })
+    }
+
+    const longitude = parseFloat(lng)
+    const latitude = parseFloat(lat)
+
+    // Find drivers within 5 km radius (5000 meters)
+    const drivers = await DriverModel.find({
+      location: {
+        $near: {
+          $geometry: { type: "Point", coordinates: [longitude, latitude] },
+          $maxDistance: 5000 // meters
+        }
+      }
+    })
+
+    res.json({ count: drivers.length, drivers })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: "Server error" })
+  }
+}

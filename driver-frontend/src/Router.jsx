@@ -9,6 +9,7 @@ import UpdateName from "./Components/UpdateName";
 import UpdateNumber from "./Components/UpdateNumber";
 import DriverStore from "./Store/DriverStore";
 import Logouterror from "../../frontend/src/Components/Logouterror";
+import UpdateCartype from "./Components/UpdateCartype";
 
 function CustomRoute() {
     const token=DriverStore((state)=>state.token)
@@ -23,6 +24,7 @@ function CustomRoute() {
                 <Route path="/UpdateProfile" element={token?(<UpdateProfile />):<Logouterror/>} />
                 <Route path="/UpdateName" element={token?(<UpdateName />):<Logouterror/>} />
                 <Route path="/UpdateNumber" element={token?(<UpdateNumber />):<Logouterror/>} />
+                <Route path="/updatecartype" element={token?(<UpdateCartype/>):<Logouterror/>} />
                 
             </Routes>
         </BrowserRouter>

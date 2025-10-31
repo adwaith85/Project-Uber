@@ -21,7 +21,9 @@ function UserHome() {
     const dLon = toRad(coord2.lng - coord1.lng)
     const a =
       Math.sin(dLat / 2) ** 2 +
-      Math.cos(toRad(coord1.lat)) * Math.cos(toRad(coord2.lat)) * Math.sin(dLon / 2) ** 2
+      Math.cos(toRad(coord1.lat)) *
+        Math.cos(toRad(coord2.lat)) *
+        Math.sin(dLon / 2) ** 2
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
     return (R * c).toFixed(2)
   }
@@ -63,7 +65,6 @@ function UserHome() {
         </div>
 
         <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-10 p-4">
-
           <div className="w-full lg:w-1/3 flex flex-col items-start md:items-start">
             <Location
               onPickupSelect={(loc) => setPickupLocation(loc)}
@@ -78,8 +79,13 @@ function UserHome() {
                 Show Route
               </button>
 
-              <Link to="/BookRide">
-                <button className="border rounded-xl p-3 bg-gray-700 text-md text-white w-36 hover:bg-gray-600 transition">
+              {/* ✅ Pass pickup latitude and longitude as parameters to BookRide page */}
+              <Link
+                to={`/BookRide?lat=${pickupLocation?.lat || ""}&lng=${pickupLocation?.lng || ""}`}
+              >
+                <button
+                  className="border rounded-xl p-3 bg-gray-700 text-md text-white w-36 hover:bg-gray-600 transition"
+                >
                   Book Ride
                 </button>
               </Link>
