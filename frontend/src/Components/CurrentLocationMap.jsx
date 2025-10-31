@@ -134,11 +134,11 @@ const CurrentLocationMap = ({ currentLocation, pickupLocation, dropoffLocation, 
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          {currentLocation && (
+          {/* {currentLocation && (
             <Marker position={[currentLocation.lat, currentLocation.lng]} icon={userIcon}>
               <Popup>Your Location 🚶</Popup>
             </Marker>
-          )}
+          )} */}
 
           {driverLocation && (
             <Marker position={[driverLocation.lat, driverLocation.lng]} icon={driverIcon}>

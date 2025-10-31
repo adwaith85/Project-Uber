@@ -6,6 +6,7 @@ import http from "http";
 import { Server } from "socket.io";
 import UserRoute from "./Routes/User.js";
 import driverRoute from "./Routes/Driver.js";
+import DriverModel from "./Model/Driver.js";
 
 dotenv.config();
 
@@ -38,9 +39,43 @@ io.on("connection", (socket) => {
   });
 
   // receive driver’s location from frontend
-  socket.on("location:update", (coords) => {
-    console.log("📍 Driver location:", coords);
-    io.emit("driver:location", coords); // broadcast to all users
+  socket.on("driver:location:update", async(data) => {
+    try {
+      const { email, coordinates } = data;
+
+      if (!email || !coordinates) {
+        console.warn("⚠️ Missing email or coordinates");
+        return;
+      }
+
+      // GeoJSON expects [longitude, latitude]
+      const { lat, lng } = coordinates;
+
+      // Update driver’s location in DB
+      const driver = await DriverModel.findOneAndUpdate(
+        { email },
+        {
+          $set: {
+            location: {
+              type: "Point",
+              coordinates: [lng, lat],
+            },
+          },
+        },
+        { new: true }
+      );
+
+          io.emit("driver:location", coordinates);
+
+      if (driver) {
+        console.log(`📍 Updated location for ${driver.email}:`, driver.location.coordinates);
+      } else {
+        console.warn(`⚠️ Driver not found for email: ${email}`);
+      }
+    } catch (err) {
+      console.error("❌ Error updating location:", err);
+    }
+ 
   });
 });
 

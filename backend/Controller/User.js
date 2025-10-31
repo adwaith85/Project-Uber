@@ -38,44 +38,44 @@ export const Login = async (req, res) => {
 };
 
 
-export const UpdateLocation = async (req, res) => {
-  const { email, location } = req.body
-  try {
-     const email=req.user?.email;
-    if(!email){
-      return res.status(400).json({status:"error",message:"missing email in token"});
-    }
-    const user = await UserModel.findOne({ email })
-    if (!user) {
-      return res.status(400).json({ message: "user not found" })
-    }
-    if (
-      location &&
-      location.type === "Point" &&
-      Array.isArray(location.coordinates) &&
-      location.coordinates.length === 2
-    ) {
-      user.location = {
-        type: "Point",
-        coordinates: location.coordinates,
-      };
-      user.markModified("location");
-      await user.save();
-      return res.status(200).json({
-        status: "Success",
-        message: "location updated successfully",
-      })
-    } else {
-      return res.status(400).json({
-        status: "error",
-        message: "location update failed",
-      })
-    }
-  } catch (error) {
-    console.error("error while updating location", error.message, error.stack)
-    res.status(500).json({ status: "error", message: error.message })
-  }
-}
+// export const UpdateLocation = async (req, res) => {
+//   const { email, location } = req.body
+//   try {
+//      const email=req.user?.email;
+//     if(!email){
+//       return res.status(400).json({status:"error",message:"missing email in token"});
+//     }
+//     const user = await UserModel.findOne({ email })
+//     if (!user) {
+//       return res.status(400).json({ message: "user not found" })
+//     }
+//     if (
+//       location &&
+//       location.type === "Point" &&
+//       Array.isArray(location.coordinates) &&
+//       location.coordinates.length === 2
+//     ) {
+//       user.location = {
+//         type: "Point",
+//         coordinates: location.coordinates,
+//       };
+//       user.markModified("location");
+//       await user.save();
+//       return res.status(200).json({
+//         status: "Success",
+//         message: "location updated successfully",
+//       })
+//     } else {
+//       return res.status(400).json({
+//         status: "error",
+//         message: "location update failed",
+//       })
+//     }
+//   } catch (error) {
+//     console.error("error while updating location", error.message, error.stack)
+//     res.status(500).json({ status: "error", message: error.message })
+//   }
+// }
 
 
 

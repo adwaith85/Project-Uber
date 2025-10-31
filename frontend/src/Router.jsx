@@ -11,22 +11,25 @@ import Register from "./PAGES/Register";
 import UpdateForm from "./Components/UpdateForm";
 import ProfileUpdate from "./Components/ProfileUpdate";
 import UpdateNumber from "./Components/UpdateNumber";
+import UserStore from "./Store/UserStore";
+import Logouterror from "./Components/Logouterror";
 
 function CustomRoute() {
+    const token =UserStore((state)=>state.token)
     return <>
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/Login" element={<Login />} />
-                <Route path="/BookRide" element={<BookRide />} />
-                <Route path="/NavbarX" element={<NavbarX />} />
-                <Route path="/UserHome" element={<UserHome />} />
-                <Route path="/AccountManager" element={<AccountManager />} />
-                <Route path="/PersonalInfo" element={<PersonalInfo />} />
                 <Route path="/Register" element={<Register />} />
-                <Route path="/UpdateForm" element={<UpdateForm />} />
-                <Route path="/ProfileUpdate" element={<ProfileUpdate />} />
-                <Route path="/UpdateNumber" element={<UpdateNumber />} />
+                <Route path="/BookRide" element={<BookRide />} />
+                <Route path="/NavbarX" element={token?(<NavbarX />):<Logouterror/>} />
+                <Route path="/UserHome" element={token?(<UserHome />):<Logouterror/>} />
+                <Route path="/AccountManager" element={token?(<AccountManager />):<Logouterror/>} />
+                <Route path="/PersonalInfo" element={token?(<PersonalInfo />):<Logouterror/>} />
+                <Route path="/UpdateForm" element={token?(<UpdateForm />):<Logouterror/>} />
+                <Route path="/ProfileUpdate" element={token?(<ProfileUpdate />):<Logouterror/>} />
+                <Route path="/UpdateNumber" element={token?(<UpdateNumber />):<Logouterror/>} />
             </Routes>
         </BrowserRouter>
     </>

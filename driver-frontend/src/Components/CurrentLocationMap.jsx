@@ -3,6 +3,25 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import io from "socket.io-client";
 import "leaflet/dist/leaflet.css";
+import DriverStore from "../Store/DriverStore"; // adjust path if needed
+
+// 🔑 Simple JWT decoder (client-side)
+const decodeJWT = (token) => {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
+  } catch (err) {
+    console.error("Error decoding JWT:", err);
+    return null;
+  }
+};
 
 // 🚗 Custom car icon
 const carIcon = new L.Icon({
@@ -23,6 +42,25 @@ const CurrentLocationMap = () => {
   const [location, setLocation] = useState(null);
   const [error, setError] = useState(null);
   const socketRef = useRef(null);
+  const [driverEmail, setDriverEmail] = useState(null);
+
+  // 🧠 Access token from Zustand store
+  const token = DriverStore((state) => state.token);
+
+  // Decode token to get driver email
+  useEffect(() => {
+    if (token) {
+      const decoded = decodeJWT(token);
+      if (decoded?.email) {
+        setDriverEmail(decoded.email);
+        console.log("👨‍✈️ Driver email:", decoded.email);
+      } else {
+        console.warn("No email found in token");
+      }
+    } else {
+      console.warn("No driver token found in store");
+    }
+  }, [token]);
 
   // 🔌 Connect to socket server
   useEffect(() => {
@@ -43,7 +81,7 @@ const CurrentLocationMap = () => {
     };
   }, []);
 
-  // 📍 Watch live location
+  // 📍 Watch and send live location
   useEffect(() => {
     if (!navigator.geolocation) {
       setError("Geolocation is not supported by your browser");
@@ -55,8 +93,12 @@ const CurrentLocationMap = () => {
         const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         setLocation([coords.lat, coords.lng]);
 
-        if (socketRef.current && socketRef.current.connected) {
-          socketRef.current.emit("location:update", coords);
+        // ✅ Emit driver email + location to socket
+        if (socketRef.current && socketRef.current.connected && driverEmail) {
+          socketRef.current.emit("driver:location:update", {
+            email: driverEmail,
+            coordinates: coords,
+          });
         }
       },
       (err) => {
@@ -67,16 +109,16 @@ const CurrentLocationMap = () => {
     );
 
     return () => navigator.geolocation.clearWatch(watcher);
-  }, []);
+  }, [driverEmail]);
 
   return (
     <div className="fixed w-[90%] h-[350px] rounded-2xl overflow-hidden shadow-lg border border-gray-300 bg-white md:w-[50%] md:right-8">
       {error && (
-        <p className="text-red-500 text-center py-4 font-medium md:right-6">{error}</p>
+        <p className="text-red-500 text-center py-4 font-medium">{error}</p>
       )}
 
       {!location && !error && (
-        <p className="text-gray-600 text-center py-4 font-medium md:right-6">
+        <p className="text-gray-600 text-center py-4 font-medium">
           Fetching current location...
         </p>
       )}
@@ -102,118 +144,3 @@ const CurrentLocationMap = () => {
 };
 
 export default CurrentLocationMap;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // CurrentLocationMap.jsx
-// import React, { useEffect, useState, useRef } from 'react';
-// import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-// import L from 'leaflet';
-// import io from 'socket.io-client';
-// import 'leaflet/dist/leaflet.css';
-
-// // Custom car icon
-// const carIcon = new L.Icon({
-//   iconUrl: '/car.png',
-//   iconSize: [50, 50],
-//   iconAnchor: [25, 25],
-// });
-
-// const RecenterMap = ({ position }) => {
-//   const map = useMap();
-//   useEffect(() => {
-//     if (position) map.setView(position, map.getZoom(), { animate: true });
-//   }, [position, map]);
-//   return null;
-// };
-
-// const CurrentLocationMap = () => {
-//   const [location, setLocation] = useState(null);
-//   const [error, setError] = useState(null);
-//   const socketRef = useRef(null); // ✅ keep socket persistent
-
-//   useEffect(() => {
-//     // Create socket connection
-//     socketRef.current = io('http://localhost:8080', {
-//       transports: ['websocket'], // Use websocket to avoid polling issues
-//     });
-
-//     socketRef.current.on('connect', () => {
-//       console.log('🚗 Client connected:', socketRef.current.id);
-//     });
-
-//     socketRef.current.on('disconnect', () => {
-//       console.log('❌ Client disconnected:', socketRef.current.id);
-//     });
-
-//     return () => {
-//       socketRef.current.disconnect(); // Only disconnect on unmount
-//     };
-//   }, []);
-
-//   useEffect(() => {
-//     if (!navigator.geolocation) {
-//       setError('Geolocation is not supported by your browser');
-//       return;
-//     }
-
-//     const watcher = navigator.geolocation.watchPosition(
-//       (pos) => {
-//         const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-//         setLocation([coords.lat, coords.lng]);
-
-//         // ✅ Send location updates to server
-//         if (socketRef.current && socketRef.current.connected) {
-//           socketRef.current.emit('location:update', coords);
-//         }
-//       },
-//       (err) => {
-//         console.error(err);
-//         setError('Unable to retrieve your location');
-//       },
-//       { enableHighAccuracy: true }
-//     );
-
-//     return () => navigator.geolocation.clearWatch(watcher);
-//   }, []);
-
-//   return (
-//     <div style={{ width: '100%', height: '400px' }}>
-//       {error && <p style={{ color: 'red' }}>{error}</p>}
-//       {location ? (
-//         <MapContainer center={location} zoom={15} style={{ height: '100%', width: '100%' }}>
-//           <TileLayer
-//             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-//             attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-//           />
-//           <Marker position={location} icon={carIcon}>
-//             <Popup>You are here 🚗</Popup>
-//           </Marker>
-//           <RecenterMap position={location} />
-//         </MapContainer>
-//       ) : (
-//         <p>Fetching current location...</p>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default CurrentLocationMap;

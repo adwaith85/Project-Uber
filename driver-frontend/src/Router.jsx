@@ -7,19 +7,22 @@ import Register from "./PAGES/Register";
 import UpdateProfile from "./Components/UpdateProfile";
 import UpdateName from "./Components/UpdateName";
 import UpdateNumber from "./Components/UpdateNumber";
+import DriverStore from "./Store/DriverStore";
+import Logouterror from "../../frontend/src/Components/Logouterror";
 
 function CustomRoute() {
+    const token=DriverStore((state)=>state.token)
     return <>
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/Navbar" element={<Navbar />} />
-                <Route path="/Profile" element={<Profile />} />
                 <Route path="/Login" element={<Login />} />
                 <Route path="/Register" element={<Register />} />
-                <Route path="/UpdateProfile" element={<UpdateProfile />} />
-                <Route path="/UpdateName" element={<UpdateName />} />
-                <Route path="/UpdateNumber" element={<UpdateNumber />} />
+                <Route path="/" element={token?(<Home />):<Logouterror/>} />
+                <Route path="/Navbar" element={token?(<Navbar />):<Logouterror/>} />
+                <Route path="/Profile" element={token?(<Profile />):<Logouterror/>} />
+                <Route path="/UpdateProfile" element={token?(<UpdateProfile />):<Logouterror/>} />
+                <Route path="/UpdateName" element={token?(<UpdateName />):<Logouterror/>} />
+                <Route path="/UpdateNumber" element={token?(<UpdateNumber />):<Logouterror/>} />
                 
             </Routes>
         </BrowserRouter>
