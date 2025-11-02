@@ -10,7 +10,7 @@ function Navbar() {
     const toggleDrawer = () => setDrawerOpen(!drawerOpen);
     const logout = DriverStore((state) => state.logout);
     const menuItems = [
-        { name: "Dashboard", path: "/" },
+        { name: "Dashboard", path: "/home" },
         { name: "Earnings", path: "/earnings" },
         { name: "Trips", path: "/trips" },
         { name: "Profile", path: "/Profile" },
@@ -33,7 +33,7 @@ function Navbar() {
                 <button
                 onClick={() => {
                 logout();
-                navigate("/Login");
+                navigate("/")
               }} 
                 className="flex items-center gap-2 hover:opacity-80">
                     <span className="text-sm font-medium">Logout</span>

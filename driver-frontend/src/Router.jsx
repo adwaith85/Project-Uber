@@ -16,9 +16,9 @@ function CustomRoute() {
     return <>
         <BrowserRouter>
             <Routes>
-                <Route path="/Login" element={<Login />} />
+                <Route path="/" element={<Login />} />
                 <Route path="/Register" element={<Register />} />
-                <Route path="/" element={token?(<Home />):<Logouterror/>} />
+                <Route path="/home" element={token?(<Home />):<Logouterror/>} />
                 <Route path="/Navbar" element={token?(<Navbar />):<Logouterror/>} />
                 <Route path="/Profile" element={token?(<Profile />):<Logouterror/>} />
                 <Route path="/UpdateProfile" element={token?(<UpdateProfile />):<Logouterror/>} />

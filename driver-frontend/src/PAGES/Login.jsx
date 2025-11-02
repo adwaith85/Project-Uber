@@ -38,7 +38,7 @@ function Login() {
           console.log(response.data.token)
           if (response.data.token) {
             addToken(response.data.token); // store token
-            navigate("/"); // redirect to dashboard
+            navigate("/home"); // redirect to dashboard
           } else {
             setMessage("Login failed. Please check your credentials.");
           }
