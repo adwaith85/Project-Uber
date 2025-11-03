@@ -2,9 +2,10 @@ import NavbarX from '../Components/NavbarX'
 import Location from '../Components/Location'
 import { Link } from "react-router-dom"
 import Suggestions from '../Components/Suggestions'
-import CurrentLocationMap from '../Components/CurrentLocationMap'
-import { useEffect, useState } from 'react'
+
+import { useEffect, useRef, useState } from 'react'
 import L from "leaflet"
+import Userhomemap from '../Components/Userhomemap'
 
 function UserHome() {
   const [pickupLocation, setPickupLocation] = useState(null)
@@ -12,6 +13,10 @@ function UserHome() {
   const [currentLocation, setCurrentLocation] = useState(null)
   const [route, setRoute] = useState([])
   const [distance, setDistance] = useState(null)
+
+
+  const pickuplocationnameref=useRef("")
+  const dropofflocationnameref=useRef("")
 
   const calculateDistance = (coord1, coord2) => {
     if (!coord1 || !coord2) return 0
@@ -67,6 +72,8 @@ function UserHome() {
         <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-10 p-4">
           <div className="w-full lg:w-1/3 flex flex-col items-start md:items-start">
             <Location
+              pickuplocationnameref={pickuplocationnameref}
+              dropofflocationnameref={dropofflocationnameref}
               onPickupSelect={(loc) => setPickupLocation(loc)}
               onDropoffSelect={(loc) => setDropoffLocation(loc)}
             />
@@ -81,7 +88,7 @@ function UserHome() {
 
               {/* ✅ Pass pickup latitude and longitude as parameters to BookRide page */}
               <Link
-                to={`/BookRide?lat=${pickupLocation?.lat || ""}&lng=${pickupLocation?.lng || ""}`}
+                to={`/BookRide?lat=${pickupLocation?.lat || ""}&lng=${pickupLocation?.lng || ""}&dis=${distance||""}&drop=${dropofflocationnameref.current.value||""}&pickup=${pickuplocationnameref.current.value}`}
               >
                 <button
                   className="border rounded-xl p-3 bg-gray-700 text-md text-white w-36 hover:bg-gray-600 transition"
@@ -99,7 +106,7 @@ function UserHome() {
           </div>
 
           <div className="w-full lg:w-2/3 h-80 lg:h-[400px] md:w-[50%] md:-mt-[16px]">
-            <CurrentLocationMap
+            <Userhomemap
               pickupLocation={pickupLocation}
               dropoffLocation={dropoffLocation}
               currentLocation={currentLocation}

@@ -3,7 +3,10 @@ import { BiSolidNavigation } from "react-icons/bi";
 import { FaDotCircle } from "react-icons/fa";
 import { TbSquareDotFilled } from "react-icons/tb";
 
-function Location({ onPickupSelect, onDropoffSelect }) {
+function Location({ onPickupSelect, 
+  onDropoffSelect,
+  pickuplocationnameref ,
+dropofflocationnameref}) {
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -60,6 +63,7 @@ function Location({ onPickupSelect, onDropoffSelect }) {
           <FaDotCircle className="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6" />
           <BiSolidNavigation className="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 md:left-77 " />
           <input
+            ref={pickuplocationnameref}
             type="text"
             placeholder="Pickup location"
             value={pickup}
@@ -77,6 +81,7 @@ function Location({ onPickupSelect, onDropoffSelect }) {
         <div className="relative w-[90%]">
           <TbSquareDotFilled className="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6" />
           <input
+            ref={dropofflocationnameref}
             type="text"
             placeholder="Dropoff location"
             value={dropoff}
