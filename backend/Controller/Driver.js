@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import DriverModel from "../Model/Driver.js";
+import { io } from '../index.js'
 import RideModel from "../Model/Ride.js";
 
 

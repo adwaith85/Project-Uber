@@ -13,9 +13,10 @@ import ProfileUpdate from "./Components/ProfileUpdate";
 import UpdateNumber from "./Components/UpdateNumber";
 import UserStore from "./Store/UserStore";
 import Logouterror from "./Components/Logouterror";
+import Rider from "./Components/Rider";
 
 function CustomRoute() {
-    const token =UserStore((state)=>state.token)
+    const token = UserStore((state) => state.token)
     return <>
         <BrowserRouter>
             <Routes>
@@ -23,13 +24,14 @@ function CustomRoute() {
                 <Route path="/Login" element={<Login />} />
                 <Route path="/Register" element={<Register />} />
                 <Route path="/BookRide" element={<BookRide />} />
-                <Route path="/NavbarX" element={token?(<NavbarX />):<Logouterror/>} />
-                <Route path="/UserHome" element={token?(<UserHome />):<Logouterror/>} />
-                <Route path="/AccountManager" element={token?(<AccountManager />):<Logouterror/>} />
-                <Route path="/PersonalInfo" element={token?(<PersonalInfo />):<Logouterror/>} />
-                <Route path="/UpdateForm" element={token?(<UpdateForm />):<Logouterror/>} />
-                <Route path="/ProfileUpdate" element={token?(<ProfileUpdate />):<Logouterror/>} />
-                <Route path="/UpdateNumber" element={token?(<UpdateNumber />):<Logouterror/>} />
+                <Route path="/NavbarX" element={token ? (<NavbarX />) : <Logouterror />} />
+                <Route path="/UserHome" element={token ? (<UserHome />) : <Logouterror />} />
+                <Route path="/AccountManager" element={token ? (<AccountManager />) : <Logouterror />} />
+                <Route path="/PersonalInfo" element={token ? (<PersonalInfo />) : <Logouterror />} />
+                <Route path="/UpdateForm" element={token ? (<UpdateForm />) : <Logouterror />} />
+                <Route path="/ProfileUpdate" element={token ? (<ProfileUpdate />) : <Logouterror />} />
+                <Route path="/UpdateNumber" element={token ? (<UpdateNumber />) : <Logouterror />} />
+                <Route path="/rider" element={token ? (<Rider />) : <Logouterror />} />
             </Routes>
         </BrowserRouter>
     </>

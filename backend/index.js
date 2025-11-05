@@ -31,8 +31,6 @@ app.use("/uploads", express.static("uploads"));
 app.use(UserRoute);
 app.use(driverRoute);
 
-
-
 // ✅ Socket.IO setup
 io.on("connection", (socket) => {
   console.log("🚗 Client connected:", socket.id);

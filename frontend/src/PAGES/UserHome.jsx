@@ -14,9 +14,8 @@ function UserHome() {
   const [route, setRoute] = useState([])
   const [distance, setDistance] = useState(null)
 
-
-  const pickuplocationnameref=useRef("")
-  const dropofflocationnameref=useRef("")
+  const pickuplocationnameref = useRef("")
+  const dropofflocationnameref = useRef("")
 
   const calculateDistance = (coord1, coord2) => {
     if (!coord1 || !coord2) return 0
@@ -27,8 +26,8 @@ function UserHome() {
     const a =
       Math.sin(dLat / 2) ** 2 +
       Math.cos(toRad(coord1.lat)) *
-        Math.cos(toRad(coord2.lat)) *
-        Math.sin(dLon / 2) ** 2
+      Math.cos(toRad(coord2.lat)) *
+      Math.sin(dLon / 2) ** 2
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
     return (R * c).toFixed(2)
   }
@@ -88,7 +87,7 @@ function UserHome() {
 
               {/* ✅ Pass pickup latitude and longitude as parameters to BookRide page */}
               <Link
-                to={`/BookRide?lat=${pickupLocation?.lat || ""}&lng=${pickupLocation?.lng || ""}&dis=${distance||""}&drop=${dropofflocationnameref.current.value||""}&pickup=${pickuplocationnameref.current.value}`}
+                to={`/BookRide?lat=${pickupLocation?.lat || ""}&lng=${pickupLocation?.lng || ""}&dis=${distance || ""}&drop=${dropofflocationnameref.current.value || ""}&pickup=${pickuplocationnameref.current.value}`}
               >
                 <button
                   className="border rounded-xl p-3 bg-gray-700 text-md text-white w-36 hover:bg-gray-600 transition"

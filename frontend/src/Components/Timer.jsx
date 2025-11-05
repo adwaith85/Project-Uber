@@ -47,7 +47,7 @@ const TimerCountDown = ({ orderId, setCounter }) => {
   // ---- Navigate when accepted ----
   useEffect(() => {
     if (orderAccepted) {
-      const timeout = setTimeout(() => navigate("/home"), 3000);
+      const timeout = setTimeout(() => navigate("/rider"), 3000);
       return () => clearTimeout(timeout);
     }
   }, [orderAccepted, navigate]);
@@ -61,11 +61,11 @@ const TimerCountDown = ({ orderId, setCounter }) => {
   }, [timeRemaining]);
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-50 font-sans relative overflow-hidden">
+    <div className="h-[100%] pb-8 flex items-center justify-center bg-gray-50 font-sans relative overflow-hidden md:w-[100%] md:left-[200px]">
       {/* 🎉 Confetti */}
       {orderAccepted && <Confetti recycle={false} numberOfPieces={300} />}
 
-      <div className="flex flex-col items-center space-y-6">
+      <div className="md:w-[100%] flex flex-col items-center space-y-6">
         <h1 className="text-3xl font-bold text-gray-800 text-center">
           Order Countdown
         </h1>
@@ -73,10 +73,10 @@ const TimerCountDown = ({ orderId, setCounter }) => {
         {/* Round Counter */}
         <div
           className={`relative flex items-center justify-center w-48 h-48 rounded-full border-[10px] ${orderAccepted
-              ? "border-green-500 text-green-600"
-              : timeRemaining <= 5
-                ? "border-amber-400 text-amber-500 animate-pulse"
-                : "border-blue-400 text-blue-600"
+            ? "border-green-500 text-green-600"
+            : timeRemaining <= 5
+              ? "border-amber-400 text-amber-500 animate-pulse"
+              : "border-blue-400 text-blue-600"
             } font-mono text-5xl font-bold`}
         >
           {formattedTime}
