@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import DriverModel from "../Model/Driver.js";
+import RideModel from "../Model/Ride.js";
 
 
 export const DriverLogin = async (req, res) => {
@@ -49,12 +50,12 @@ export const DriverLogin = async (req, res) => {
 export const UpdateLocation = async (req, res) => {
   const { location } = req.body
   try {
-    const email=req.user?.email;
-    if(!email){
-      return res.status(400).json({status:"error",message:"missing email in token"});
+    const email = req.user?.email;
+    if (!email) {
+      return res.status(400).json({ status: "error", message: "missing email in token" });
     }
-    
-    const driver = await DriverModel.findOne({email})
+
+    const driver = await DriverModel.findOne({ email })
 
     if (!driver) {
       return res.status(400).json({ message: "user not found" })
@@ -116,7 +117,7 @@ export const DriverRegister = async (req, res) => {
 
 export const UpdateDriver = async (req, res) => {
   try {
-    const { name, number, carnumber,cartype } = req.body;
+    const { name, number, carnumber, cartype } = req.body;
     const file = req.file;
 
     const driver = await DriverModel.findOne({ email: req.user.email });
@@ -178,7 +179,7 @@ export const Details = async (req, res) => {
 
 
 
-export const nearby=async (req, res) => {
+export const nearby = async (req, res) => {
   try {
     const { lat, lng } = req.query
     if (!lat || !lng) {
@@ -204,3 +205,46 @@ export const nearby=async (req, res) => {
     res.status(500).json({ error: "Server error" })
   }
 }
+
+
+
+
+
+export const acceptride = async (req, res) => {
+  const { rideId, driverEmail } = req.body;
+
+  try {
+    // Update ride status to 'accepted' and assign driver
+    const ride = await RideModel.findByIdAndUpdate(rideId, {
+      status: 'accepted',
+      driverEmail: driverEmail
+    }, { new: true });
+
+    if (!ride) {
+      return res.status(404).json({ message: "Ride not found" });
+    }
+
+    res.status(200).json({ message: "Ride accepted successfully", ride });
+  } catch (error) {
+    console.error("Error accepting ride:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+
+export const bookride = async (req, res) => {
+
+
+  console.log(req.body)
+  const driver = await DriverModel.findOne({ _id: req.body.driverId })
+  const ride = await RideModel.create({
+    pickup: req.body.pickup,
+    dropoff: req.body.dropoff,
+    driverId: req.body.driverId,
+  })
+  io.to(driver.socketid).emit('ride:alert', { pickup: req.body.pickup, dropoff: req.body.dropoff, rideId: ride._id });
+
+  res.status(200).json({ message: "Ride requested successfully", rideId: ride._id })
+}
+
+

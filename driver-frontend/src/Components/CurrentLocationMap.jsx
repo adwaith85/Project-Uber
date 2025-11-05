@@ -4,6 +4,7 @@ import L from "leaflet";
 import io from "socket.io-client";
 import "leaflet/dist/leaflet.css";
 import DriverStore from "../Store/DriverStore"; // adjust path if needed
+import api from "../api/axiosClient";
 
 // 🔑 Simple JWT decoder (client-side)
 const decodeJWT = (token) => {
@@ -75,6 +76,24 @@ const CurrentLocationMap = () => {
     socketRef.current.on("disconnect", () => {
       console.log("❌ Client disconnected:", socketRef.current.id);
     });
+
+     socketRef.current.on("ride:alert", (msg) => {
+      
+    let ans= prompt(`New Ride Request!\nPickup: ${msg.pickup}\nDropoff: ${msg.dropoff}\n id:${msg.rideId}`)
+    
+      if(ans!=null){
+        api.post('/acceptride',{
+          rideId:msg.rideId,
+          driverEmail:driverEmail
+        }).then((response)=>{
+          alert("You accepted the ride request!")
+        }).catch((error)=>{
+          console.error("Error accepting ride:", error)
+        })
+      }else{
+        alert("You rejected the ride request!")
+      }
+  });
 
     return () => {
       socketRef.current.disconnect();

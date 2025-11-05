@@ -8,6 +8,10 @@ const DriverSchema = new mongoose.Schema(
       required: [true, "Name is required"],
       trim: true,
     },
+    socketid:{
+      type:String,
+      default:null,
+    },
     email: {
       type: String,
       required: [true, "Email is required"],
