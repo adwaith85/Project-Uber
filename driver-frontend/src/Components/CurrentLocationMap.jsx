@@ -22,7 +22,6 @@ const RecenterMap = ({ position }) => {
 
 const CurrentLocationMap = ({ socketRef }) => {
 
-
   const [location, setLocation] = useState(null);
   const [error, setError] = useState(null);
   const token = DriverStore((state) => state.token);
@@ -40,8 +39,6 @@ const CurrentLocationMap = ({ socketRef }) => {
 
   // Connect socket
   useEffect(() => {
-    // socketRef.current = io("http://localhost:8080", { transports: ["websocket"] });
-
     socketRef?.current?.on("connect", () => {
       console.log("✅ Connected to socket:", socketRef.current.id);
     });
@@ -60,7 +57,7 @@ const CurrentLocationMap = ({ socketRef }) => {
       (pos) => {
         const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         setLocation([coords.lat, coords.lng]);
-        // onLocationUpdate?.(coords);
+       
 
         if (socketRef.current && socketRef.current.connected && driverEmail) {
           socketRef.current.emit("driver:location:update", {

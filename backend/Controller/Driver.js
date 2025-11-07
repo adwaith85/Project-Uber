@@ -192,6 +192,7 @@ export const nearby = async (req, res) => {
 
     // Find drivers within 5 km radius (5000 meters)
     const drivers = await DriverModel.find({
+      onlinestatus:"loggin",
       location: {
         $near: {
           $geometry: { type: "Point", coordinates: [longitude, latitude] },
@@ -239,7 +240,11 @@ export const bookride = async (req, res) => {
 
 
   console.log(req.body)
-  const driver = await DriverModel.findOne({ _id: req.body.driverId })
+  const driver = await DriverModel.findOne({ onlinestatus: "loggin" });
+
+    if (!driver) {
+      return res.status(404).json({ message: "No online driver available" });
+    }
   const ride = await RideModel.create({
     pickup: req.body.pickup,
     dropoff: req.body.dropoff,

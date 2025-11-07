@@ -24,7 +24,7 @@ function Register() {
       });
       if(response.data){
         alert("Registration successfull")
-        navigate("/Login"); // redirect to dashboard
+        navigate("/"); // redirect to dashboard
       }
     } catch (error) {
       setMessage(error.response?.data?.message || "Registration failed. Please try again.");
@@ -106,7 +106,7 @@ function Register() {
         <div className="mt-6 text-center text-gray-400 text-sm">
           Already have an account?{" "}
           <button
-            onClick={() => navigate("/Login")}
+            onClick={() => navigate("/")}
             className="text-white hover:underline"
           >
             Login

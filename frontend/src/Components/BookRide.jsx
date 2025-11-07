@@ -76,7 +76,7 @@ function BookRide() {
       const orderId = response.data.rideId
       console.log("Ride booked successfully:", orderId)
 
-      alert(`Ride booked with ${selectedDriverName} at ${time} and ${date}!`)
+      // alert(`Ride booked with ${selectedDriverName} at ${time} and ${date}!`)
 
       // ✅ Now update state *after* the async call returns
       setShowCounter({ showCounter: true, orderId })

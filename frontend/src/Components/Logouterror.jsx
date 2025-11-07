@@ -8,10 +8,10 @@ function Logouterror() {
         <p className="text-gray-700 mb-2">You're not logged in.</p>
         <p className="text-gray-600">Please login first to continue.</p>
         <button 
-          onClick={() => window.location.href = '/login'} 
+          onClick={() => window.location.href = '/'} 
           className="mt-6 px-5 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition duration-200"
         >
-          Go to Login
+          Please Login First
         </button>
       </div>
     </div>

@@ -1,154 +1,97 @@
-// 📁 components/RideRequests.jsx
-import React, { useEffect, useRef, useState } from "react";
-import io from "socket.io-client";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import api from "../api/axiosClient";
-import DriverStore from "../Store/DriverStore";
 
-function RiderReqMessage ({socketRef}){
-  const [rideRequests, setRideRequests] = useState([]);
-  const [timers, setTimers] = useState({});
-  // const socketRef = useRef(null);
-  const token = DriverStore((state) => state.token);
-  const [driverEmail, setDriverEmail] = useState(null);
+const RiderReqMessage = ({ ride }) => {
+  if (!ride) return null; // Safety check
 
-  const decodeJWT = (token) => {
-  try {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-    return JSON.parse(jsonPayload);
-  } catch (err) {
-    console.error("Error decoding JWT:", err);
-    return null;
-  }
-};
+  const { pickup, dropoff, time, date, rideId } = ride;
+  const [visible, setVisible] = useState(true);
+  const [progress, setProgress] = useState(100);
 
-useEffect(() => {
-    if (token) {
-      const decoded = decodeJWT(token);
-      if (decoded?.email) setDriverEmail(decoded.email);
-    }
-  }, [token]);
-
-
-   useEffect(() => {
-    // socketRef.current = io("http://localhost:8080", { transports: ["websocket"] });
-
-    socketRef?.current?.on("connect", () => {
-      console.log("🚗 Connected:", socketRef.current.id);
-    });
-
-    // 🚨 Ride request received
-    socketRef?.current?.on("ride:alert", (msg) => {
-      const rideId = msg.rideId;
-      setRideRequests((prev) => [...prev, msg]);
-      setTimers((prev) => ({ ...prev, [rideId]: 25 })); // 25s countdown
-
-      // Auto-remove after 25s
-      const timeout = setTimeout(() => {
-        setRideRequests((prev) => prev.filter((r) => r.rideId !== rideId));
-      }, 25000);
-
-      return () => clearTimeout(timeout);
-    });
-
-    return () => socketRef?.current?.disconnect();
-  }, []);
-
-  // Countdown logic
+  // Countdown progress bar (100 → 0 over 25 seconds)
   useEffect(() => {
+    const totalTime = 25; // seconds
+    let elapsed = 0;
+
     const interval = setInterval(() => {
-      setTimers((prev) => {
-        const updated = { ...prev };
-        Object.keys(updated).forEach((id) => {
-          if (updated[id] > 0) updated[id] -= 1;
-        });
-        return updated;
-      });
+      elapsed++;
+      const newProgress = Math.max(100 - (elapsed / totalTime) * 100, 0);
+      setProgress(newProgress);
+
+      // When progress reaches 0 → hide the card
+      if (elapsed >= totalTime) {
+        setVisible(false);
+        clearInterval(interval);
+      }
     }, 1000);
+
     return () => clearInterval(interval);
   }, []);
 
-  const handleAccept = (ride) => {
+  const handleAccept = () => {
     api
-      .post("acceptride", { rideId: ride.rideId, driverEmail,date,time })
+      .post("acceptride", { rideId, date, time })
       .then(() => {
         alert("✅ You accepted the ride request!");
-        setRideRequests((prev) => prev.filter((r) => r.rideId !== ride.rideId));
+        setVisible(false);
       })
       .catch((err) => console.error("Error:", err));
   };
 
-  const handleReject = (ride) => {
+  const handleReject = () => {
     alert("❌ You rejected the ride request!");
-    setRideRequests((prev) => prev.filter((r) => r.rideId !== ride.rideId));
+    setVisible(false);
   };
 
+  if (!visible) return null;
+
   return (
-    <div className="w-full bottom-19  md:w-[50%] md:ml-[560px] bg-white border border-gray-300 rounded-2xl shadow-md p-4 mt-39">
+    <div className="w-full bottom-19 md:w-[50%] md:ml-[560px] bg-white border border-gray-300 rounded-2xl shadow-md p-4 mt-10">
       <h2 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">
         🚘 Incoming Ride Requests
       </h2>
+
       <div className="max-h-[300px] overflow-y-auto pr-2">
-        {rideRequests.map((ride) => (
-          <div
-            key={ride.rideId}
-            className="border border-gray-200 rounded-xl p-3 mb-3 flex justify-between items-center hover:bg-gray-50 transition"
-          >
-            <div className="flex flex-col">
-              <p className="font-semibold text-gray-900">
-                Ride ID: <span className="text-blue-600">{ride.rideId}</span>
-              </p>
-              <p className="text-sm text-gray-700">
-                <strong>Pickup:</strong> {ride.pickup} <br />
-                <strong>Dropoff:</strong> {ride.dropoff} <br />
-                <strong>Date:</strong> {moment(ride.date).format("MMMM Do YYYY")} <br />
-                <strong>Time:</strong> {moment(ride.time, "HH:mm").format("h:mm A")}
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                Auto-expiring in {timers[ride.rideId] || 0}s...
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center gap-2">
-              <button
-                onClick={() => handleAccept(ride)}
-                className="bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-1 rounded-lg"
-              >
-                Accept
-              </button>
-              <button
-                onClick={() => handleReject(ride)}
-                className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded-lg"
-              >
-                Reject
-              </button>
-
-              <svg className="w-6 h-6 mt-1">
-                <circle cx="12" cy="12" r="10" stroke="#ccc" strokeWidth="2" fill="transparent" />
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="#22c55e"
-                  strokeWidth="2"
-                  fill="transparent"
-                  strokeDasharray={2 * Math.PI * 10}
-                  strokeDashoffset={
-                    (1 - (timers[ride.rideId] || 0) / 25) * 2 * Math.PI * 10
-                  }
-                  className="transition-all duration-1000 ease-linear"
-                />
-              </svg>
-            </div>
+        <div
+          key={rideId}
+          className="relative border border-gray-200 rounded-xl p-3 mb-3 flex justify-between items-center hover:bg-gray-50 transition"
+        >
+          <div className="flex flex-col">
+            <p className="font-semibold text-gray-900">
+              Ride ID: <span className="text-blue-600">{rideId}</span>
+            </p>
+            <p className="text-sm text-gray-700">
+              <strong>Pickup:</strong> {pickup} <br />
+              <strong>Dropoff:</strong> {dropoff} <br />
+              <strong>Date:</strong> {moment(date).format("MMMM Do YYYY")} <br />
+              <strong>Time:</strong> {moment(time, "HH:mm").format("h:mm A")}
+            </p>
           </div>
-        ))}
+
+          <div className="flex flex-col items-center gap-2">
+            <button
+              onClick={handleAccept}
+              className="bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-1 rounded-lg"
+            >
+              Accept
+            </button>
+            <button
+              onClick={handleReject}
+              className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded-lg"
+            >
+              Reject
+            </button>
+          </div>
+
+          {/* Bottom progress bar */}
+          <div className="absolute bottom-0 left-0 h-[4px] bg-gray-200 w-full rounded-b-xl overflow-hidden">
+            <div
+              className="h-full bg-green-500 transition-all duration-1000 ease-linear"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+        </div>
       </div>
     </div>
   );

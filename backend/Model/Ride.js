@@ -24,6 +24,11 @@ const RideSchema = new mongoose.Schema({
         return now.toLocaleTimeString("en-US", { hour12: false }); // HH:MM:SS format
       },
     },
+    onlinestatus:{
+      type:String,
+      enum:["loggin","logout"],
+      default:"logout",
+    },
   status: {
     type: String,
     enum: ["requested", "accepted", "completed", "cancelled"],

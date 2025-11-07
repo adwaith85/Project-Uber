@@ -31,6 +31,34 @@ app.use("/uploads", express.static("uploads"));
 app.use(UserRoute);
 app.use(driverRoute);
 
+
+// const onlineDrivers = new Map();
+
+io.on("connection", (socket) => {
+  console.log("🚗 Client connected:", socket.id);
+
+  // 🟢 DRIVER LOGIN HANDLER
+  socket.on("driver:login", async (driverId) => {
+    try {
+      console.log("✅ Driver logged in:", driverId);
+      onlineDrivers.set(socket.id, driverId);
+      await DriverModel.findByIdAndUpdate(driverId, { onlinestatus: "loggin" });
+    } catch (err) {
+      console.error("❌ Error updating driver login:", err);
+    }
+  });
+
+  // 🔴 DRIVER LOGOUT HANDLER
+  socket.on("driver:logout", async (driverId) => {
+    try {
+      console.log("🚪 Driver logged out:", driverId);
+      await DriverModel.findByIdAndUpdate(driverId, { onlinestatus: "logout" });
+      onlineDrivers.delete(socket.id);
+    } catch (err) {
+      console.error("❌ Error updating driver logout:", err);
+    }
+  });
+
 // ✅ Socket.IO setup
 io.on("connection", (socket) => {
   console.log("🚗 Client connected:", socket.id);
@@ -99,6 +127,19 @@ io.on("connection", (socket) => {
     }
 
   });
+});
+
+
+ // ❌ DISCONNECT HANDLER (auto logout)
+  // socket.on("disconnect", async () => {
+  //   console.log("🔴 Client disconnected:", socket.id);
+  //   const driverId = onlineDrivers.get(socket.id);
+  //   if (driverId) {
+  //     await DriverModel.findByIdAndUpdate(driverId, { onlinestatus: "logout" });
+  //     onlineDrivers.delete(socket.id);
+  //     console.log("⚠️ Driver auto-logged out:", driverId);
+  //   }
+  // });
 });
 
 server.listen(PORT, () => console.log(`🚀 Server running on ${PORT}`));

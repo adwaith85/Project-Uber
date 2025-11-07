@@ -44,6 +44,11 @@ const DriverSchema = new mongoose.Schema(
       enum: ["driver"],
       default: "driver",
     },
+    onlinestatus:{
+      type:String,
+      enum:["loggin","logout"],
+      default:"logout",
+    },
     location: {
       type: {
         type: String,
