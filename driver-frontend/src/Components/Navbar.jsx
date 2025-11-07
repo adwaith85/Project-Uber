@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Menu, LogOut, UserCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from '@tanstack/react-query';
 import DriverStore from "../Store/DriverStore";
 import api from "../api/axiosClient";
+
 
 function Navbar() {
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [driverData, setDriverData] = useState(null);
+  // const [driverData, setDriverData] = useState(null);
   const toggleDrawer = () => setDrawerOpen(!drawerOpen);
 
   const { token, logout } = DriverStore();
@@ -39,23 +41,25 @@ function Navbar() {
   };
 
   // 🎯 Fetch driver profile when token available
-  useEffect(() => {
-    const fetchDriver = async () => {
-      try {
-        const decoded = decodeJWT(token);
-        if (!decoded?.email) throw new Error("User not found");
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['driver'],
+    queryFn: async () => {
+      const res = await api.get('/Details', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return res.data;
+    },
+    enabled: !!token,
+  });
 
-        const response = await api.get(`/Details/${decoded.email}`);
-        setDriverData(response.data);
-      } catch (err) {
-        console.error("❌ Driver fetch error:", err);
-        setDriverData(null);
-      }
-    };
 
-    if (token) fetchDriver();
-    else setDriverData(null);
-  }, [token]);
+  // console.log("User data from API:", data);
+
+  if (isLoading) return <p className="text-center mt-4">Loading...</p>;
+  if (error) return <p className="text-center mt-4 text-red-500">Error loading data</p>;
+
 
   // 🚪 Handle logout
   const handleLogout = () => {
@@ -76,11 +80,11 @@ function Navbar() {
           </button>
 
           {/* Driver Info */}
-          {driverData ? (
+          {data ? (
             <div className="flex items-center gap-2">
-              {driverData.profileImg ? (
+              {data.profileimg ? (
                 <img
-                  src={driverData.profileImg}
+                  src={data?.profileimg}
                   alt="Profile"
                   className="w-8 h-8 rounded-full object-cover border"
                 />
@@ -88,7 +92,7 @@ function Navbar() {
                 <UserCircle className="w-8 h-8 text-gray-500" />
               )}
               <span className="font-medium text-gray-800 text-sm truncate max-w-[100px]">
-                {driverData.name || "Driver"}
+                {data.name || "Driver"}
               </span>
             </div>
           ) : (

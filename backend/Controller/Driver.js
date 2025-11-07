@@ -212,13 +212,15 @@ export const nearby = async (req, res) => {
 
 
 export const acceptride = async (req, res) => {
-  const { rideId, driverEmail } = req.body;
+  const { rideId, driverEmail,time,date } = req.body;
 
   try {
     // Update ride status to 'accepted' and assign driver
     const ride = await RideModel.findByIdAndUpdate(rideId, {
       status: 'accepted',
-      driverEmail: driverEmail
+      driverEmail: driverEmail,
+      date:date,
+      time:time
     }, { new: true });
 
     if (!ride) {
@@ -242,8 +244,10 @@ export const bookride = async (req, res) => {
     pickup: req.body.pickup,
     dropoff: req.body.dropoff,
     driverId: req.body.driverId,
+    date: req.body.date,
+    time: req.body.time,
   })
-  io.to(driver.socketid).emit('ride:alert', { pickup: req.body.pickup, dropoff: req.body.dropoff, rideId: ride._id });
+  io.to(driver.socketid).emit('ride:alert', { pickup: req.body.pickup, dropoff: req.body.dropoff,time: req.body.time,date: req.body.date, rideId: ride._id });
 
   res.status(200).json({ message: "Ride requested successfully", rideId: ride._id })
 }

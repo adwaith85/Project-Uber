@@ -38,6 +38,7 @@ function BookRide() {
   const [selectedDriverLocation, setSelectedDriverLocation] = useState(null)
   const [locdriver, setLocdriver] = useState(null)
   const [time, setTime] = useState("")
+  const [date, setDate] = useState("")
   const drivermarkers = useRef({})
 
   // Fetch nearby drivers
@@ -53,7 +54,7 @@ function BookRide() {
   const handleBookRide = async (e) => {
     e.preventDefault()
 
-    if (!time || !selectedDriverName) {
+    if (!time || !selectedDriverName || !date) {
       alert("Please select a driver and pickup time.")
       return
     }
@@ -65,6 +66,7 @@ function BookRide() {
         dropoff,
         driver: selectedDriverName,
         time,
+        date,
         userLat: lat,
         userLng: lng,
         driverLat: selectedDriverLocation?.lat,
@@ -74,7 +76,7 @@ function BookRide() {
       const orderId = response.data.rideId
       console.log("Ride booked successfully:", orderId)
 
-      alert(`Ride booked with ${selectedDriverName} at ${time}!`)
+      alert(`Ride booked with ${selectedDriverName} at ${time} and ${date}!`)
 
       // ✅ Now update state *after* the async call returns
       setShowCounter({ showCounter: true, orderId })
@@ -178,16 +180,26 @@ function BookRide() {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-gray-600 text-sm font-medium">Driver</label>
-                    <input
-                      type="text"
-                      value={selectedDriverName || "No driver selected"}
-                      readOnly
-                      className="w-full border border-gray-300 rounded-lg p-2 mt-1 bg-gray-100 text-gray-700"
-                    />
-                  </div>
 
+
+                  <div className="grid grid-cols-2 gap-4 w-full mt-4">
+                    <div>
+                      <label className="block text-gray-600 text-sm font-medium">Driver</label>
+                      <input
+                        type="text"
+                        value={selectedDriverName || "No driver selected"}
+                        readOnly
+                        className="w-full border border-gray-300 rounded-lg p-2 mt-1 bg-gray-100 text-gray-700"
+                      />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label className="block text-gray-600 text-sm font-medium mb-1">Distance to Travel</label>
+                      <div className="flex items-center border border-gray-300 rounded-lg p-2 text-gray-700 bg-white">
+                        <span className="flex-1">{distance || "not found"}</span>
+                      </div>
+                    </div>
+                  </div>
                   <div className="grid grid-cols-2 gap-4 w-full mt-4">
                     <div className="flex flex-col">
                       <label className="block text-gray-600 text-sm font-medium mb-1">Pickup Time</label>
@@ -204,12 +216,17 @@ function BookRide() {
                         popperPlacement="bottom-start"
                       />
                     </div>
-
                     <div className="flex flex-col">
-                      <label className="block text-gray-600 text-sm font-medium mb-1">Distance to Travel</label>
-                      <div className="flex items-center border border-gray-300 rounded-lg p-2 text-gray-700 bg-white">
-                        <span className="flex-1">{distance || "not found"}</span>
-                      </div>
+                      <label className="block text-gray-600 text-sm font-medium mb-1">Pickup Date</label>
+                      <DatePicker
+                        selected={date} // only when value has changed
+                        onChange={(t)=>setDate(t)}
+                        minDate={new Date()} // ⬅️ disables all days before today
+                        dateFormat="yyyy/MM/dd"
+                        placeholderText="Select date"
+                        className="w-full border border-gray-300 rounded-lg p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        popperPlacement="bottom-start"
+                      />
                     </div>
                   </div>
 

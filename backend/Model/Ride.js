@@ -13,6 +13,17 @@ const RideSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
+  date: {
+      type: Date,
+      default: Date.now, // stores both date & time (ISO format)
+    },
+  time: {
+      type: String,
+      default: () => {
+        const now = new Date();
+        return now.toLocaleTimeString("en-US", { hour12: false }); // HH:MM:SS format
+      },
+    },
   status: {
     type: String,
     enum: ["requested", "accepted", "completed", "cancelled"],
