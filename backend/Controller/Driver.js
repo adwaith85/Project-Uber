@@ -12,6 +12,7 @@ export const DriverLogin = async (req, res) => {
       return res.status(400).json({ message: "Email and password are required" });
     }
     const driver = await DriverModel.findOne({ email });
+
     if (!driver) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -30,6 +31,7 @@ export const DriverLogin = async (req, res) => {
         coordinates: location.coordinates,
       };
       driver.markModified("location");
+      driver.onlinestatus = "loggin"
       await driver.save();
     }
 
@@ -43,6 +45,31 @@ export const DriverLogin = async (req, res) => {
     });
   } catch (error) {
     console.error("Login error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+
+export const Driverlogout = async (req, res) => {
+  try {
+
+    const driver = await DriverModel.findOne({
+      email: req.user.email
+    })
+
+    if (driver) {
+      driver.onlinestatus = "logout"
+      await driver.save()
+    }
+
+
+    res.status(200).json({
+      message: "Logout successful",
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -192,7 +219,7 @@ export const nearby = async (req, res) => {
 
     // Find drivers within 5 km radius (5000 meters)
     const drivers = await DriverModel.find({
-      onlinestatus:"loggin",
+      onlinestatus: "loggin",
       location: {
         $near: {
           $geometry: { type: "Point", coordinates: [longitude, latitude] },
@@ -213,15 +240,15 @@ export const nearby = async (req, res) => {
 
 
 export const acceptride = async (req, res) => {
-  const { rideId, driverEmail,time,date } = req.body;
+  const { rideId, driverEmail, time, date } = req.body;
 
   try {
     // Update ride status to 'accepted' and assign driver
     const ride = await RideModel.findByIdAndUpdate(rideId, {
       status: 'accepted',
       driverEmail: driverEmail,
-      date:date,
-      time:time
+      date: date,
+      time: time
     }, { new: true });
 
     if (!ride) {
@@ -242,9 +269,9 @@ export const bookride = async (req, res) => {
   console.log(req.body)
   const driver = await DriverModel.findOne({ onlinestatus: "loggin" });
 
-    if (!driver) {
-      return res.status(404).json({ message: "No online driver available" });
-    }
+  if (!driver) {
+    return res.status(404).json({ message: "No online driver available" });
+  }
   const ride = await RideModel.create({
     pickup: req.body.pickup,
     dropoff: req.body.dropoff,
@@ -252,8 +279,12 @@ export const bookride = async (req, res) => {
     date: req.body.date,
     time: req.body.time,
   })
-  io.to(driver.socketid).emit('ride:alert', { pickup: req.body.pickup, dropoff: req.body.dropoff,time: req.body.time,date: req.body.date, rideId: ride._id });
-
+  io.to(driver.socketid).emit('ride:alert', {
+    pickup: req.body.pickup,
+    dropoff: req.body.dropoff,
+    time: req.body.time, date: req.body.date,
+    rideId: ride._id,
+  });
   res.status(200).json({ message: "Ride requested successfully", rideId: ride._id })
 }
 

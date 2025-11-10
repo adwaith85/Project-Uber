@@ -1,12 +1,13 @@
 import express from 'express'
 import { upload } from "../multer.js"
-import { acceptride, bookride, Details, DriverLogin, DriverRegister, nearby, UpdateDriver, UpdateLocation } from '../Controller/Driver.js'
+import { acceptride, bookride, Details, DriverLogin, Driverlogout, DriverRegister, nearby, UpdateDriver, UpdateLocation } from '../Controller/Driver.js'
 import { LoginCheck } from '../Middleware/User.js'
 
 
 const driver = express.Router()
 
 driver.post("/driverlogin", DriverLogin)
+driver.get("/driverlogout",LoginCheck,Driverlogout)
 driver.put("/updatelocation", LoginCheck, UpdateLocation)
 driver.post("/driverregister", DriverRegister)
 driver.post("/updatedriver", LoginCheck, upload.single("profileimg"), UpdateDriver)

@@ -87,7 +87,7 @@ function BookRide() {
   }
 
   return (
-    <>
+    <div className='h-[100%] mb-8'>
       <NavbarX />
 
       {/* Map Section */}
@@ -103,7 +103,7 @@ function BookRide() {
       </div>
       <div className="md:flex md:w-[100%]">
         {/* Driver List */}
-        <div className="md:w-[50%] p-4 ">
+        <div className="md:w-[100%] p-4 ">
           {lat && lng && (
             <p className="text-gray-700 mb-4 text-sm md:text-base md:w-[100%] md:mr-50 text-center">
               Uber found within 5km radius of <strong>latitude:</strong> {lat}, <strong>longitude:</strong> {lng}
@@ -160,12 +160,12 @@ function BookRide() {
         </div>
 
         {/* Show Timer if Ride Booked */}
-        <div className="">
+        <div className="w-[100%]">
           {showCounter.showCounter ? (
             <TimerCountDown orderId={showCounter.orderId} setCounter={setShowCounter} />
           ) : (
             <div className='border-white rounded-2xl md:mt-[0px] md:w-[100%]'>
-              <h2 className='px-[28px] py-[14px] font-bold text-xl md:ml-60 md:mb-4'>Get a ride</h2>
+              <h2 className='px-[28px] py-[14px] font-bold text-xl md:ml-82 md:mb-4'>Get a ride</h2>
               <div className="bg-white mx-6 md:mx-10 mb-6 p-6 rounded-2xl shadow-lg md:ml-20">
                 <form onSubmit={handleBookRide} className="flex flex-col gap-4">
                   <div className="flex flex-col md:flex-row justify-between gap-4">
@@ -242,7 +242,7 @@ function BookRide() {
           )}
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

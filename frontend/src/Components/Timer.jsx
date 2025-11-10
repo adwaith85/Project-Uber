@@ -61,7 +61,7 @@ const TimerCountDown = ({ orderId, setCounter }) => {
   }, [timeRemaining]);
 
   return (
-    <div className="h-[100%] pb-8 flex items-center justify-center bg-gray-50 font-sans relative overflow-hidden md:w-[100%] md:left-[200px]">
+    <div className="rounded-[20px] h-[100%] w-[100%] pb-8 flex items-center justify-center bg-gray-100 font-sans relative overflow-hidden md:w-[100%] ">
       {/* 🎉 Confetti */}
       {orderAccepted && <Confetti recycle={false} numberOfPieces={300} />}
 
@@ -72,7 +72,7 @@ const TimerCountDown = ({ orderId, setCounter }) => {
 
         {/* Round Counter */}
         <div
-          className={`relative flex items-center justify-center w-48 h-48 rounded-full border-[10px] ${orderAccepted
+          className={`mb-1 relative flex items-center justify-center w-48 h-48 rounded-full border-[10px] ${orderAccepted
             ? "border-green-500 text-green-600"
             : timeRemaining <= 5
               ? "border-amber-400 text-amber-500 animate-pulse"
@@ -83,20 +83,20 @@ const TimerCountDown = ({ orderId, setCounter }) => {
         </div>
 
         {/* Status Text */}
-        <p className="text-center text-lg font-medium">
+        <p className=" text-center text-lg font-medium ">
           {orderAccepted ? (
             <span className="text-green-600 font-bold">
               ✅ Order Accepted!
             </span>
           ) : timeRemaining === 0 ? (
             <div className="flex flex-col items-center justify-center mt-8 space-y-4">
-              <span className="text-2xl font-extrabold text-red-600 flex items-center gap-2">
+              <span className="text-2xl font-extrabold text flex items-center gap-2">
                 ⏰ Time’s Up!
               </span>
 
               <button
                 onClick={() => setCounter({ showCounter: false, orderId: null })}
-                className="px-6 py-2 text-white font-semibold bg-gradient-to-r from-red-500 to-orange-400 rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200"
+                className="px-6 py-2 text-white font-semibold bg-gradient-to-r from-red-900 to-orange-800 rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200"
               >
                 🔁 Retry Booking
               </button>

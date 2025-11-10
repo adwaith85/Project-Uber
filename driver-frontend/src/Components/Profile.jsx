@@ -24,7 +24,7 @@ function Profile() {
   });
 
 
-  console.log("User data from API:", data);
+  // console.log("User data from API:", data);
 
   if (isLoading) return <p className="text-center mt-4">Loading...</p>;
   if (error) return <p className="text-center mt-4 text-red-500">Error loading data</p>;

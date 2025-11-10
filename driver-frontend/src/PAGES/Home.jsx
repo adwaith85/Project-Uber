@@ -37,7 +37,7 @@ function Home() {
   return (
     <div className="flex flex-col h-screen bg-gray-100 text-gray-900">
       <Navbar />
-      <main className="flex-1 overflow-y-auto p-3 space-y-6">
+      <main className="flex-1 overflow-y-auto md:ml-70 p-3 space-y-6 ">
         <div className="w-[100%] ">
           <CurrentLocationMap socketRef={socketRef} />
         </div>
