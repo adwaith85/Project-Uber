@@ -1,13 +1,28 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import api from "../api/axiosClient";
+import DriverStore from "../Store/DriverStore";
+import { useNavigate } from "react-router-dom";
 
-const RiderReqMessage = ({ ride }) => {
+const RiderReqMessage = ({ ride, socketRef }) => {
   if (!ride) return null; // Safety check
 
   const { pickup, dropoff, time, date, rideId } = ride;
   const [visible, setVisible] = useState(true);
   const [progress, setProgress] = useState(100);
+  const navigate = useNavigate();
+  const token = DriverStore((state) => state.token);
+  let driverEmail = null;
+  if (token) {
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = JSON.parse(atob(base64));
+      driverEmail = jsonPayload.email;
+    } catch (err) {
+      console.warn("Could not parse driver token", err);
+    }
+  }
 
   // Countdown progress bar (100 → 0 over 25 seconds)
   useEffect(() => {
@@ -31,10 +46,21 @@ const RiderReqMessage = ({ ride }) => {
 
   const handleAccept = () => {
     api
-      .post("acceptride", { rideId, date, time })
+      .post("acceptride", { rideId, date, time, driverEmail })
       .then(() => {
         alert("✅ You accepted the ride request!");
         setVisible(false);
+
+        // Join ride room as driver so driver can emit locations to that room
+        try {
+          if (socketRef?.current) {
+            socketRef.current.emit("ride:join", { rideId, role: "driver", email: driverEmail });
+          }
+        } catch (err) {
+          console.warn("Could not join ride room via socket:", err);
+        }
+
+        navigate("/ridinglocation", { state: { rideId } });
       })
       .catch((err) => console.error("Error:", err));
   };

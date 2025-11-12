@@ -29,6 +29,14 @@ function Login() {
       console.error("login error:", error.response?.data || error.message);
     }
   }
+
+  const googlesubmit=()=>{
+    alert("you don't have an account")
+  }
+  const applesubmit=()=>{
+    alert("first buy an iphone")
+  }
+
   return (<>
 
     <div className="w-[100%] h-screen flex flex-col  items-center">
@@ -82,7 +90,9 @@ function Login() {
         </div>
 
         {/* Google Button */}
-        <button className="w-[100%] border-none h-12  flex items-center justify-center gap-2 bg-gray-200 py-3 rounded-lg font-medium mb-2 border border-gray-300 hover:bg-gray-200">
+        <button className="w-[100%] border-none h-12  flex items-center justify-center gap-2 bg-gray-200 py-3 rounded-lg font-medium mb-2 border border-gray-300 hover:bg-gray-200"
+        onClick={googlesubmit}
+        >
           <img
             src="https://www.svgrepo.com/show/355037/google.svg"
             alt="Google"
@@ -92,7 +102,9 @@ function Login() {
         </button>
 
         {/* Apple Button */}
-        <button className="w-[100%] border-none  h-12 flex items-center justify-center gap-2 bg-gray-200 py-3 rounded-lg font-medium border border-gray-300 hover:bg-gray-200">
+        <button className="w-[100%] border-none  h-12 flex items-center justify-center gap-2 bg-gray-200 py-3 rounded-lg font-medium border border-gray-300 hover:bg-gray-200"
+        onClick={applesubmit}
+        >
           <img
             src="https://www.svgrepo.com/show/349442/apple.svg"
             alt="Apple"

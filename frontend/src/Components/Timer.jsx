@@ -20,9 +20,18 @@ const TimerCountDown = ({ orderId, setCounter }) => {
     });
 
     socketRef.current.emit("checkOrderStatus", { orderId });
+    // Join ride room so we can receive immediate room events
+    socketRef.current.emit("ride:join", { rideId: orderId, role: "user" });
 
     socketRef.current.on("orderStatus", (data) => {
       if (data.status === "accepted") {
+        setOrderAccepted(true);
+        setIsRunning(false);
+      }
+    });
+
+    socketRef.current.on("ride:accepted", (data) => {
+      if (data?.rideId && String(data.rideId) === String(orderId)) {
         setOrderAccepted(true);
         setIsRunning(false);
       }
@@ -47,7 +56,7 @@ const TimerCountDown = ({ orderId, setCounter }) => {
   // ---- Navigate when accepted ----
   useEffect(() => {
     if (orderAccepted) {
-      const timeout = setTimeout(() => navigate("/rider"), 3000);
+      const timeout = setTimeout(() => navigate(`/ridinglocation?rideId=${orderId}`), 3000);
       return () => clearTimeout(timeout);
     }
   }, [orderAccepted, navigate]);

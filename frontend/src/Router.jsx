@@ -4,7 +4,6 @@ import Home from "./PAGES/Home";
 import BookRide from "./Components/BookRide";
 import NavbarX from "./Components/NavbarX";
 import UserHome from "./PAGES/UserHome";
-import Suggestions from "./Components/Suggestions";
 import AccountManager from "./PAGES/AccountManager";
 import PersonalInfo from "./Components/PersonalInfo";
 import Register from "./PAGES/Register";
@@ -14,6 +13,7 @@ import UpdateNumber from "./Components/UpdateNumber";
 import UserStore from "./Store/UserStore";
 import Logouterror from "./Components/Logouterror";
 import Rider from "./Components/Rider";
+import RidingLocation from "./Components/RidingLocation";
 
 function CustomRoute() {
     const token = UserStore((state) => state.token)
@@ -32,6 +32,7 @@ function CustomRoute() {
                 <Route path="/ProfileUpdate" element={token ? (<ProfileUpdate />) : <Logouterror />} />
                 <Route path="/UpdateNumber" element={token ? (<UpdateNumber />) : <Logouterror />} />
                 <Route path="/rider" element={token ? (<Rider />) : <Logouterror />} />
+                <Route path="/ridinglocation" element={token ? (<RidingLocation />) : <Logouterror />} />
             </Routes>
         </BrowserRouter>
     </>

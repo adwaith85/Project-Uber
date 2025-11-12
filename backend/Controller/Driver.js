@@ -255,6 +255,15 @@ export const acceptride = async (req, res) => {
       return res.status(404).json({ message: "Ride not found" });
     }
 
+    // Notify everyone in the ride room that the ride was accepted
+    try {
+      const roomName = `ride_${ride._id}`;
+      io.to(roomName).emit("ride:accepted", { rideId: ride._id, driverEmail: driverEmail });
+      console.log(`🔔 Emitted ride:accepted to room ${roomName}`);
+    } catch (err) {
+      console.error("Error emitting ride:accepted", err);
+    }
+
     res.status(200).json({ message: "Ride accepted successfully", ride });
   } catch (error) {
     console.error("Error accepting ride:", error);

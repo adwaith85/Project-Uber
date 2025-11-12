@@ -43,7 +43,7 @@ function Home() {
         </div>
         <div className="w-full bottom-7">
           {ridenotify ? (
-            <RiderReqMessage ride={rideData} />
+            <RiderReqMessage ride={rideData} socketRef={socketRef} />
           ) : (
             <></>
           )}
