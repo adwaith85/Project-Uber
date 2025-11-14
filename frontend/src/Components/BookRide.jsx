@@ -180,8 +180,6 @@ function BookRide() {
                     </div>
                   </div>
 
-
-
                   <div className="grid grid-cols-2 gap-4 w-full mt-4">
                     <div>
                       <label className="block text-gray-600 text-sm font-medium">Driver</label>

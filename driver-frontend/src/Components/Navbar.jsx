@@ -50,7 +50,7 @@ function Navbar() {
   // 🧭 Automatically update title based on current route
   const currentTitle =
     menuItems.find((item) => location.pathname.startsWith(item.path))?.name ||
-    "Driver Dashboard";
+    { name: "Dashboard" }.name;
 
   return (
     <div className="flex flex-col bg-gray-100 text-gray-900">

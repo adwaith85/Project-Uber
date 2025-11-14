@@ -95,7 +95,7 @@ const UserRideMap = () => {
           setOtpStatus("confirmed");
           setJourneyStarted(true);
           alert("✅ OTP confirmed. Journey started!");
-          navigate("/rider")
+          navigate("/destination")
         } else {
           setOtpStatus("failed");
           alert("❌ OTP incorrect. Please try again.");
