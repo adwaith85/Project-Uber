@@ -1,83 +1,72 @@
 import React, { useEffect, useState } from "react";
 import { Menu, LogOut, UserCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom"; // ⬅️ Added useLocation
 import { useQuery } from '@tanstack/react-query';
 import DriverStore from "../Store/DriverStore";
 import api from "../api/axiosClient";
 
-
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation(); // ⬅️ Track current route
   const [drawerOpen, setDrawerOpen] = useState(false);
-  // const [driverData, setDriverData] = useState(null);
   const toggleDrawer = () => setDrawerOpen(!drawerOpen);
-
   const { token, logout } = DriverStore();
 
   const menuItems = [
     { name: "Dashboard", path: "/home" },
     { name: "Earnings", path: "/earnings" },
     { name: "Trips", path: "/trips" },
-    { name: "Profile", path: "/Profile" },
+    { name: "Profile", path: "/profile" },
     { name: "Support", path: "/support" },
   ];
 
-
-  // 🎯 Fetch driver profile when token available
+  // 🎯 Fetch driver profile
   const { data, isLoading, error } = useQuery({
     queryKey: ['driver'],
     queryFn: async () => {
       const res = await api.get('/Details', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       return res.data;
     },
     enabled: !!token,
   });
 
-
-  // console.log("User data from API:", data);
-
   if (isLoading) return <p className="text-center mt-4">Loading...</p>;
   if (error) return <p className="text-center mt-4 text-red-500">Error loading data</p>;
 
-
-  // 🚪 Handle logout
   const handleLogout = () => {
-    api
-      .get("driverlogout", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+    api.get("driverlogout", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then(() => {
         logout();
-        // setDriverData(null);
         navigate("/");
       })
       .catch((err) => console.error("error:", err))
   };
 
+  // 🧭 Automatically update title based on current route
+  const currentTitle =
+    menuItems.find((item) => location.pathname.startsWith(item.path))?.name ||
+    "Driver Dashboard";
+
   return (
     <div className="flex flex-col bg-gray-100 text-gray-900">
       {/* Navbar */}
       <header className="sticky top-0 z-10 flex items-center justify-between px-6 py-3 bg-white shadow-md">
-        {/* Left Section: Drawer + Driver Info */}
+        {/* Left Section */}
         <div className="flex items-center gap-3">
-          {/* Drawer Button */}
           <button onClick={toggleDrawer} className="p-2 rounded hover:bg-gray-200">
             <Menu className="w-6 h-6" />
           </button>
 
-          {/* Driver Info */}
           {data ? (
             <div className="flex items-center gap-2">
               {data.profileimg ? (
                 <img
-                  src={data?.profileimg}
+                  src={data.profileimg}
                   alt="Profile"
                   className="w-8 h-8 rounded-full object-cover border"
                 />
@@ -89,14 +78,14 @@ function Navbar() {
               </span>
             </div>
           ) : (
-            token && (
-              <span className="text-red-500 text-sm font-medium">User not found</span>
-            )
+            token && <span className="text-red-500 text-sm font-medium">User not found</span>
           )}
         </div>
 
-        {/* Center Title */}
-        <h1 className="text-lg font-semibold tracking-wide">Driver Dashboard</h1>
+        {/* Center Title — Dynamically changes */}
+        <h1 className="text-lg font-semibold tracking-wide">
+          {currentTitle}
+        </h1>
 
         {/* Logout Button */}
         {token ? (
@@ -138,7 +127,11 @@ function Navbar() {
                   <Link
                     key={idx}
                     to={item.path}
-                    className="hover:bg-gray-100 rounded-lg px-3 py-2 transition-colors"
+                    className={`hover:bg-gray-100 rounded-lg px-3 py-2 transition-colors ${
+                      location.pathname.startsWith(item.path)
+                        ? "bg-gray-200 font-semibold"
+                        : ""
+                    }`}
                     onClick={toggleDrawer}
                   >
                     {item.name}
@@ -146,7 +139,6 @@ function Navbar() {
                 ))}
               </nav>
 
-              {/* Close button */}
               <button
                 onClick={toggleDrawer}
                 className="mt-auto bg-red-600 hover:bg-red-700 text-white font-medium py-2 rounded-lg"
@@ -155,7 +147,6 @@ function Navbar() {
               </button>
             </motion.aside>
 
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.5 }}

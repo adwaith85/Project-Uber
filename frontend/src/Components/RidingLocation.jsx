@@ -2,9 +2,10 @@ import React, { useEffect, useState, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Polyline, Popup, CircleMarker } from "react-leaflet";
 import L from "leaflet";
 import io from "socket.io-client";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import UserStore from "../Store/UserStore";
 import "leaflet/dist/leaflet.css";
+import NavbarX from "./NavbarX";
 
 const driverIcon = new L.Icon({
   iconUrl: "/carimg.png",
@@ -33,6 +34,7 @@ const UserRideMap = () => {
   const [otpInput, setOtpInput] = useState("");
   const [otpStatus, setOtpStatus] = useState(null);
   const [journeyStarted, setJourneyStarted] = useState(false);
+  const navigate=useNavigate()
 
   // Connect socket
   useEffect(() => {
@@ -93,6 +95,7 @@ const UserRideMap = () => {
           setOtpStatus("confirmed");
           setJourneyStarted(true);
           alert("✅ OTP confirmed. Journey started!");
+          navigate("/rider")
         } else {
           setOtpStatus("failed");
           alert("❌ OTP incorrect. Please try again.");
@@ -242,8 +245,11 @@ const UserRideMap = () => {
 
   const center = userLocation || driverLocation || { lat: 11.9635, lng: 75.3208 };
 
-  return (
-    <div className="m-4 rounded-2xl overflow-hidden shadow-md mt-4 md:w-[50%] md:mx-auto relative">
+  return (<>
+    <div className="">
+      <NavbarX/>
+    </div>
+    <div className="m-4 rounded-2xl overflow-hidden shadow-md mt-4 md:w-[100%] md:mx-auto relative">
       {journeyStarted && distance && eta && (
         <div className="absolute top-2 left-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-3 rounded shadow-lg text-sm font-bold z-10">
           <div>🚗 En Route to Destination</div>
@@ -348,6 +354,7 @@ const UserRideMap = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

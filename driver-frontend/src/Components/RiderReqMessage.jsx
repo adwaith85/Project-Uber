@@ -73,7 +73,7 @@ const RiderReqMessage = ({ ride, socketRef }) => {
   if (!visible) return null;
 
   return (
-    <div className="w-full bottom-19 md:w-[50%] md:ml-[560px] bg-white border border-gray-300 rounded-2xl shadow-md p-4 mt-10">
+    <div className="w-full bottom-19 md:w-[60%] md:ml-[30%] bg-white border border-gray-300 rounded-2xl shadow-md p-4 mt-10">
       <h2 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">
         🚘 Incoming Ride Requests
       </h2>

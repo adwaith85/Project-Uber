@@ -75,7 +75,7 @@ const CurrentLocationMap = ({ socketRef }) => {
   }, [driverEmail]);
 
   return (
-    <div className="w-full h-[350px] md:w-[50%] md:ml-[560px] rounded-2xl overflow-hidden shadow-lg border border-gray-300 bg-white">
+    <div className="w-full h-[350px] md:w-[60%] md:ml-[30%] rounded-2xl overflow-hidden shadow-lg border border-gray-300 bg-white">
       {error && <p className="text-red-500 text-center py-4 font-medium">{error}</p>}
       {!location && !error && (
         <p className="text-gray-600 text-center py-4 font-medium">Fetching location...</p>
