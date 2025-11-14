@@ -34,6 +34,10 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
   const [rideId, setRideId] = useState(propRideId || null);
   const [arrivedSent, setArrivedSent] = useState(false);
   const [arrivalNotified, setArrivalNotified] = useState(false);
+  const [arrivalReady, setArrivalReady] = useState(false); // within threshold, but not generated
+  const [arrivalAlerted, setArrivalAlerted] = useState(false);
+  const [otpSentToUser, setOtpSentToUser] = useState(false);
+  const [otpInputDriver, setOtpInputDriver] = useState("");
   const [journeyStarted, setJourneyStarted] = useState(false);
   const location = useLocation();
 
@@ -127,13 +131,12 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
       }
     });
 
-    // backend will also send OTP to room; display it to driver
-    socketRef.current.on("driver:arrived", (data) => {
-      console.log("✅ driver:arrived event", data);
-      if (data?.otp) {
-        // show brief notification
-        alert(`OTP sent to rider: ${data.otp}`);
-      }
+    // backend will notify the driver that OTP was sent to the user (without revealing OTP)
+    socketRef.current.on("otp:sent-to-user", (data) => {
+      console.log("✅ otp:sent-to-user event", data);
+      setOtpSentToUser(true);
+      setArrivalNotified(true);
+      alert("OTP generated and sent to rider. Please ask the rider for the code and enter it to start the journey.");
     });
 
     socketRef.current.on("otp:confirmed", (data) => {
@@ -272,20 +275,42 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
   useEffect(() => {
     if (!driverLocation || !userLocation || arrivedSent) return;
     const dKm = haversineKm(driverLocation, userLocation);
-    // arrival threshold: 0.05 km = 50 meters
-    if (dKm <= 0.05) {
-      // emit arrival once
-      try {
-        if (socketRef.current && socketRef.current.connected) {
-          socketRef.current.emit("driver:arrived", { rideId, email: driverEmail });
-          setArrivedSent(true);
-          setArrivalNotified(true);
-        }
-      } catch (err) {
-        console.warn("Error emitting driver:arrived", err);
-      }
+    // arrival threshold: treat as 0 km with a tiny tolerance (1 meter) to allow for GPS noise
+    if (dKm <= 0.001) {
+      setArrivalReady(true);
     }
   }, [driverLocation, userLocation, arrivedSent, rideId, driverEmail]);
+
+  // alert driver when within arrival threshold (shown once)
+  useEffect(() => {
+    if (arrivalReady && !arrivalAlerted) {
+      setArrivalAlerted(true);
+      alert("You have reached the rider's location. You can now generate OTP to verify pickup.");
+    }
+  }, [arrivalReady, arrivalAlerted]);
+
+  // Driver clicks this to generate OTP and notify rider
+  const handleGenerateOtp = () => {
+    if (!socketRef.current || !socketRef.current.connected) return;
+    if (!rideId) return;
+    try {
+      socketRef.current.emit("driver:arrived", { rideId, email: driverEmail });
+      setArrivedSent(true);
+      // arrivalNotified will be set when backend emits the arrival event back to the room
+    } catch (err) {
+      console.warn("Error emitting driver:arrived", err);
+    }
+  };
+
+  const handleDriverConfirmOtp = (e) => {
+    e?.preventDefault?.();
+    if (!socketRef.current || !rideId || !otpInputDriver) return;
+    try {
+      socketRef.current.emit("otp:confirm", { rideId, otp: otpInputDriver });
+    } catch (err) {
+      console.warn("Error emitting otp:confirm", err);
+    }
+  };
 
   const center = driverLocation || userLocation || { lat: 11.9635, lng: 75.3208 };
 
@@ -382,6 +407,35 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
               )}
             </div>
           </div>
+        </div>
+
+        {/* Arrival / OTP controls for driver */}
+        <div className="absolute bottom-24 left-2 right-2 p-3 rounded text-sm z-20 pointer-events-auto">
+          {arrivalReady && !arrivedSent && (
+            <div className="flex justify-center">
+              <button
+                onClick={handleGenerateOtp}
+                className="px-4 py-2 bg-blue-600 text-white rounded shadow-md"
+              >
+                Generate OTP & Notify Rider
+              </button>
+            </div>
+          )}
+          {otpSentToUser && !journeyStarted && (
+            <div className="mt-2 bg-white p-3 rounded shadow-md text-gray-900 w-full md:w-1/2 mx-auto">
+              <div className="mb-2 font-semibold">OTP sent to rider</div>
+              <div className="text-sm mb-2">Ask the rider for the 4-digit OTP and enter it below to confirm pickup.</div>
+              <form onSubmit={handleDriverConfirmOtp} className="flex gap-2">
+                <input
+                  value={otpInputDriver}
+                  onChange={(e) => setOtpInputDriver(e.target.value)}
+                  className="p-2 border rounded w-full"
+                  placeholder="Enter OTP to confirm"
+                />
+                <button className="px-3 py-2 bg-green-600 text-white rounded">Confirm</button>
+              </form>
+            </div>
+          )}
         </div>
       </div>
     </div>

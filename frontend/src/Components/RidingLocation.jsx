@@ -31,8 +31,6 @@ const UserRideMap = () => {
   const token = UserStore((state) => state.token);
   const [userEmail, setUserEmail] = useState(null);
   const [otpReceived, setOtpReceived] = useState(null);
-  const [otpInput, setOtpInput] = useState("");
-  const [otpStatus, setOtpStatus] = useState(null);
   const [journeyStarted, setJourneyStarted] = useState(false);
   const navigate=useNavigate()
 
@@ -83,8 +81,9 @@ const UserRideMap = () => {
     socketRef.current.on("driver:arrived", (data) => {
       console.log("🔔 Driver arrived event:", data);
       if (data?.rideId && String(data.rideId) === String(rideId)) {
-        setOtpReceived(data.otp);
-        alert("Driver has arrived. Please confirm the OTP to start the journey.");
+          setOtpReceived(data.otp);
+          // Let user know OTP was generated and is shown below
+          alert("Driver has arrived. Please note the OTP shown below and give it to the driver.");
       }
     });
 
@@ -92,12 +91,11 @@ const UserRideMap = () => {
       console.log("✅ OTP confirmed event:", data);
       if (data?.rideId && String(data.rideId) === String(rideId)) {
         if (data.success) {
-          setOtpStatus("confirmed");
           setJourneyStarted(true);
           alert("✅ OTP confirmed. Journey started!");
-          navigate("/destination")
+          // navigate with a full reload so destination page state is fresh
+          window.location.href = "/destination";
         } else {
-          setOtpStatus("failed");
           alert("❌ OTP incorrect. Please try again.");
         }
       }
@@ -131,11 +129,7 @@ const UserRideMap = () => {
     }
   }, [rideId, userEmail]);
 
-  const handleConfirmOtp = (e) => {
-    e.preventDefault();
-    if (!otpInput || !rideId) return;
-    socketRef.current.emit("otp:confirm", { rideId, otp: otpInput });
-  };
+  // User no longer confirms OTP — driver will confirm it. Keep socket listener for otp:confirmed.
 
   // Send user's location
   useEffect(() => {
@@ -337,20 +331,12 @@ const UserRideMap = () => {
         </div>
       </div>
 
-      {/* OTP modal */}
-      {otpReceived && otpStatus !== "confirmed" && (
+      {/* OTP display for rider (read-only) */}
+      {otpReceived && !journeyStarted && (
         <div className="absolute top-20 left-4 bg-white p-4 rounded shadow z-20 w-[90%] md:w-[40%]">
-          <h3 className="font-semibold mb-2">Driver arrived — Confirm OTP</h3>
-          <p className="text-sm mb-2">Enter the 4-digit OTP shown by the driver to start the journey.</p>
-          <form onSubmit={handleConfirmOtp} className="flex gap-2">
-            <input
-              value={otpInput}
-              onChange={(e) => setOtpInput(e.target.value)}
-              className="p-2 border rounded w-full"
-              placeholder="Enter OTP"
-            />
-            <button className="px-3 py-2 bg-blue-600 text-white rounded">Confirm</button>
-          </form>
+          <h3 className="font-semibold mb-2">Driver arrived — OTP</h3>
+          <p className="text-sm mb-2">Provide the OTP below to the driver so they can confirm pickup.</p>
+          <div className="p-3 bg-gray-100 rounded text-center font-mono text-lg">{otpReceived}</div>
         </div>
       )}
     </div>
