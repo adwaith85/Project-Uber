@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Polyline, Popup, CircleMarker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import DriverStore from "../Store/DriverStore";
 import { useSocket } from "../context/SocketContext";
 import Navbar from "./Navbar";
@@ -40,6 +40,8 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
   const [otpInputDriver, setOtpInputDriver] = useState("");
   const [journeyStarted, setJourneyStarted] = useState(false);
   const location = useLocation();
+
+  const navigate=useNavigate()
 
   useEffect(() => {
     if (!rideId && location?.state?.rideId) setRideId(location.state.rideId);
@@ -144,6 +146,7 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
       if (data?.rideId && String(data.rideId) === String(rideId) && data.success) {
         setJourneyStarted(true);
         alert("OTP confirmed — journey started");
+        navigate("/driverdestination")  
       }
     });
 

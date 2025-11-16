@@ -3,7 +3,6 @@ import { MapContainer, TileLayer, Marker, useMap, Polyline } from "react-leaflet
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 // removed leaflet-routing-machine to avoid its UI and markers
-import NavbarX from "../Components/NavbarX";
 
 const userIcon = new L.Icon({
   iconUrl: "/carimg.png",
@@ -19,7 +18,7 @@ const destinationIcon = new L.Icon({
 
 // We'll fetch a route geometry (GeoJSON) from OSRM and draw it as a Polyline
 
-const Destination = () => {
+const DriverDestination = () => {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [dropoffLocation, setDropoffLocation] = useState(null);
   const [routeCoords, setRouteCoords] = useState([]);
@@ -133,7 +132,7 @@ const Destination = () => {
 
   return (
     <>
-      <NavbarX />
+      
       <div className="rounded-2xl overflow-hidden shadow-md mt-4 md:w-[100%]">
         <MapContainer
           center={[center.lat || center[0], center.lng || center[1]]}
@@ -169,4 +168,4 @@ const Destination = () => {
   );
 };
 
-export default Destination;
+export default DriverDestination;
