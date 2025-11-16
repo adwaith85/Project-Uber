@@ -94,7 +94,12 @@ const UserRideMap = () => {
           setJourneyStarted(true);
           alert("✅ OTP confirmed. Journey started!");
           // navigate with a full reload so destination page state is fresh
-          window.location.href = "/destination";
+          // include rideId so Destination page can fetch the correct trip
+          if (rideId) {
+            window.location.href = `/destination?rideId=${rideId}`;
+          } else {
+            window.location.href = "/destination";
+          }
         } else {
           alert("❌ OTP incorrect. Please try again.");
         }
