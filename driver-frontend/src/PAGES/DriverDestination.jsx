@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 // removed leaflet-routing-machine to avoid its UI and markers
 
 const userIcon = new L.Icon({
-  iconUrl: "/carimg.png",
+  iconUrl: "/car.png",
   iconSize: [40, 40],
   iconAnchor: [20, 20],
 });
@@ -23,6 +23,9 @@ const DriverDestination = () => {
   const [dropoffLocation, setDropoffLocation] = useState(null);
   const [routeCoords, setRouteCoords] = useState([]);
   const mapRef = useRef(null);
+
+  const [distance, setDistance] = useState(null);
+  const[eta,setEta]=useState(null);
 
   // 1️⃣ Get user GPS
   useEffect(() => {
@@ -109,8 +112,11 @@ const DriverDestination = () => {
         const res = await fetch(url);
         const data = await res.json();
         if (data?.routes?.length) {
+          const route = data.routes[0];
           const coords = data.routes[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
           setRouteCoords(coords);
+          setDistance((route.distance / 1000).toFixed(2)); // km
+        setEta(Math.ceil(route.duration / 60)); // min
 
           // fit map to route
           if (mapRef.current) {
@@ -133,7 +139,7 @@ const DriverDestination = () => {
   return (
     <>
       
-      <div className="rounded-2xl overflow-hidden shadow-md mt-4 md:w-[100%]">
+      <div className="m-2 rounded-2xl overflow-hidden shadow-md mt-4 md:w-[100%]">
         <MapContainer
           center={[center.lat || center[0], center.lng || center[1]]}
           zoom={13}
@@ -164,6 +170,16 @@ const DriverDestination = () => {
           )}
         </MapContainer>
       </div>
+      {distance && eta &&  (
+        
+          <div className="absolute top-2 left-2 bg-orange-400 text-white px-4 py-3 rounded shadow-lg text-sm font-bold z-10">
+            <div>� Heading to Pickup</div>
+            <div className="text-xs mt-1">📍 {distance} km away | ⏱ {eta} min</div>
+            {
+              Number(distance)<=0.5 && (alert("You have reached the destination"))
+            }
+          </div>
+        )}
     </>
   );
 };

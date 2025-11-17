@@ -143,12 +143,21 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
 
     socketRef.current.on("otp:confirmed", (data) => {
       console.log("✅ otp:confirmed event", data);
-      if (data?.rideId && String(data.rideId) === String(rideId) && data.success) {
+      if (data?.rideId && String(data.rideId) === String(rideId)) {
+        if(data.success){
         setJourneyStarted(true);
         alert("OTP confirmed — journey started");
-        navigate("/driverdestination")  
+        // navigate("/driverdestination")  
+      if (rideId) {
+            window.location.href = `/driverdestination?rideId=${rideId}`;
+          } else {
+            window.location.href = "/driverdestination";
+          }
+        } else {
+          alert("❌ OTP verified incorrectly. Please try again.");
+        }
       }
-    });
+  });
 
     return () => {
       if (!socketRef.current) return;

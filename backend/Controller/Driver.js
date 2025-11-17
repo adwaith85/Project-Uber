@@ -213,10 +213,8 @@ export const nearby = async (req, res) => {
     if (!lat || !lng) {
       return res.status(400).json({ error: "Latitude and longitude are required" })
     }
-
     const longitude = parseFloat(lng)
     const latitude = parseFloat(lat)
-
     // Find drivers within 5 km radius (5000 meters)
     const drivers = await DriverModel.find({
       onlinestatus: "loggin",
@@ -227,7 +225,6 @@ export const nearby = async (req, res) => {
         }
       }
     })
-
     res.json({ count: drivers.length, drivers })
   } catch (err) {
     console.error(err)
