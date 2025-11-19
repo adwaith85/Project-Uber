@@ -21,12 +21,6 @@ driver.get("/trip/:id", async (req, res) => {
   try {
     const trip = await RideModel.findById(req.params.id);
     if (!trip) return res.status(404).json({ message: "Trip not found" });
-   
-
-    trip.status="completed"
-    await trip.save();
- 
-    console.log("Ride completed:", trip);
 
     res.json(trip);
   } catch (err) {
@@ -34,6 +28,21 @@ driver.get("/trip/:id", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+driver.get("/ridecomplete/:id", async (req, res) => {
+  try {
+    const trip = await RideModel.findById(req.params.id);
+    if (!trip) return res.status(404).json({ message: "Trip not found" });
+    trip.status = "completed"
+    await trip.save();
+    // console.log("Ride completed:", trip);
+    res.json({ message: "Trip marked as completed" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 
 

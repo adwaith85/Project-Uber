@@ -27,6 +27,21 @@ const DriverDestination = () => {
   const [distance, setDistance] = useState(null);
   const[eta,setEta]=useState(null);
 
+  // update ride status
+  const markRideComplete = async () => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+        const rideId = params.get("rideId");
+
+      const res = await fetch(`http://localhost:8080/ridecomplete/${rideId}`);
+      if (res.ok) {
+        alert("Ride marked as completed!");
+      }
+    } catch (err) {
+      console.log("Error marking ride complete:", err);
+    }
+  };
+
   // 1️⃣ Get user GPS
   useEffect(() => {
     if (!navigator.geolocation) return;
@@ -45,13 +60,13 @@ const DriverDestination = () => {
     } catch (e) {
       console.warn("Geolocation watch failed", e);
     }
-
     return () => {
       if (watcher && navigator.geolocation.clearWatch) {
         navigator.geolocation.clearWatch(watcher);
       }
     };
   }, []);
+
 
   // 2️⃣ Fetch dropoff location from MongoDB
   useEffect(() => {
@@ -64,20 +79,17 @@ const DriverDestination = () => {
           console.warn("No rideId in query params");
           return;
         }
-
         const res = await fetch(`http://localhost:8080/trip/${rideId}`);
         if (!res.ok) {
           console.error("Failed to fetch trip", res.statusText);
           return;
         }
         const trip = await res.json();
-
         // If backend stored dropoff coordinates, use them directly
         if (trip.dropoffLat && trip.dropoffLng) {
           setDropoffLocation({ lat: Number(trip.dropoffLat), lng: Number(trip.dropoffLng) });
           return;
         }
-
         // Otherwise, fallback to geocoding the dropoff address
         if (trip.dropoff) {
           const geoRes = await fetch(
@@ -95,7 +107,6 @@ const DriverDestination = () => {
         console.log(err);
       }
     };
-
     fetchDropoff();
   }, []);
 
@@ -135,6 +146,9 @@ const DriverDestination = () => {
 
     fetchRoute();
   }, [currentLocation, dropoffLocation]);
+
+
+  
 
   return (
     <>
@@ -176,7 +190,13 @@ const DriverDestination = () => {
             <div>� Heading to Pickup</div>
             <div className="text-xs mt-1">📍 {distance} km away | ⏱ {eta} min</div>
             {
-              Number(distance)<=0.5 && (alert("You have reached the destination"))
+              Number(distance)<=0.5 && <>
+                <button onClick={markRideComplete }
+                className="mt-2 bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-xs"
+                >
+                done
+                </button>
+              </>
             }
           </div>
         )}

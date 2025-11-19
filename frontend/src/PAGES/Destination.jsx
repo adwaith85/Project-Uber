@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, useMap, Polyline } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import Confetti from "react-confetti";
 // removed leaflet-routing-machine to avoid its UI and markers
 import NavbarX from "../Components/NavbarX";
+import { useNavigate } from "react-router-dom";
 
 const userIcon = new L.Icon({
   iconUrl: "/carimg.png",
@@ -24,6 +26,13 @@ const Destination = () => {
   const [dropoffLocation, setDropoffLocation] = useState(null);
   const [routeCoords, setRouteCoords] = useState([]);
   const mapRef = useRef(null);
+  const navigate = useNavigate();
+  const [distance, setDistance] = useState(null);
+  const [eta, setEta] = useState(null);
+  const [showFeedback, setShowFeedback] = useState(true);
+  const [rating, setRating] = useState(0);
+  const [feedback, setFeedback] = useState("");
+
 
   // 1️⃣ Get user GPS
   useEffect(() => {
@@ -110,8 +119,11 @@ const Destination = () => {
         const res = await fetch(url);
         const data = await res.json();
         if (data?.routes?.length) {
+          const route = data.routes[0];
           const coords = data.routes[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
           setRouteCoords(coords);
+          setDistance((route.distance / 1000).toFixed(2)); // km
+          setEta(Math.ceil(route.duration / 60)); // min
 
           // fit map to route
           if (mapRef.current) {
@@ -134,6 +146,7 @@ const Destination = () => {
   return (
     <>
       <NavbarX />
+      {/* {Number(distance) && <Confetti recycle={false} numberOfPieces={300} />} */}
       <div className="rounded-2xl overflow-hidden shadow-md mt-4 md:w-[100%]">
         <MapContainer
           center={[center.lat || center[0], center.lng || center[1]]}
@@ -165,6 +178,76 @@ const Destination = () => {
           )}
         </MapContainer>
       </div>
+      {distance && eta && (
+
+        <div className="absolute top-20 left-2 bg-orange-400 text-white px-4 py-5 rounded shadow-lg text-sm font-bold z-0">
+          <div>� Heading to Pickup</div>
+          <div className="text-xs mt-1">📍 {distance} km away | ⏱ {eta} min</div>
+        </div>
+      )}
+      {
+        distance && Number(distance) <= 0.5 && showFeedback && (
+          <>
+            {/* BACKGROUND BLUR */}
+            <div className="fixed inset-0 bg-black/40 backdrop-brightness-50  z-[100]" />
+            <Confetti recycle={false} numberOfPieces={2000} className="w-full h-full" />
+            <div className="
+        fixed top-70 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[90%] md:w-[400px] p-6 rounded-2xl shadow-2xl flex flex-col items-center z-[300] ">
+              {/* CLOSE BUTTON */}
+              <button
+                className="absolute top-3 right-3 text-gray-600 hover:text-black text-xl"
+                onClick={() => {
+                  setShowFeedback(false)
+                  navigate('/UserHome')
+                }}
+              >
+                ✕
+              </button>
+              <h2 className="text-xl font-semibold mt-2 mb-4">
+                Arrived at Your Destination
+              </h2>
+              {/* STAR RATING */}
+              <div className="flex gap-2 mb-4">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    onClick={() => setRating(star)}
+                    className={`text-3xl cursor-pointer transition ${rating >= star ? "text-yellow-400" : "text-gray-300"
+                      }`}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+
+              {/* FEEDBACK BOX */}
+              <textarea
+                className="w-full h-24 border border-gray-300 rounded-lg p-2 text-sm
+                     focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                placeholder="Write your feedback..."
+                value={feedback}
+                onChange={(e) => setFeedback(e.target.value)}
+              />
+
+              {/* BUTTONS */}
+              <div className="flex gap-3 w-full mt-4">
+                <button
+                  className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl"
+                  onClick={() => {
+                    console.log("Rating:", rating);
+                    console.log("Feedback:", feedback);
+                    setShowFeedback(false);
+                    navigate('/UserHome');
+                  }}
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </>
+        )
+      }
+
     </>
   );
 };

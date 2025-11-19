@@ -12,7 +12,7 @@ function NavbarX() {
                         <Link to="/UserHome" className='ml-15 mb-3 text-2xl text-black font-medium'>Uber</Link>
                     </button>
                     {/* <h2 className='ml-15 mb-3 text-2xl text-black font-medium'>Uber</h2> */}
-                    <div className={`fixed flex flex-col items-center  bg-white gap-5 top-0 right-0 w-[100%] h-[45vh] z-10 md:h-auto md:w-auto md:flex-row md:gap-8 md:relative ${isOpen ? " -translate-x-0" : "-translate-x-full md:-translate-x-0"}`}>
+                    <div className={`fixed flex flex-col items-center  bg-white gap-5 top-0 right-0 w-[100%] h-[45vh] z-0 md:h-auto md:w-auto md:flex-row md:gap-8 md:relative ${isOpen ? " -translate-x-0" : "-translate-x-full md:-translate-x-0"}`}>
                         <div className='w-full flex justify-end p-[20px]  '>
                             <IoCloseSharp onClick={() => setIsOpen(false)} className=' text-2xl md:hidden ' />
                         </div>
