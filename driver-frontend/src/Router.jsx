@@ -13,6 +13,7 @@ import UpdateCartype from "./Components/UpdateCartype";
 import RidingLocation from "./Components/RidingLocation";
 import DriverDestination from "./PAGES/DriverDestination";
 import AllRideDetails from "./Components/AllRideDetails";
+import RideAnalyticsChart from "./Components/RideAnalyticsChart";
 
 function CustomRoute() {
     const token=DriverStore((state)=>state.token)
@@ -31,6 +32,7 @@ function CustomRoute() {
                 <Route path="/ridinglocation" element={token?(<RidingLocation />):<Logouterror/>} />
                 <Route path="/driverdestination" element={token?(<DriverDestination />):<Logouterror/>} />
                 <Route path="/allridedetails" element={token?(<AllRideDetails />):<Logouterror/>} />
+                <Route path="/rideanalyticschart" element={token?(<RideAnalyticsChart />):<Logouterror/>} />
                 
             </Routes>
         </BrowserRouter>

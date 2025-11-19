@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import DriverStore from "../Store/DriverStore";
 import { useQuery } from "@tanstack/react-query";
 import api from "../api/axiosClient";
+import RideAnalyticsChart from "./RideAnalyticsChart";
 
-function AllRideDetails() {
+function AllRideDetails({ rides }) {
   const token = DriverStore((state) => state.token);
   const [sortType, setSortType] = useState("none");
 
@@ -31,7 +32,7 @@ function AllRideDetails() {
   }
 
   if (sortType === "completed") {
-     sortedData.sort((a, b) => new Date(b.date) - new Date(a.date));
+    sortedData.sort((a, b) => new Date(b.date) - new Date(a.date));
     sortedData = sortedData.filter((r) => r.status === "completed");
   }
 
@@ -91,13 +92,12 @@ function AllRideDetails() {
                 <td className="p-3 border text-sm text-center">{ride.date}</td>
                 <td className="p-3 border text-sm text-center">{ride.time}</td>
                 <td
-                  className={`p-3 border text-center text-sm font-semibold ${
-                    ride.status === "completed"
+                  className={`p-3 border text-center text-sm font-semibold ${ride.status === "completed"
                       ? "text-green-600"
                       : ride.status === "cancelled"
-                      ? "text-red-600"
-                      : "text-blue-600"
-                  }`}
+                        ? "text-red-600"
+                        : "text-blue-600"
+                    }`}
                 >
                   {ride.status}
                 </td>
@@ -106,7 +106,9 @@ function AllRideDetails() {
           </tbody>
         </table>
       </div>
+
     </div>
+
   );
 }
 
