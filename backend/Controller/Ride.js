@@ -27,3 +27,15 @@ export const ridecomplete = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 }
+
+
+export const rideDetails = async (req, res) => {
+  try {
+    const rides = await RideModel.find();
+    res.json(rides);
+    console.log("All rides fetched:", rides);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};

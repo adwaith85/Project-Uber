@@ -16,7 +16,7 @@ function Navbar() {
   const menuItems = [
     { name: "Dashboard", path: "/home" },
     { name: "Earnings", path: "/earnings" },
-    { name: "Trips", path: "/trips" },
+    { name: "Trips", path: "/allridedetails" },
     { name: "Profile", path: "/profile" },
     { name: "Support", path: "/support" },
   ];

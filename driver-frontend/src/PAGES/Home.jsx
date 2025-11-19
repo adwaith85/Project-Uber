@@ -4,6 +4,7 @@ import CurrentLocationMap from "../Components/CurrentLocationMap";
 import DriverStore from "../Store/DriverStore";
 import RiderReqMessage from "../Components/RiderReqMessage";
 import { io } from "socket.io-client";
+import AllRideDetails from "../Components/AllRideDetails";
 
 function Home() {
   const socketRef = useRef(null);
@@ -34,8 +35,8 @@ function Home() {
   }, []);
 
 
-  return (
-    <div className="flex flex-col h-screen bg-gray-100 text-gray-900">
+  return (<>
+    <div className="flex flex-col bg-gray-100 text-gray-900">
       <Navbar />
       <main className="flex-1 overflow-y-auto md:ml-70 p-3 space-y-6 ">
         <div className="w-[100%] ">
@@ -49,8 +50,12 @@ function Home() {
           )}
         </div>
       </main>
+          
     </div>
-  );
+    <div className="relative bg-gray-100 w-full  h-[80%] md:w-[100%] mx-auto mb-10 rounded-xl shadow-lg overflow-hidden">
+          <AllRideDetails/>
+          </div>
+  </>);
 }
 
 export default Home;
