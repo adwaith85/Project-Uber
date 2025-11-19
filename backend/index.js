@@ -6,6 +6,7 @@ import http from "http";
 import { Server } from "socket.io";
 import UserRoute from "./Routes/User.js";
 import driverRoute from "./Routes/Driver.js";
+import rideRoute from "./Routes/Ride.js";
 import DriverModel from "./Model/Driver.js";
 import RideModel from "./Model/Ride.js";
 
@@ -36,6 +37,7 @@ app.use(cors());
 app.use("/uploads", express.static("uploads"));
 app.use(UserRoute);
 app.use(driverRoute);
+app.use(rideRoute);
 
 // ============================================================
 // ✅ SOCKET.IO LOGIC

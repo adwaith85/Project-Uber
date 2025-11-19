@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, useMap, Polyline } from "react-leaflet
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 // removed leaflet-routing-machine to avoid its UI and markers
+import { useNavigate } from "react-router-dom";
 
 const userIcon = new L.Icon({
   iconUrl: "/car.png",
@@ -23,7 +24,7 @@ const DriverDestination = () => {
   const [dropoffLocation, setDropoffLocation] = useState(null);
   const [routeCoords, setRouteCoords] = useState([]);
   const mapRef = useRef(null);
-
+  const navigate = useNavigate();
   const [distance, setDistance] = useState(null);
   const[eta,setEta]=useState(null);
 
@@ -35,7 +36,7 @@ const DriverDestination = () => {
 
       const res = await fetch(`http://localhost:8080/ridecomplete/${rideId}`);
       if (res.ok) {
-        alert("Ride marked as completed!");
+        alert("Ride marked as completed!.....ready for next ride");
       }
     } catch (err) {
       console.log("Error marking ride complete:", err);
@@ -189,17 +190,29 @@ const DriverDestination = () => {
           <div className="absolute top-2 left-2 bg-orange-400 text-white px-4 py-3 rounded shadow-lg text-sm font-bold z-10">
             <div>� Heading to Pickup</div>
             <div className="text-xs mt-1">📍 {distance} km away | ⏱ {eta} min</div>
-            {
-              Number(distance)<=0.5 && <>
-                <button onClick={markRideComplete }
-                className="mt-2 bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-xs"
-                >
-                done
-                </button>
-              </>
-            }
+            
           </div>
         )}
+        {
+            distance&& Number(distance)<=0.5 && <>
+            <div>
+                <div className="fixed inset-0 bg-black/40 backdrop-brightness-50  z-[100]" />
+                <div className=" fixed top-70 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[90%] md:w-[400px] p-6 rounded-2xl shadow-2xl flex flex-col items-center z-[300] ">
+                  <h2 className="text-xl font-bold mb-4">Ride Completed!</h2>
+                  <p className="text-center">You have arrived at the Destination . Please confirm to mark the ride as complete.</p>
+                  <button 
+                onClick={()=>{
+                  markRideComplete()
+                  navigate('/home')
+                }}
+                className="mt-2 bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-lg text-xs"
+                >
+                Mark as Completed
+                </button>
+            </div>
+                </div>
+              </>
+            }
     </>
   );
 };

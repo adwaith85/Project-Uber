@@ -233,9 +233,6 @@ export const nearby = async (req, res) => {
 }
 
 
-
-
-
 export const acceptride = async (req, res) => {
   const { rideId, driverEmail, time, date } = req.body;
 
@@ -270,8 +267,6 @@ export const acceptride = async (req, res) => {
 
 
 export const bookride = async (req, res) => {
-
-
   console.log(req.body)
   const driver = await DriverModel.findOne({ onlinestatus: "loggin" });
 
