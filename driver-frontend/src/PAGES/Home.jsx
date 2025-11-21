@@ -70,7 +70,7 @@ function Home() {
         </div>
 
         {/* 🎉 Added Chart Here */}
-        <div className="md:absolute md:top-9 md:w-[370px] p-4 ">
+        <div className="md:absolute md:top-12 md:w-[370px] p-1 ">
           {!isLoading && rideList && (
             <RideAnalyticsChart rides={rideList} />
           )}

@@ -7,6 +7,6 @@ const ride = express.Router()
 
 ride.get("/trip/:id",trip )
 ride.get("/ridecomplete/:id", ridecomplete)
-ride.get("/ridedetails",rideDetails )
+ride.get("/ridedetails",LoginCheck,rideDetails )
 
 export default ride

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import DriverStore from "../Store/DriverStore";
 import { useQuery } from "@tanstack/react-query";
 import api from "../api/axiosClient";
-import RideAnalyticsChart from "./RideAnalyticsChart";
 
 function AllRideDetails({ rides }) {
   const token = DriverStore((state) => state.token);
@@ -12,7 +11,9 @@ function AllRideDetails({ rides }) {
     queryKey: ["rides"],
     queryFn: async () => {
       const res = await api.get("/ridedetails", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { 
+          Authorization: `Bearer ${token}`
+         },
       });
       return res.data;
     },
@@ -28,11 +29,11 @@ function AllRideDetails({ rides }) {
   let sortedData = [...data];
 
   if (sortType === "date") {
-    sortedData.sort((a, b) => new Date(b.date) - new Date(a.date));
+    sortedData.sort((a, b) => new Date(a.date) - new Date(b.date));
   }
 
   if (sortType === "completed") {
-    sortedData.sort((a, b) => new Date(b.date) - new Date(a.date));
+    sortedData.sort((a, b) => new Date(a.date) - new Date(b.date));
     sortedData = sortedData.filter((r) => r.status === "completed");
   }
 
@@ -93,10 +94,10 @@ function AllRideDetails({ rides }) {
                 <td className="p-3 border text-sm text-center">{ride.time}</td>
                 <td
                   className={`p-3 border text-center text-sm font-semibold ${ride.status === "completed"
-                      ? "text-green-600"
-                      : ride.status === "cancelled"
-                        ? "text-red-600"
-                        : "text-blue-600"
+                    ? "text-green-600"
+                    : ride.status === "cancelled"
+                      ? "text-red-600"
+                      : "text-blue-600"
                     }`}
                 >
                   {ride.status}
