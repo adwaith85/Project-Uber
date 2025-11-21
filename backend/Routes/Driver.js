@@ -23,6 +23,9 @@ driver.get("/Details", LoginCheck, Details)
 driver.get("/nearby", nearby)
 driver.post("/acceptride", acceptride)
 driver.post("/bookride", bookride)
+driver.post("/updatedistancerate",LoginCheck)
+
+
 
 
 export default driver

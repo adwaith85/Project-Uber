@@ -290,3 +290,34 @@ export const bookride = async (req, res) => {
 }
 
 
+
+// PUT /updatedistancerate
+export const updatedistancerate= async (req, res) => {
+  try {
+    const { distancerate } = req.body;
+
+    if (!distancerate) {
+      return res.status(400).json({ message: "Distance rate is required" });
+    }
+
+    // Get logged-in driver's ID from req.user
+    const driverId = req.user.id;
+
+    const driver = await DriverModel.findById(driverId);
+    if (!driver) {
+      return res.status(404).json({ message: "Driver not found" });
+    }
+
+    // Update the distance rate
+    driver.distancerate = distancerate;
+    await driver.save();
+
+    res.json({
+      message: "Distance rate updated successfully",
+      driver,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", error });
+  }
+}
