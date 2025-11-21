@@ -299,16 +299,10 @@ export const updatedistancerate= async (req, res) => {
     if (!distancerate) {
       return res.status(400).json({ message: "Distance rate is required" });
     }
-
-    // Get logged-in driver's ID from req.user
-    const driverId = req.user.id;
-
-    const driver = await DriverModel.findById(driverId);
+    const driver = await DriverModel.findOne({ email: req.user.email });
     if (!driver) {
       return res.status(404).json({ message: "Driver not found" });
     }
-
-    // Update the distance rate
     driver.distancerate = distancerate;
     await driver.save();
 
@@ -321,3 +315,102 @@ export const updatedistancerate= async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 }
+
+
+
+// --- Distance Calculation (Haversine Formula) ---
+function getDistanceInKm(lat1, lon1, lat2, lon2) {
+  const R = 6371; // km
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) ** 2;
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c;
+}
+
+// --- Price Calculation Controller ---
+export const Rideprice = async (req, res) => {
+  try {
+    const { rideId } = req.params;
+
+    // Get ride
+    const ride = await RideModel.findById(rideId);
+    if (!ride) return res.status(404).json({ message: "Ride not found" });
+
+    // Get driver for rate
+    const driver = await DriverModel.findById(ride.driverId);
+    if (!driver) return res.status(404).json({ message: "Driver not found" });
+
+    // Reading stored coordinates  [lng, lat]
+    const [pickupLng, pickupLat] = ride.pickupLocation.coordinates;
+    const [dropLng, dropLat] = ride.dropoffLocation.coordinates;
+
+    // Calculate distance
+    const distanceKm = getDistanceInKm(pickupLat, pickupLng, dropLat, dropLng);
+
+    // Price = distance × rate
+    const ratePerKm = parseFloat(driver.distancerate);
+    const price = distanceKm * ratePerKm;
+
+    return res.status(200).json({
+      message: "Price calculated",
+      distance: distanceKm.toFixed(2),
+      rate: ratePerKm,
+      price: price.toFixed(2)
+    });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+
+
+
+
+
+
+export const getDriverEarnings = async (req, res) => {
+  try {
+    const { driverId } = req.params;
+
+    const rides = await RideModel.find({
+      driverId,
+      status: "completed",
+    }).lean();
+
+    const total = rides.reduce((sum, r) => sum + parseFloat(r.price), 0);
+
+    // Today
+    const today = new Date().toISOString().slice(0, 10);
+    const todayEarnings = rides
+      .filter((r) => r.date.toISOString().slice(0, 10) === today)
+      .reduce((sum, r) => sum + parseFloat(r.price), 0);
+
+    // Month
+    const month = new Date().toISOString().slice(0, 7);
+    const monthEarnings = rides
+      .filter((r) => r.date.toISOString().slice(0, 7) === month)
+      .reduce((sum, r) => sum + parseFloat(r.price), 0);
+
+    res.json({
+      totalEarnings: total.toFixed(2),
+      todayEarnings: todayEarnings.toFixed(2),
+      monthEarnings: monthEarnings.toFixed(2),
+      completedRides: rides,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

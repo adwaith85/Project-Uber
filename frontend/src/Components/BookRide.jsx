@@ -146,6 +146,7 @@ function BookRide() {
                           <span><strong>📞</strong> {d.number}</span>
                           <span><strong>🚘</strong> {d.cartype || "Unknown"}</span>
                           <span><strong>🔢</strong> {d.carnumber}</span>
+                          <span><strong>km/</strong> {d.distancerate}</span>
                           {dis && <span><strong>📍</strong> {dis} km away</span>}
                         </div>
                       </div>

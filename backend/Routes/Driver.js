@@ -7,7 +7,10 @@ import {
   DriverLogin, 
   Driverlogout, 
   DriverRegister, 
+  getDriverEarnings, 
   nearby, 
+  Rideprice, 
+  updatedistancerate, 
   UpdateDriver, 
   UpdateLocation } from '../Controller/Driver.js'
 import { LoginCheck } from '../Middleware/User.js'
@@ -23,8 +26,9 @@ driver.get("/Details", LoginCheck, Details)
 driver.get("/nearby", nearby)
 driver.post("/acceptride", acceptride)
 driver.post("/bookride", bookride)
-driver.post("/updatedistancerate",LoginCheck)
-
+driver.post("/updatedistancerate",LoginCheck,updatedistancerate)
+driver.post("/getDriverEarnings",getDriverEarnings)
+driver.get("/rideprice/:rideId", LoginCheck,Rideprice)
 
 
 

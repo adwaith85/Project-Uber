@@ -9,21 +9,52 @@ const RideSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  pickupLocation: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point"
+    },
+    coordinates: {
+      type: [Number], // [lng, lat]
+      required: true
+    }
+  },
+
+  dropoffLocation: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point"
+    },
+    coordinates: {
+      type: [Number], // [lng, lat]
+      required: true
+    }
+  },
   driverId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
   date: {
-      type: Date,
-      default: Date.now, // stores both date & time (ISO format)
-    },
+    type: Date,
+    default: Date.now, // stores both date & time (ISO format)
+  },
   time: {
-      type: String,
-      default: () => {
-        const now = new Date();
-        return now.toLocaleTimeString("en-US", { hour12: false }); // HH:MM:SS format
-      },
+    type: String,
+    default: () => {
+      const now = new Date();
+      return now.toLocaleTimeString("en-US", { hour12: false }); // HH:MM:SS format
     },
+  },
+  price: {
+    type: Number,
+    default: 0,
+  },
+  distance: {
+    type: Number,
+    default: 0,
+  },
   status: {
     type: String,
     enum: ["requested", "accepted", "completed", "cancelled"],
