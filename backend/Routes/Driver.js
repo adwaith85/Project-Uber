@@ -27,7 +27,8 @@ driver.get("/nearby", nearby)
 driver.post("/acceptride", acceptride)
 driver.post("/bookride", bookride)
 driver.post("/updatedistancerate",LoginCheck,updatedistancerate)
-driver.post("/getDriverEarnings",getDriverEarnings)
+driver.post("/getdriverearnings",LoginCheck, getDriverEarnings)
+driver.get("/driver-earnings/:driverId", getDriverEarnings)
 driver.get("/rideprice/:rideId", LoginCheck,Rideprice)
 
 

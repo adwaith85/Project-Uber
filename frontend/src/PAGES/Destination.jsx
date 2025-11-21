@@ -79,23 +79,34 @@ const Destination = () => {
         }
         const trip = await res.json();
 
-        // If backend stored dropoff coordinates, use them directly
+        // Prefer coordinates stored as GeoJSON Point in the trip data
+        if (trip.dropoffLocation && trip.dropoffLocation.coordinates && trip.dropoffLocation.coordinates.length === 2) {
+          const [lng, lat] = trip.dropoffLocation.coordinates; // GeoJSON: [lng, lat]
+          setDropoffLocation({ lat: Number(lat), lng: Number(lng) });
+          return;
+        }
+
+        // Backwards-compat: if older fields exist use them
         if (trip.dropoffLat && trip.dropoffLng) {
           setDropoffLocation({ lat: Number(trip.dropoffLat), lng: Number(trip.dropoffLng) });
           return;
         }
 
-        // Otherwise, fallback to geocoding the dropoff address
+        // Last resort: fallback to geocoding the dropoff address (may fail for special characters)
         if (trip.dropoff) {
-          const geoRes = await fetch(
-            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(trip.dropoff)}`
-          );
-          const geoData = await geoRes.json();
+          try {
+            const geoRes = await fetch(
+              `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(trip.dropoff)}`
+            );
+            const geoData = await geoRes.json();
 
-          if (geoData.length > 0) {
-            setDropoffLocation({ lat: Number(geoData[0].lat), lng: Number(geoData[0].lon) });
-          } else {
-            console.warn("Geocoding returned no results for dropoff", trip.dropoff);
+            if (geoData.length > 0) {
+              setDropoffLocation({ lat: Number(geoData[0].lat), lng: Number(geoData[0].lon) });
+            } else {
+              console.warn("Geocoding returned no results for dropoff", trip.dropoff);
+            }
+          } catch (e) {
+            console.warn("Geocoding request failed", e);
           }
         }
       } catch (err) {

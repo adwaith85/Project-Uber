@@ -87,23 +87,12 @@ const DriverDestination = () => {
           return;
         }
         const trip = await res.json();
-        // If backend stored dropoff coordinates, use them directly
-        if (trip.dropoffLat && trip.dropoffLng) {
-          setDropoffLocation({ lat: Number(trip.dropoffLat), lng: Number(trip.dropoffLng) });
-          return;
-        }
-        // Otherwise, fallback to geocoding the dropoff address
-        if (trip.dropoff) {
-          const geoRes = await fetch(
-            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(trip.dropoff)}`
-          );
-          const geoData = await geoRes.json();
-
-          if (geoData.length > 0) {
-            setDropoffLocation({ lat: Number(geoData[0].lat), lng: Number(geoData[0].lon) });
-          } else {
-            console.warn("Geocoding returned no results for dropoff", trip.dropoff);
-          }
+        // Use dropoff coordinates stored as GeoJSON Point in database
+        if (trip.dropoffLocation && trip.dropoffLocation.coordinates && trip.dropoffLocation.coordinates.length === 2) {
+          const [lng, lat] = trip.dropoffLocation.coordinates;
+          setDropoffLocation({ lat: Number(lat), lng: Number(lng) });
+        } else {
+          console.warn("No dropoffLocation coordinates found in trip data:", trip);
         }
       } catch (err) {
         console.log(err);

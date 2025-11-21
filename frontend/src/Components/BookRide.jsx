@@ -28,6 +28,8 @@ function BookRide() {
   const params = new URLSearchParams(location.search)
   const lat = parseFloat(params.get("lat"))
   const lng = parseFloat(params.get("lng"))
+  const dropLat = parseFloat(params.get("dropLat"))
+  const dropLng = parseFloat(params.get("dropLng"))
   const distance = parseFloat(params.get("dis"))
   const pickup = params.get("pickup") || "Not selected"
   const dropoff = params.get("drop") || "Not selected"
@@ -60,6 +62,10 @@ function BookRide() {
     }
 
     try {
+      // Calculate price: distance * driver's rate (if available, default to 10 per km)
+      const driverRate = drivers.find(d => d._id === selectedDriver)?.distancerate || 10
+      const price = distance ? (distance * driverRate).toFixed(2) : 0
+
       const response = await api.post('/bookride', {
         driverId: selectedDriver,
         pickup,
@@ -69,8 +75,12 @@ function BookRide() {
         date,
         userLat: lat,
         userLng: lng,
+        dropoffLat: dropLat,
+        dropoffLng: dropLng,
         driverLat: selectedDriverLocation?.lat,
         driverLng: selectedDriverLocation?.lng,
+        distance: distance || 0,
+        price: price,
       })
 
       const orderId = response.data.rideId

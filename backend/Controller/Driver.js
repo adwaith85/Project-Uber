@@ -273,12 +273,32 @@ export const bookride = async (req, res) => {
   if (!driver) {
     return res.status(404).json({ message: "No online driver available" });
   }
+
+  // Extract coordinates from request body
+  const pickupLat = req.body.userLat;
+  const pickupLng = req.body.userLng;
+  const dropoffLat = req.body.dropoffLat;
+  const dropoffLng = req.body.dropoffLng;
+  const distance = req.body.distance || 0;
+  const price = req.body.price || 0;
+
   const ride = await RideModel.create({
     pickup: req.body.pickup,
     dropoff: req.body.dropoff,
+    pickupLocation: {
+      type: "Point",
+      coordinates: [pickupLng, pickupLat] // [lng, lat] format for GeoJSON
+    },
+    dropoffLocation: {
+      type: "Point",
+      coordinates: [dropoffLng, dropoffLat] // [lng, lat] format for GeoJSON
+    },
     driverId: req.body.driverId,
     date: req.body.date,
     time: req.body.time,
+    distance: distance,
+    price: price,
+    status: "requested",
   })
   io.to(driver.socketid).emit('ride:alert', {
     pickup: req.body.pickup,

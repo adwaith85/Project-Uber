@@ -6,7 +6,8 @@ import api from "../api/axiosClient";
 function Login() {
   const emailRef = useRef("");
   const passwordRef = useRef("");
-  const addToken = DriverStore((state) => state.addToken); // get addToken from store
+  const addToken = DriverStore((state) => state.addToken);
+  const addUser = DriverStore((state) => state.addUser);
   const navigate = useNavigate();
   const [message, setMessage] = useState(""); // message for success/error
 
@@ -38,6 +39,17 @@ function Login() {
           console.log(response.data.token)
           if (response.data.token) {
             addToken(response.data.token); // store token
+            
+            // Fetch driver details after login
+            try {
+              const detailsRes = await api.get('/Details', {
+                headers: { Authorization: `Bearer ${response.data.token}` },
+              });
+              addUser(detailsRes.data); // store user details including _id
+            } catch (err) {
+              console.error("Error fetching driver details:", err);
+            }
+            
             navigate("/home"); // redirect to dashboard
           } else {
             setMessage("Login failed. Please check your credentials.");

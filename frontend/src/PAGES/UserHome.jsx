@@ -85,9 +85,9 @@ function UserHome() {
                 Show Route
               </button>
 
-              {/* ✅ Pass pickup latitude and longitude as parameters to BookRide page */}
+              {/* ✅ Pass pickup & dropoff coordinates and distance to BookRide page */}
               <Link
-                to={`/BookRide?lat=${pickupLocation?.lat || ""}&lng=${pickupLocation?.lng || ""}&dis=${distance || ""}&drop=${dropofflocationnameref.current.value || ""}&pickup=${pickuplocationnameref.current.value}`}
+                to={`/BookRide?lat=${pickupLocation?.lat || ""}&lng=${pickupLocation?.lng || ""}&dropLat=${dropoffLocation?.lat || ""}&dropLng=${dropoffLocation?.lng || ""}&dis=${distance || ""}&drop=${dropofflocationnameref.current.value || ""}&pickup=${pickuplocationnameref.current.value}`}
               >
                 <button
                   className="border rounded-xl p-3 bg-gray-700 text-md text-white w-36 hover:bg-gray-600 transition"
