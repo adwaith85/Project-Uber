@@ -50,7 +50,7 @@ function Navbar() {
   // 🧭 Automatically update title based on current route
   const currentTitle =
     menuItems.find((item) => location.pathname.startsWith(item.path))?.name ||
-    { name: "Dashboard" }.name;
+    { name: "driver" }.name;
 
   return (
     <div className="flex flex-col bg-gray-100 text-gray-900">
@@ -130,7 +130,7 @@ function Navbar() {
                     className={`hover:bg-gray-100 rounded-lg px-3 py-2 transition-colors ${
                       location.pathname.startsWith(item.path)
                         ? "bg-gray-200 font-semibold"
-                        : ""
+                        : "driver"
                     }`}
                     onClick={toggleDrawer}
                   >

@@ -3,14 +3,14 @@ import { BiSolidNavigation } from "react-icons/bi";
 import { FaDotCircle } from "react-icons/fa";
 import { TbSquareDotFilled } from "react-icons/tb";
 
-function Location({ onPickupSelect, 
+function Location({ onPickupSelect,
   onDropoffSelect,
-  pickuplocationnameref ,
-dropofflocationnameref}) {
+  pickuplocationnameref,
+  dropofflocationnameref }) {
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [query, setQuery] = useState({ value: "", type: "" }); 
+  const [query, setQuery] = useState({ value: "", type: "" });
 
   const fetchPlaces = async (searchQuery, type) => {
     if (!searchQuery) return setSuggestions([]);
@@ -40,7 +40,7 @@ dropofflocationnameref}) {
     }, 1000); // 2 seconds debounce
 
     return () => {
-      clearTimeout(handler); 
+      clearTimeout(handler);
     };
   }, [query]);
 

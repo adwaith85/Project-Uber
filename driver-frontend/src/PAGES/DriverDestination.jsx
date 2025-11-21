@@ -36,7 +36,8 @@ const DriverDestination = () => {
 
       const res = await fetch(`http://localhost:8080/ridecomplete/${rideId}`);
       if (res.ok) {
-        alert("Ride marked as completed!.....ready for next ride");
+        // alert("Ride marked as completed!.....ready for next ride");
+        navigate("/home")
       }
     } catch (err) {
       console.log("Error marking ride complete:", err);
@@ -203,7 +204,7 @@ const DriverDestination = () => {
                   <button 
                 onClick={()=>{
                   markRideComplete()
-                  navigate('/home')
+                  // navigate('/home')
                 }}
                 className="mt-2 bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-lg text-xs"
                 >
