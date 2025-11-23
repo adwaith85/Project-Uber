@@ -62,10 +62,10 @@ const DriverEarnings = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center text-white">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
-          <p className="mt-4 text-gray-600 font-medium">Loading earnings...</p>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange-400"></div>
+          <p className="mt-4 text-gray-300 font-medium">Loading earnings...</p>
         </div>
       </div>
     );
@@ -73,14 +73,14 @@ const DriverEarnings = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md text-center">
-          <div className="text-red-500 text-5xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Error</h2>
-          <p className="text-gray-600">{error}</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center text-white">
+        <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-lg rounded-2xl p-8 max-w-md text-center border border-gray-700/50">
+          <div className="text-yellow-400 text-5xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-white mb-2">Error</h2>
+          <p className="text-gray-300">{error}</p>
           <button
             onClick={() => navigate("/home")}
-            className="mt-6 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-lg transition"
+            className="mt-6 bg-gradient-to-r from-orange-400 to-orange-600 text-white font-semibold py-2 px-6 rounded-lg transition shadow-lg"
           >
             Back to Home
           </button>
@@ -125,20 +125,20 @@ const DriverEarnings = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
       <Navbar />
 
-      <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 md:py-8">
+      <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 md:py-8 relative z-10">
         {/* Header with Refresh Button */}
         <div className="mb-6 md:mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">💰 Earnings Dashboard</h1>
-            <p className="text-sm md:text-base text-gray-600">Track your daily, monthly, and annual earnings</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400 mb-2">💰 Earnings Dashboard</h1>
+            <p className="text-sm md:text-base text-gray-300">Track your daily, monthly, and annual earnings</p>
           </div>
           <div className="flex gap-3 w-full sm:w-auto">
             <button
               onClick={() => fetchEarnings()}
-              className="flex-1 sm:flex-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 md:px-6 rounded-lg transition text-sm md:text-base"
+              className="flex-1 sm:flex-auto bg-gradient-to-r from-orange-400 to-orange-600 text-white font-semibold py-2 px-4 md:px-6 rounded-lg transition text-sm md:text-base shadow-lg"
               disabled={loading}
             >
               {loading ? "Refreshing..." : "🔄 Refresh"}
@@ -146,8 +146,8 @@ const DriverEarnings = () => {
             <button
               onClick={() => setAutoRefresh(!autoRefresh)}
               className={`flex-1 sm:flex-auto font-semibold py-2 px-3 md:px-4 rounded-lg transition text-sm md:text-base ${autoRefresh
-                  ? "bg-green-500 hover:bg-green-600 text-white"
-                  : "bg-gray-300 hover:bg-gray-400 text-gray-800"
+                  ? "bg-green-600 text-white"
+                  : "bg-gray-700 text-gray-300"
                 }`}
             >
               {autoRefresh ? "📡 Auto" : "⏸ Auto"}
@@ -156,41 +156,41 @@ const DriverEarnings = () => {
         </div>
 
         {/* Last Refresh Time */}
-        <div className="mb-6 text-xs md:text-sm text-gray-500">
+        <div className="mb-6 text-xs md:text-sm text-gray-300">
           Last updated: {lastRefresh.toLocaleTimeString()}
         </div>
 
         {/* Key Metrics Cards - Responsive Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
           {/* Total Earnings */}
-          <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-5 md:p-8 border-l-4 border-orange-500 hover:shadow-xl transition">
+          <div className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-xl rounded-xl md:rounded-2xl p-5 md:p-8 border border-gray-700/50 hover:border-orange-500/30 transition">
             <div className="flex justify-between items-start">
               <div className="flex-1">
-                <p className="text-gray-600 text-xs md:text-sm font-medium uppercase tracking-wide">Total Earnings</p>
-                <h3 className="text-2xl md:text-4xl font-bold text-gray-900 mt-2">
+                <p className="text-gray-300 text-xs md:text-sm font-medium uppercase tracking-wide">Total Earnings</p>
+                <h3 className="text-2xl md:text-4xl font-bold text-white mt-2">
                   ₹{parseFloat(earnings?.totalEarnings || 0).toFixed(2)}
                 </h3>
               </div>
               <div className="text-3xl md:text-4xl">📊</div>
             </div>
-            <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-gray-200">
-              <p className="text-xs text-gray-500">{earnings?.completedRides?.length || 0} completed rides</p>
+            <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-gray-700/40">
+              <p className="text-xs text-gray-400">{earnings?.completedRides?.length || 0} completed rides</p>
             </div>
           </div>
 
           {/* This Month */}
-          <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-5 md:p-8 border-l-4 border-blue-500 hover:shadow-xl transition">
+          <div className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-xl rounded-xl md:rounded-2xl p-5 md:p-8 border border-gray-700/50 hover:border-blue-500/30 transition">
             <div className="flex justify-between items-start">
               <div className="flex-1">
-                <p className="text-gray-600 text-xs md:text-sm font-medium uppercase tracking-wide">This Month</p>
-                <h3 className="text-2xl md:text-4xl font-bold text-gray-900 mt-2">
+                <p className="text-gray-300 text-xs md:text-sm font-medium uppercase tracking-wide">This Month</p>
+                <h3 className="text-2xl md:text-4xl font-bold text-white mt-2">
                   ₹{parseFloat(earnings?.monthEarnings || 0).toFixed(2)}
                 </h3>
               </div>
               <div className="text-3xl md:text-4xl">📅</div>
             </div>
-            <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-gray-200">
-              <p className="text-xs text-gray-500">
+            <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-gray-700/40">
+              <p className="text-xs text-gray-400">
                 {earnings?.completedRides?.filter((r) => {
                   const month = new Date(r.date).toISOString().slice(0, 7);
                   const currentMonth = new Date().toISOString().slice(0, 7);
@@ -201,18 +201,18 @@ const DriverEarnings = () => {
           </div>
 
           {/* Today */}
-          <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-5 md:p-8 border-l-4 border-green-500 hover:shadow-xl transition sm:col-span-2 lg:col-span-1">
+          <div className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-xl rounded-xl md:rounded-2xl p-5 md:p-8 border border-gray-700/50 hover:border-green-500/30 transition sm:col-span-2 lg:col-span-1">
             <div className="flex justify-between items-start">
               <div className="flex-1">
-                <p className="text-gray-600 text-xs md:text-sm font-medium uppercase tracking-wide">Today</p>
-                <h3 className="text-2xl md:text-4xl font-bold text-gray-900 mt-2">
+                <p className="text-gray-300 text-xs md:text-sm font-medium uppercase tracking-wide">Today</p>
+                <h3 className="text-2xl md:text-4xl font-bold text-white mt-2">
                   ₹{parseFloat(earnings?.todayEarnings || 0).toFixed(2)}
                 </h3>
               </div>
               <div className="text-3xl md:text-4xl">📱</div>
             </div>
-            <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-gray-200">
-              <p className="text-xs text-gray-500">
+            <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-gray-700/40">
+              <p className="text-xs text-gray-400">
                 {earnings?.completedRides?.filter((r) => {
                   const today = new Date().toISOString().slice(0, 10);
                   return new Date(r.date).toISOString().slice(0, 10) === today;
@@ -225,8 +225,8 @@ const DriverEarnings = () => {
         {/* Charts Section - Full Responsive */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
           {/* Daily Earnings Chart */}
-          <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-4 md:p-8">
-            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4 md:mb-6 flex items-center">
+          <div className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-xl rounded-xl md:rounded-2xl p-4 md:p-8 border border-gray-700/50">
+            <h2 className="text-lg md:text-xl font-bold text-white mb-4 md:mb-6 flex items-center">
               <span className="text-2xl mr-2">📈</span> <span className="line-clamp-1">Daily Earnings (Last 7 Days)</span>
             </h2>
             {earnings && dailyChartData.length > 0 ? (
@@ -236,9 +236,9 @@ const DriverEarnings = () => {
                     data={dailyChartData}
                     margin={{ top: 20, right: 20, left: -20, bottom: 5 }}
                   >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="date" stroke="#6b7280" style={{ fontSize: "0.75rem" }} />
-                    <YAxis stroke="#6b7280" style={{ fontSize: "0.75rem" }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <XAxis dataKey="date" stroke="#9ca3af" style={{ fontSize: "0.75rem" }} />
+                    <YAxis stroke="#9ca3af" style={{ fontSize: "0.75rem" }} />
                     <Tooltip
                       contentStyle={{
                         backgroundColor: "#1f2937",
@@ -261,8 +261,8 @@ const DriverEarnings = () => {
           </div>
 
           {/* Monthly Earnings Chart */}
-          <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-4 md:p-8">
-            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4 md:mb-6 flex items-center">
+          <div className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-xl rounded-xl md:rounded-2xl p-4 md:p-8 border border-gray-700/50">
+            <h2 className="text-lg md:text-xl font-bold text-white mb-4 md:mb-6 flex items-center">
               <span className="text-2xl mr-2">📊</span> <span className="line-clamp-1">Monthly Earnings Trend</span>
             </h2>
             {earnings && monthlyChartData.length > 0 ? (
@@ -272,9 +272,9 @@ const DriverEarnings = () => {
                     data={monthlyChartData}
                     margin={{ top: 20, right: 20, left: -20, bottom: 5 }}
                   >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="month" stroke="#6b7280" style={{ fontSize: "0.75rem" }} />
-                    <YAxis stroke="#6b7280" style={{ fontSize: "0.75rem" }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <XAxis dataKey="month" stroke="#9ca3af" style={{ fontSize: "0.75rem" }} />
+                    <YAxis stroke="#9ca3af" style={{ fontSize: "0.75rem" }} />
                     <Tooltip
                       contentStyle={{
                         backgroundColor: "#1f2937",
@@ -308,12 +308,12 @@ const DriverEarnings = () => {
         {/* Rides Statistics */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
           {ridesStats.map((stat, idx) => (
-            <div key={idx} className="bg-white rounded-xl md:rounded-2xl shadow-lg p-5 md:p-8">
+            <div key={idx} className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-xl rounded-xl md:rounded-2xl p-5 md:p-8 border border-gray-700/50">
               <div className="flex items-center justify-between gap-4">
                 <div className="flex-1">
-                  <p className="text-gray-600 text-xs md:text-sm font-medium">{stat.name}</p>
-                  <p className="text-2xl md:text-4xl font-bold text-gray-900 mt-2">{stat.value}</p>
-                  <p className="text-xs text-gray-500 mt-2">Completed Rides</p>
+                  <p className="text-gray-300 text-xs md:text-sm font-medium">{stat.name}</p>
+                  <p className="text-2xl md:text-4xl font-bold text-white mt-2">{stat.value}</p>
+                  <p className="text-xs text-gray-400 mt-2">Completed Rides</p>
                 </div>
                 <div
                   className="w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-white font-bold text-lg md:text-xl flex-shrink-0"
@@ -327,23 +327,23 @@ const DriverEarnings = () => {
         </div>
 
         {/* Recent Rides Table - Fully Responsive */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 w-full h-[80vh] flex flex-col">
+        <div className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-xl rounded-2xl shadow-2xl p-6 md:p-8 w-full flex flex-col">
           {/* Heading */}
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+          <h2 className="text-2xl font-bold text-white mb-4 flex items-center">
             <span className="text-2xl mr-2">🚗</span> Recent Rides
           </h2>
 
           {/* Scrollable Table Container */}
-          <div className="flex-1 overflow-y-auto rounded-xl border border-gray-200">
-            <table className="w-full border-collapse">
-              <thead className="sticky top-0 bg-gray-100 z-10">
-                <tr className="border-b border-gray-300">
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Date</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Pickup</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Dropoff</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Distance</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Earnings</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Status</th>
+          <div className="flex-1 overflow-y-auto rounded-xl border border-gray-700/40">
+            <table className="w-full border-collapse min-w-full">
+              <thead className="sticky top-0 bg-gray-900/80 z-10">
+                <tr className="border-b border-gray-700/50">
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-300">Date</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-300">Pickup</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-300">Dropoff</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-300">Distance</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-300">Earnings</th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-300">Status</th>
                 </tr>
               </thead>
 
@@ -351,9 +351,9 @@ const DriverEarnings = () => {
                 {earnings?.completedRides?.slice(-15).reverse().map((ride, idx) => (
                   <tr
                     key={idx}
-                    className="border-b border-gray-100 hover:bg-gray-50 transition-colors even:bg-gray-50/50"
+                    className="border-b border-gray-800 hover:bg-white/5 transition-colors even:bg-white/2"
                   >
-                    <td className="px-6 py-4 text-sm text-gray-700">
+                    <td className="px-6 py-4 text-sm text-gray-300">
                       {new Date(ride.date).toLocaleDateString("en-US", {
                         year: "2-digit",
                         month: "short",
@@ -363,24 +363,24 @@ const DriverEarnings = () => {
                       })}
                     </td>
 
-                    <td className="px-6 py-4 text-sm text-gray-700">
+                    <td className="px-6 py-4 text-sm text-gray-300">
                       <span className="line-clamp-1">{ride.pickup}</span>
                     </td>
 
-                    <td className="px-6 py-4 text-sm text-gray-700">
+                    <td className="px-6 py-4 text-sm text-gray-300">
                       <span className="line-clamp-1">{ride.dropoff}</span>
                     </td>
 
-                    <td className="px-6 py-4 text-sm text-gray-700">
+                    <td className="px-6 py-4 text-sm text-gray-300">
                       {ride.distance?.toFixed(2)} km
                     </td>
 
-                    <td className="px-6 py-4 text-sm font-semibold text-green-600">
+                    <td className="px-6 py-4 text-sm font-semibold text-green-400">
                       ₹{parseFloat(ride.price).toFixed(2)}
                     </td>
 
                     <td className="px-6 py-4">
-                      <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
+                      <span className="bg-green-900/30 text-green-300 px-3 py-1 rounded-full text-xs font-semibold">
                         ✓ Completed
                       </span>
                     </td>
@@ -391,7 +391,7 @@ const DriverEarnings = () => {
 
             {/* Empty State */}
             {(!earnings?.completedRides || earnings.completedRides.length === 0) && (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-gray-400">
                 <p>No completed rides yet</p>
               </div>
             )}

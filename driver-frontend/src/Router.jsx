@@ -4,6 +4,7 @@ import Navbar from "./Components/Navbar";
 import Profile from "./Components/Profile";
 import Login from "./PAGES/Login";
 import Register from "./PAGES/Register";
+import LandingPage from "./PAGES/LandingPage";
 import UpdateProfile from "./Components/UpdateProfile";
 import UpdateName from "./Components/UpdateName";
 import UpdateNumber from "./Components/UpdateNumber";
@@ -22,8 +23,9 @@ function CustomRoute() {
     return <>
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/Register" element={<Register />} />
+                <Route path="/" element={token ? <Home /> : <LandingPage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
                 <Route path="/home" element={token?(<Home />):<Logouterror/>} />
                 <Route path="/Navbar" element={token?(<Navbar />):<Logouterror/>} />
                 <Route path="/Profile" element={token?(<Profile />):<Logouterror/>} />

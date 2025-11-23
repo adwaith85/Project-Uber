@@ -53,12 +53,12 @@ function Navbar() {
     { name: "driver" }.name;
 
   return (
-    <div className="flex flex-col bg-gray-100 text-gray-900">
+    <div className="flex flex-col">
       {/* Navbar */}
-      <header className="sticky top-0 z-10 flex items-center justify-between px-6 py-3 bg-white shadow-md">
+      <header className="sticky top-0 z-10 flex items-center justify-between px-6 py-3 bg-gray-100 border-b border-black shadow-1x2 backdrop-blur-sm">
         {/* Left Section */}
         <div className="flex items-center gap-3">
-          <button onClick={toggleDrawer} className="p-2 rounded hover:bg-gray-200">
+          <button onClick={toggleDrawer} className="p-2 rounded hover:bg-orange-500/20 transition text-black">
             <Menu className="w-6 h-6" />
           </button>
 
@@ -68,27 +68,27 @@ function Navbar() {
                 <img
                   src={data.profileimg}
                   alt="Profile"
-                  className="w-8 h-8 rounded-full object-cover border"
+                  className="w-8 h-8 rounded-full object-cover border-2 border-orange-500/50"
                 />
               ) : (
-                <UserCircle className="w-8 h-8 text-gray-500" />
+                <UserCircle className="w-8 h-8 text-black" />
               )}
               <div className="flex flex-col">
-                <span className=" font-medium text-gray-800 text-sm truncate max-w-[100px]">
+                <span className="font-medium text-black text-sm truncate max-w-[100px]">
                 {data.name || "Driver"}
               </span>
-              <span className=" font-medium text-gray-800 text-sm truncate max-w-[100px]">
+                <span className="font-medium text-black text-xs truncate max-w-[100px]">
                 Rate-{data.distancerate || "NaN"}/<strong/>km
               </span>
               </div>
             </div>
           ) : (
-            token && <span className="text-red-500 text-sm font-medium">User not found</span>
+            token && <span className="text-red-600 text-sm font-medium">User not found</span>
           )}
         </div>
 
         {/* Center Title — Dynamically changes */}
-        <h1 className="text-lg font-semibold tracking-wide">
+        <h1 className="text-lg font-semibold tracking-wide text-black hidden md:block">
           {currentTitle}
         </h1>
 
@@ -96,15 +96,15 @@ function Navbar() {
         {token ? (
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 hover:opacity-80"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-600 hover:text-red-700 transition font-medium border border-red-500/50"
           >
-            <span className="text-sm font-medium">Logout</span>
+            <span className="text-sm font-medium hidden sm:inline">Logout</span>
             <LogOut className="w-5 h-5" />
           </button>
         ) : (
           <button
             onClick={() => navigate("/")}
-            className="text-sm font-medium hover:underline text-blue-600"
+            className="text-sm font-medium px-4 py-2 rounded-lg bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 border border-orange-500/50 transition"
           >
             Login
           </button>
@@ -120,22 +120,22 @@ function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ duration: 0.3 }}
-              className="fixed top-0 left-0 h-full w-64 bg-white shadow-2xl z-30 p-6 flex flex-col"
+              className="fixed top-0 left-0 h-full w-64 bg-white shadow-2xl z-30 p-6 flex flex-col border-r border-black"
             >
-              <h3 className="text-lg font-semibold mb-4 border-b border-gray-200 pb-2">
+              <h3 className="text-lg font-semibold mb-4 border-b border-black pb-2 text-black">
                 Menu
               </h3>
 
               {/* Menu Links */}
-              <nav className="flex flex-col space-y-3">
+              <nav className="flex flex-col space-y-2">
                 {menuItems.map((item, idx) => (
                   <Link
                     key={idx}
                     to={item.path}
-                    className={`hover:bg-gray-100 rounded-lg px-3 py-2 transition-colors ${
+                    className={`rounded-lg px-4 py-2.5 transition-all font-medium ${
                       location.pathname.startsWith(item.path)
-                        ? "bg-gray-200 font-semibold"
-                        : "driver"
+                        ? "bg-gray-200 text-gray-900 border border-black"
+                        : "text-gray-900 hover:text-black hover:bg-gray-700/50"
                     }`}
                     onClick={toggleDrawer}
                   >
@@ -146,7 +146,7 @@ function Navbar() {
 
               <button
                 onClick={toggleDrawer}
-                className="mt-auto bg-red-600 hover:bg-red-700 text-white font-medium py-2 rounded-lg"
+                className="mt-auto bg-gradient-to-r from-red-900/30 to-red-400/50 hover:from-red-500/50 hover:to-red-600/50 text-red-600 font-medium py-2 rounded-lg border border-red-500/50 transition"
               >
                 Close
               </button>

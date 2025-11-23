@@ -325,131 +325,136 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
   };
 
   const center = driverLocation || userLocation || { lat: 11.9635, lng: 75.3208 };
-
   return (
-    <div className="flex flex-col h-screen bg-gray-100 text-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 text-white flex flex-col">
       <Navbar />
-      <div className="relative mt-2 m-2 w-auto h-[350px] md:w-[50%] md:ml-[560px] rounded-2xl overflow-hidden shadow-lg border border-gray-300 bg-white">
-        {journeyStarted && distance && eta && (
-          <div className="absolute top-2 left-2 bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-4 py-3 rounded shadow-lg text-sm font-bold z-10">
-            <div>✅ OTP Confirmed - Journey Started</div>
-            <div className="text-xs mt-1">📍 {distance} km to destination | ⏱ {eta} min</div>
-          </div>
-        )}
 
-        {distance && eta && !journeyStarted && (
-          <div className="absolute top-2 left-2 bg-orange-400 text-white px-4 py-3 rounded shadow-lg text-sm font-bold z-10">
-            <div>� Heading to Pickup</div>
-            <div className="text-xs mt-1">📍 {distance} km away | ⏱ {eta} min</div>
-          </div>
-        )}
-
-        {error && <p className="text-red-500 text-center py-4 font-medium">{error}</p>}
-
-        {(driverLocation || userLocation) && (
-          <MapContainer center={center} zoom={13} className="z-0 h-full w-full">
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
-            />
-
-            {driverLocation && (
-              <>
-                <Marker position={[driverLocation.lat, driverLocation.lng]} icon={carIcon}>
-                  <Popup>You (Driver) 🚗</Popup>
-                </Marker>
-                <CircleMarker
-                  center={[driverLocation.lat, driverLocation.lng]}
-                  radius={5}
-                  color="blue"
-                  fill={true}
-                  fillColor="blue"
-                  fillOpacity={0.5}
-                />
-              </>
-            )}
-
-            {userLocation && (
-              <>
-                <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
-                  <Popup>User 📍</Popup>
-                </Marker>
-                <CircleMarker
-                  center={[userLocation.lat, userLocation.lng]}
-                  radius={6}
-                  color="red"
-                  fill={true}
-                  fillColor="red"
-                  fillOpacity={0.5}
-                />
-              </>
-            )}
-
-            {routeCoords.length > 0 && (
-              <Polyline positions={routeCoords} color="blue" weight={4} opacity={0.7} />
-            )}
-          </MapContainer>
-        )}
-
-        {/* Status info box */}
-        <div className="absolute bottom-2 left-2 right-2 bg-gray-800 text-white p-3 rounded text-xs z-10">
-          <div className="flex justify-between gap-4">
-            <div>
-              <span>🚗 Driver: </span>
-              {driverLocation ? (
-                <span className="text-green-400">✓ Connected</span>
-              ) : (
-                <span className="text-red-400">✗ Waiting...</span>
-              )}
-            </div>
-            <div>
-              <span>👤 User: </span>
-              {userLocation ? (
-                <span className="text-green-400">✓ Connected</span>
-              ) : (
-                <span className="text-red-400">✗ Waiting...</span>
-              )}
-            </div>
-            <div>
-              <span>🗺️ Route: </span>
-              {routeCoords.length > 0 ? (
-                <span className="text-green-400">✓ Active</span>
-              ) : (
-                <span className="text-yellow-400">⏳ Loading...</span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Arrival / OTP controls for driver */}
-        <div className="absolute bottom-24 left-2 right-2 p-3 rounded text-sm z-20 pointer-events-auto">
-          {arrivalReady && !arrivedSent && (
-            <div className="flex justify-center">
-              <button
-                onClick={handleGenerateOtp}
-                className="px-4 py-2 bg-blue-600 text-white rounded shadow-md"
-              >
-                Generate OTP & Notify Rider
-              </button>
-            </div>
-          )}
-          {otpSentToUser && !journeyStarted && (
-            <div className="mt-2 bg-white p-3 rounded shadow-md text-gray-900 w-full md:w-1/2 mx-auto">
-              <div className="mb-2 font-semibold">OTP sent to rider</div>
-              <div className="text-sm mb-2">Ask the rider for the 4-digit OTP and enter it below to confirm pickup.</div>
-              <form onSubmit={handleDriverConfirmOtp} className="flex gap-2">
-                <input
-                  value={otpInputDriver}
-                  onChange={(e) => setOtpInputDriver(e.target.value)}
-                  className="p-2 border rounded w-full"
-                  placeholder="Enter OTP to confirm"
-                />
-                <button className="px-3 py-2 bg-green-600 text-white rounded">Confirm</button>
-              </form>
-            </div>
-          )}
-        </div>
+      {/* animated background blobs */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-20 -left-20 w-72 h-72 bg-indigo-700 opacity-30 rounded-full blur-3xl animate-blob" />
+        <div className="absolute -bottom-32 right-0 w-96 h-96 bg-amber-600 opacity-20 rounded-full blur-2xl animate-blob animation-delay-2000" />
       </div>
+
+      <main className="flex-1 p-4 md:p-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Map area */}
+          <div className="md:col-span-2 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden shadow-lg h-[60vh] md:h-[80vh]">
+            {(driverLocation || userLocation) ? (
+              <MapContainer center={center} zoom={13} className="h-full w-full">
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+                />
+
+                {driverLocation && (
+                  <>
+                    <Marker position={[driverLocation.lat, driverLocation.lng]} icon={carIcon}>
+                      <Popup>You (Driver) 🚗</Popup>
+                    </Marker>
+                    <CircleMarker
+                      center={[driverLocation.lat, driverLocation.lng]}
+                      radius={6}
+                      color="#60a5fa"
+                      fill={true}
+                      fillColor="#60a5fa"
+                      fillOpacity={0.5}
+                    />
+                  </>
+                )}
+
+                {userLocation && (
+                  <>
+                    <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
+                      <Popup>User 📍</Popup>
+                    </Marker>
+                    <CircleMarker
+                      center={[userLocation.lat, userLocation.lng]}
+                      radius={7}
+                      color="#fb7185"
+                      fill={true}
+                      fillColor="#fb7185"
+                      fillOpacity={0.5}
+                    />
+                  </>
+                )}
+
+                {routeCoords.length > 0 && (
+                  <Polyline positions={routeCoords} color="#60a5fa" weight={4} opacity={0.85} />
+                )}
+              </MapContainer>
+            ) : (
+              <div className="flex items-center justify-center h-full w-full text-gray-300">
+                Waiting for location data...
+              </div>
+            )}
+          </div>
+
+          {/* Side status / controls */}
+          <aside className="md:col-span-1 flex flex-col gap-4">
+            <div className="bg-white/6 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow">
+              <h3 className="text-lg font-semibold">Trip Status</h3>
+              <p className="text-sm text-gray-200 mt-2">Ride ID: <span className="font-mono text-xs text-gray-100">{rideId || '—'}</span></p>
+
+              <div className="mt-4 space-y-3 text-sm">
+                <div className="flex justify-between">
+                  <span>🚗 Driver</span>
+                  <span className={driverLocation ? 'text-green-300' : 'text-red-300'}>{driverLocation ? 'Connected' : 'Waiting'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>👤 Rider</span>
+                  <span className={userLocation ? 'text-green-300' : 'text-red-300'}>{userLocation ? 'Connected' : 'Waiting'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>🗺️ Route</span>
+                  <span className={routeCoords.length > 0 ? 'text-green-300' : 'text-yellow-300'}>{routeCoords.length > 0 ? 'Active' : 'Loading'}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white/6 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow flex flex-col gap-3">
+              <h4 className="font-semibold">Trip Info</h4>
+              <div className="flex justify-between text-sm text-gray-200">
+                <div>Distance</div>
+                <div className="font-medium">{distance ?? '—'} km</div>
+              </div>
+              <div className="flex justify-between text-sm text-gray-200">
+                <div>ETA</div>
+                <div className="font-medium">{eta ?? '—'} min</div>
+              </div>
+
+              {journeyStarted && (
+                <div className="mt-2 px-3 py-2 rounded bg-gradient-to-r from-sky-600 to-cyan-500 text-white text-sm">✅ Journey started</div>
+              )}
+            </div>
+
+            <div className="bg-white/6 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow">
+              <h4 className="font-semibold">Controls</h4>
+
+              {error && <p className="text-red-300 text-sm mt-2">{error}</p>}
+
+              <div className="mt-3 flex flex-col gap-2">
+                {arrivalReady && !arrivedSent && (
+                  <button onClick={handleGenerateOtp} className="w-full py-2 rounded bg-gradient-to-r from-orange-500 to-yellow-400 text-slate-900 font-semibold">Generate OTP & Notify Rider</button>
+                )}
+
+                {otpSentToUser && !journeyStarted && (
+                  <form onSubmit={handleDriverConfirmOtp} className="flex gap-2">
+                    <input
+                      value={otpInputDriver}
+                      onChange={(e) => setOtpInputDriver(e.target.value)}
+                      className="flex-1 p-2 rounded bg-white/10 border border-white/12 placeholder:text-gray-300"
+                      placeholder="Enter OTP"
+                    />
+                    <button className="px-3 py-2 rounded bg-emerald-500 text-white">Confirm</button>
+                  </form>
+                )}
+              </div>
+            </div>
+
+            <div className="text-xs text-center text-gray-300 mt-2">Keep app open to share live location with rider.</div>
+          </aside>
+        </div>
+      </main>
     </div>
   );
 };
