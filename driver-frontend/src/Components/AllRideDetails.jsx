@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DriverStore from "../Store/DriverStore";
 import { useQuery } from "@tanstack/react-query";
 import api from "../api/axiosClient";
+import Navbar from "./Navbar";
 
 function AllRideDetails({ rides }) {
   const token = DriverStore((state) => state.token);
@@ -39,6 +40,7 @@ function AllRideDetails({ rides }) {
 
   return (
     <div className="max-w-full mx-auto mt-2 px-4">
+     
       <h2 className="text-xl font-bold text-center">
         All Ride Details
       </h2>
@@ -77,6 +79,8 @@ function AllRideDetails({ rides }) {
               <th className="p-3 border">Dropoff</th>
               <th className="p-3 border">Date</th>
               <th className="p-3 border">Time</th>
+              <th className="p-3 border">distance</th>
+              <th className="p-3 border">ride rate</th>
               <th className="p-3 border">Status</th>
             </tr>
           </thead>
@@ -92,6 +96,8 @@ function AllRideDetails({ rides }) {
                 <td className="p-3 border text-sm text-center">{ride.dropoff}</td>
                 <td className="p-3 border text-sm text-center">{ride.date}</td>
                 <td className="p-3 border text-sm text-center">{ride.time}</td>
+                <td className="p-3 border text-sm text-center">{ride.distance}km</td>
+                <td className="p-3 border text-sm text-center">₨.{ride.price}</td>
                 <td
                   className={`p-3 border text-center text-sm font-semibold ${ride.status === "completed"
                     ? "text-green-600"

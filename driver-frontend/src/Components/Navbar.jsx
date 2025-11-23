@@ -73,9 +73,14 @@ function Navbar() {
               ) : (
                 <UserCircle className="w-8 h-8 text-gray-500" />
               )}
-              <span className="font-medium text-gray-800 text-sm truncate max-w-[100px]">
+              <div className="flex flex-col">
+                <span className=" font-medium text-gray-800 text-sm truncate max-w-[100px]">
                 {data.name || "Driver"}
               </span>
+              <span className=" font-medium text-gray-800 text-sm truncate max-w-[100px]">
+                Rate-{data.distancerate || "NaN"}/<strong/>km
+              </span>
+              </div>
             </div>
           ) : (
             token && <span className="text-red-500 text-sm font-medium">User not found</span>

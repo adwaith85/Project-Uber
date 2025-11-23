@@ -123,6 +123,15 @@ function Profile() {
                 <Link to="/UpdateNumber"> <Pencil className="w-4 h-4 text-gray-600" /></Link>
               </button>
             </div>
+            <div className="flex justify-between items-center border-b pb-2">
+              <div>
+                <p className="text-gray-600 text-sm">Rate Per Distance</p>
+                <p className="text-gray-900 font-medium">{data?.distancerate ?? "not found"}</p>
+              </div>
+              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                <Link to="/updatedistancerate"> <Pencil className="w-4 h-4 text-gray-600" /></Link>
+              </button>
+            </div>
           </div>
         </div>
       </div>
