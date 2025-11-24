@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Zap, MapPin, Users, TrendingUp, Shield, Clock } from "lucide-react";
+import CurrentLocationMap from "../Components/CurrentLocationMap"
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -131,7 +132,7 @@ const LandingPage = () => {
         <div className="mb-16 md:mb-24">
           <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-1 h-80 md:h-96 flex items-center justify-center border border-gray-700">
             <div className="w-full h-full bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-xl flex items-center justify-center">
-              <div className="text-6xl md:text-8xl">🗺️</div>
+             <CurrentLocationMap/> {/* <div className="text-6xl md:text-8xl">🗺️</div> */}
             </div>
           </div>
         </div>

@@ -57,7 +57,7 @@ function Navbar() {
       {/* Navbar */}
       <header className="sticky top-0 z-10 flex items-center justify-between px-6 py-3 bg-gray-100 border-b border-black shadow-1x2 backdrop-blur-sm">
         {/* Left Section */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 ">
           <button onClick={toggleDrawer} className="p-2 rounded hover:bg-orange-500/20 transition text-black">
             <Menu className="w-6 h-6" />
           </button>

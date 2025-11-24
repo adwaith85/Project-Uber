@@ -97,8 +97,8 @@ function RideAnalyticsChart({ rides }) {
                 : weeklyData;
 
     return (
-        <div className="md:h-[350px] h-110 p-3 bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl shadow-2xl   border border-gray-700">
-            <h2 className="text-2xl font-bold text-center text-white mb-4">
+        <div className="md:h-[350px] z-0 h-110 p-3 bg-gray-200 rounded-2xl shadow-2xl border border-gray-700">
+            <h2 className="text-2xl font-bold text-center text-gray-600 mb-4">
                 Ride Analytics
             </h2>
 
@@ -126,7 +126,7 @@ function RideAnalyticsChart({ rides }) {
                         onClick={() => setView(mode)}
                         className={`px-4 py-2 rounded-lg  text-white transition-all ${view === mode
                                 ? "bg-gradient-to-r  from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/40 scale-105"
-                                : "bg-gray-700 hovr:bg-gray-600"
+                                : "bg-gray-600 hovr:bg-gray-600"
                             }`}
                     >
                         {mode.charAt(0).toUpperCase() + mode.slice(1)}
@@ -136,13 +136,13 @@ function RideAnalyticsChart({ rides }) {
 
             {/* LOADING SKELETON */}
             {loading ? (
-                <div className="w-full h-72 md:h-[200px] animate-pulse bg-gray-700 rounded-xl" />
+                <div className="w-full h-72 md:h-[200px] animate-pulse bg-gray-600 rounded-xl" />
             ) : (
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={view + startDate + endDate}
                         initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        animate={{ opacity: 1, y: 2 }}
                         exit={{ opacity: 0, y: -15 }}
                         transition={{ duration: 0.4 }}
                         className="w-full h-72 md:h-[220px]"
@@ -150,8 +150,8 @@ function RideAnalyticsChart({ rides }) {
                         <ResponsiveContainer>
                             <BarChart data={chartData}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-                                <XAxis dataKey="label" stroke="#ccc" />
-                                <YAxis stroke="#ccc" />
+                                <XAxis dataKey="label" stroke="black" />
+                                <YAxis stroke="black" />
                                 <Tooltip
                                     contentStyle={{
                                         background: "#222",

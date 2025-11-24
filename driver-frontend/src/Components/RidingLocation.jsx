@@ -326,19 +326,19 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
 
   const center = driverLocation || userLocation || { lat: 11.9635, lng: 75.3208 };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 text-white flex flex-col">
+    <div className="min-h-screen bg-gray-400 text-black flex flex-col">
       <Navbar />
 
       {/* animated background blobs */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-20 -left-20 w-72 h-72 bg-indigo-700 opacity-30 rounded-full blur-3xl animate-blob" />
-        <div className="absolute -bottom-32 right-0 w-96 h-96 bg-amber-600 opacity-20 rounded-full blur-2xl animate-blob animation-delay-2000" />
+        <div className="absolute -top-20 -left-20 w-72 h-72 bg-gray-100 opacity-30 rounded-full blur-3xl animate-blob" />
+        <div className="absolute -bottom-32 right-0 w-96 h-96 bg-gray-100 opacity-20 rounded-full blur-2xl animate-blob animation-delay-2000" />
       </div>
 
       <main className="flex-1 p-4 md:p-8">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Map area */}
-          <div className="md:col-span-2 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden shadow-lg h-[60vh] md:h-[80vh]">
+          <div className="md:col-span-2 bg-white/5 backdrop-blur-lg border border-black rounded-2xl overflow-hidden shadow-lg h-[60vh] md:h-[80vh]">
             {(driverLocation || userLocation) ? (
               <MapContainer center={center} zoom={13} className="h-full w-full">
                 <TileLayer
@@ -383,7 +383,7 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
                 )}
               </MapContainer>
             ) : (
-              <div className="flex items-center justify-center h-full w-full text-gray-300">
+              <div className="flex items-center justify-center h-full w-full text-gray-100">
                 Waiting for location data...
               </div>
             )}
@@ -391,33 +391,33 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
 
           {/* Side status / controls */}
           <aside className="md:col-span-1 flex flex-col gap-4">
-            <div className="bg-white/6 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow">
+            <div className="bg-gray-600 backdrop-blur-md border border-white rounded-xl p-4 shadow">
               <h3 className="text-lg font-semibold">Trip Status</h3>
-              <p className="text-sm text-gray-200 mt-2">Ride ID: <span className="font-mono text-xs text-gray-100">{rideId || '—'}</span></p>
+              <p className="text-sm text-gray-100 mt-2">Ride ID: <span className="font-mono text-xs text-gray-300">{rideId || '—'}</span></p>
 
               <div className="mt-4 space-y-3 text-sm">
-                <div className="flex justify-between">
+                <div className="flex justify-between font-semibold">
                   <span>🚗 Driver</span>
                   <span className={driverLocation ? 'text-green-300' : 'text-red-300'}>{driverLocation ? 'Connected' : 'Waiting'}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between font-semibold">
                   <span>👤 Rider</span>
                   <span className={userLocation ? 'text-green-300' : 'text-red-300'}>{userLocation ? 'Connected' : 'Waiting'}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between font-semibold">
                   <span>🗺️ Route</span>
                   <span className={routeCoords.length > 0 ? 'text-green-300' : 'text-yellow-300'}>{routeCoords.length > 0 ? 'Active' : 'Loading'}</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white/6 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow flex flex-col gap-3">
+            <div className="bg-gray-600 backdrop-blur-md border border-white rounded-xl p-4 shadow flex flex-col gap-3">
               <h4 className="font-semibold">Trip Info</h4>
-              <div className="flex justify-between text-sm text-gray-200">
+              <div className="flex justify-between text-sm text-yellow-600">
                 <div>Distance</div>
                 <div className="font-medium">{distance ?? '—'} km</div>
               </div>
-              <div className="flex justify-between text-sm text-gray-200">
+              <div className="flex justify-between text-sm text-yellow-600">
                 <div>ETA</div>
                 <div className="font-medium">{eta ?? '—'} min</div>
               </div>
@@ -427,7 +427,7 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
               )}
             </div>
 
-            <div className="bg-white/6 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow">
+            <div className="bg-gray-600 backdrop-blur-md border border-white rounded-xl p-4 shadow">
               <h4 className="font-semibold">Controls</h4>
 
               {error && <p className="text-red-300 text-sm mt-2">{error}</p>}
@@ -451,7 +451,7 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
               </div>
             </div>
 
-            <div className="text-xs text-center text-gray-300 mt-2">Keep app open to share live location with rider.</div>
+            <div className="text-xs text-center text-gray-100 mt-2">Keep app open to share live location with rider.</div>
           </aside>
         </div>
       </main>

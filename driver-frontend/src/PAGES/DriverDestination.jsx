@@ -142,15 +142,15 @@ const DriverDestination = () => {
   
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 text-white flex flex-col">
+    <div className="min-h-screen bg-gray-400 text-black flex flex-col">
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-24 -left-24 w-72 h-72 bg-indigo-700 opacity-30 rounded-full blur-3xl animate-blob" />
-        <div className="absolute -bottom-28 right-0 w-96 h-96 bg-amber-600 opacity-20 rounded-full blur-2xl animate-blob animation-delay-2000" />
+        <div className="absolute -top-24 -left-24 w-72 h-72 bg-gray-100 opacity-30 rounded-full blur-3xl animate-blob" />
+        <div className="absolute -bottom-28 right-0 w-96 h-96 bg-gray-100 opacity-20 rounded-full blur-2xl animate-blob animation-delay-2000" />
       </div>
 
       <main className="flex-1 p-4 md:p-8">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-          <section className="md:col-span-2 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden shadow-lg h-[60vh] md:h-[80vh]">
+          <section className="md:col-span-2 bg-white/50 backdrop-blur-lg border border-black rounded-2xl overflow-hidden shadow-lg h-[60vh] md:h-[80vh]">
             <MapContainer
               center={[center.lat || center[0], center.lng || center[1]]}
               zoom={13}
@@ -184,30 +184,30 @@ const DriverDestination = () => {
           </section>
 
           <aside className="md:col-span-1 flex flex-col gap-4">
-            <div className="bg-white/6 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow">
-              <h3 className="text-lg font-semibold">Destination</h3>
-              <p className="text-sm text-gray-200 mt-2">Drop-off coordinates:</p>
-              <p className="text-xs font-mono text-gray-100 mt-2">{dropoffLocation ? `${dropoffLocation.lat}, ${dropoffLocation.lng}` : 'Not available'}</p>
+            <div className="bg-gray-600 backdrop-blur-md border border-black rounded-xl p-4 shadow">
+              <h3 className="text-lg text-black font-semibold">Destination</h3>
+              <p className="text-sm text- mt-2">Drop-off coordinates:</p>
+              <p className="text-xs font-mono text-gray-200 mt-2">{dropoffLocation ? `${dropoffLocation.lat}, ${dropoffLocation.lng}` : 'Not available'}</p>
             </div>
 
-            <div className="bg-white/6 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow">
+            <div className="bg-gray-600 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow">
               <h4 className="font-semibold">Trip Info</h4>
-              <div className="flex justify-between mt-2 text-sm text-gray-200">
+              <div className="flex justify-between mt-2 text-sm text-yellow-500">
                 <div>Distance</div>
                 <div className="font-medium">{distance ?? '—'} km</div>
               </div>
-              <div className="flex justify-between mt-1 text-sm text-gray-200">
+              <div className="flex justify-between mt-1 text-sm text-yellow-400">
                 <div>ETA</div>
                 <div className="font-medium">{eta ?? '—'} min</div>
               </div>
             </div>
 
-            <div className="bg-white/6 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow flex flex-col items-center gap-3">
-              <p className="text-sm text-gray-200 text-center">When you arrive, confirm to mark the ride complete.</p>
-              <button onClick={markRideComplete} className="w-full py-2 rounded bg-gradient-to-r from-emerald-500 to-green-400 text-slate-900 font-semibold">Mark as Completed</button>
+            <div className="bg-gray-600 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow flex flex-col items-center gap-3">
+              <p className="text-sm text-gray-100 text-center">When you arrive, confirm to mark the ride complete.</p>
+              {/* <button onClick={markRideComplete} className="w-full py-2 rounded bg-gradient-to-r from-emerald-500 to-green-400 text-slate-900 font-semibold">Mark as Completed</button> */}
             </div>
 
-            <div className="text-xs text-center text-gray-300 mt-2">Auto-fit applied to route when available.</div>
+            <div className="text-xs text-center text-gray-100 mt-2">Auto-fit applied to route when available.</div>
           </aside>
         </div>
       </main>
@@ -217,7 +217,7 @@ const DriverDestination = () => {
         <div>
           <div className="fixed inset-0 bg-black/40 z-[100]" />
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white text-slate-900 w-[90%] md:w-[420px] p-6 rounded-2xl shadow-2xl z-[300]">
-            <h2 className="text-xl font-bold mb-4">Ride Completed!</h2>
+            <h2 className="text-xl text-center font-bold mb-4">Ride Completed!</h2>
             <p className="text-center">You have arrived at the destination. Please confirm to mark the ride as complete.</p>
             <div className="mt-4 flex justify-center">
               <button

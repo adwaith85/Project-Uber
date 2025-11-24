@@ -58,8 +58,9 @@ function Home() {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col h-screen">
-        <Navbar />
-
+       <div className="stick z-40">
+         <Navbar />
+       </div>
         <main className="flex-1 overflow-y-auto">
           <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-3 space-y-4">
             {/* Map Section */}
@@ -71,7 +72,7 @@ function Home() {
 
             {/* Ride Notification */}
             {ridenotify && (
-              <div className="sticky top-20 z-40 animate-slide-down">
+              <div className="sticky top-20 z-30 animate-slide-down">
                 <RiderReqMessage ride={rideData} socketRef={socketRef} />
               </div>
             )}

@@ -103,7 +103,9 @@ function AllRideDetails({ rides }) {
                     ? "text-green-600"
                     : ride.status === "cancelled"
                       ? "text-red-600"
-                      : "text-blue-600"
+                      :ride.status === "accepted"
+                      ?"text-blue-600"
+                      : "text-black"
                     }`}
                 >
                   {ride.status}
