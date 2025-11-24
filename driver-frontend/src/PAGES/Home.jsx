@@ -48,12 +48,12 @@ function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
+    <div className="min-h-screen bg-white text-black">
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: "2s"}}></div>
-        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-orange-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: "4s"}}></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80  rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80  rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: "2s"}}></div>
+        <div className="absolute top-1/2 left-1/2 w-80 h-80  rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: "4s"}}></div>
       </div>
 
       {/* Content */}
@@ -61,10 +61,10 @@ function Home() {
         <Navbar />
 
         <main className="flex-1 overflow-y-auto">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+          <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-3 space-y-4">
             {/* Map Section */}
             <div className="w-full rounded-2xl overflow-hidden shadow-2xl border border-gray-700/50 backdrop-blur-sm hover:border-orange-500/30 transition">
-              <div className="bg-gray-800/30 p-4">
+              <div className="bg-gray-200 p-1">
                 <CurrentLocationMap socketRef={socketRef} />
               </div>
             </div>
@@ -79,8 +79,8 @@ function Home() {
             {/* Grid Layout for Chart and Details */}
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
               {/* Chart - Left Side */}
-              <div className="lg:col-span-1 h-fit rounded-2xl shadow-2xl border border-gray-700/50 backdrop-blur-sm overflow-hidden hover:border-orange-500/30 transition">
-                <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 p-4">
+              <div className="lg:col-span-1 h-fit rounded-2xl shadow-2xl border border-gray-700 backdrop-blur-sm overflow-hidden hover:border-black transition">
+                <div className="bg-gray-200 p-1">
                   {!isLoading && rideList && (
                     <RideAnalyticsChart rides={rideList} />
                   )}
@@ -88,8 +88,8 @@ function Home() {
               </div>
 
               {/* Rides Table - Right Side */}
-              <div className="lg:col-span-3 rounded-2xl shadow-2xl border border-gray-700/50 backdrop-blur-sm overflow-hidden hover:border-orange-500/30 transition">
-                <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40">
+              <div className="lg:col-span-3 rounded-2xl shadow-2xl border border-gray-70 backdrop-blur-sm overflow-hidden hover:border-black transition">
+                <div className="w-full m-2">
                   {!isLoading && rideList && <AllRideDetails rides={rideList} />}
                   {isLoading && (
                     <div className="flex items-center justify-center h-96">

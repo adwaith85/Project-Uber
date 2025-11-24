@@ -23,7 +23,7 @@ function CustomRoute() {
     return <>
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={token ? <Home /> : <LandingPage />} />
+                <Route path="/" element={ <LandingPage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/home" element={token?(<Home />):<Logouterror/>} />

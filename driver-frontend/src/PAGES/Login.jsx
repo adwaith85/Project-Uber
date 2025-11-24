@@ -73,31 +73,31 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4 relative overflow-hidden">
       {/* Animated Background Blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-orange-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: "2s"}}></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80  rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: "2s"}}></div>
       </div>
 
       <div className="w-full max-w-md relative z-10">
         {/* Back Button */}
         <button
           onClick={() => navigate("/")}
-          className="mb-6 flex items-center gap-2 text-gray-400 hover:text-orange-400 transition"
+          className="mb-6 flex items-center gap-2 text-gray-400 hover:text-orange-900 transition"
         >
           ← Back to Home
         </button>
 
         {/* Card */}
-        <div className="bg-gray-900/80 backdrop-blur-xl p-8 md:p-10 rounded-2xl shadow-2xl border border-gray-800 hover:border-orange-500/50 transition">
+        <div className="bg-gray-700 backdrop-blur-xl p-8 md:p-10 rounded-2xl shadow-2xl border border-gray-800 hover:border-orange-500/50 transition">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-block p-3 bg-gradient-to-r from-orange-400 to-orange-600 rounded-xl mb-4">
+            <div className="inline-block p-3 bg-blue-200 rounded-xl mb-4">
               <span className="text-2xl">🚗</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Welcome Back</h1>
-            <p className="text-gray-400">Sign in to your driver account</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-black mb-2">Welcome Back</h1>
+            <p className="text-gray-200">Sign in to your driver account</p>
           </div>
 
           {/* Form */}
@@ -111,7 +111,7 @@ function Login() {
                   ref={emailRef}
                   type="email"
                   placeholder="you@example.com"
-                  className="w-full pl-12 pr-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                  className="w-full pl-12 pr-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-900 focus:border-transparent transition"
                   required
                 />
               </div>
@@ -126,7 +126,7 @@ function Login() {
                   ref={passwordRef}
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  className="w-full pl-12 pr-12 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                  className="w-full pl-12 pr-12 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-900 focus:border-transparent transition"
                   required
                 />
                 <button
@@ -150,7 +150,7 @@ function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white font-bold py-3 rounded-lg hover:shadow-lg hover:shadow-orange-500/50 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6"
+              className="w-full bg-gradient-to-r from-red-300 to-blue-300 text-blue font-bold py-3 rounded-lg hover:shadow-md hover:shadow-orange-500 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6"
             >
               {loading ? (
                 <span className="animate-spin">⏳</span>
@@ -168,21 +168,21 @@ function Login() {
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-700"></div>
             </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-gray-900 text-gray-500">New to DriveEarn?</span>
+            <div className="relative flex justify-center text-sm ">
+              <span className="rounded-md px-4 bg-gray-800 text-gray-500">New to DriveEarn?</span>
             </div>
           </div>
 
           {/* Register Link */}
           <button
             onClick={() => navigate("/register")}
-            className="w-full border-2 border-orange-400 text-orange-400 font-bold py-3 rounded-lg hover:bg-orange-400/10 transition"
+            className="w-full border-2 border-orange-100 text-red-500 font-bold py-3 rounded-lg hover:bg-orange-400/10 transition"
           >
             Create Account
           </button>
 
           {/* Footer */}
-          <div className="mt-6 text-center text-gray-500 text-xs">
+          <div className="mt-6 text-center text-gray-300 text-xs">
             <p>By logging in, you agree to our Terms of Service and Privacy Policy</p>
           </div>
         </div>
