@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import DriverStore from "../Store/DriverStore";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
@@ -11,22 +11,49 @@ const DriverEarnings = () => {
   const [lastRefresh, setLastRefresh] = useState(new Date());
   const [autoRefresh, setAutoRefresh] = useState(true);
   const driverId = DriverStore((state) => state.user?._id);
+  const token = DriverStore((state) => state.token);
   const navigate = useNavigate();
 
   // Memoized fetch function for real-time updates
   const fetchEarnings = useCallback(async () => {
-    if (!driverId) return;
     try {
-      const res = await fetch(`http://localhost:8080/driver-earnings/${driverId}`);
-      if (!res.ok) throw new Error("Failed to fetch earnings");
+      let id = driverId;
+
+      // If driverId not present in store but token exists, fetch driver details to obtain id
+      if (!id && token) {
+        try {
+          const det = await fetch("http://localhost:8080/Details", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (det.ok) {
+            const jd = await det.json();
+            id = jd._id || jd.id || null;
+          }
+        } catch (e) {
+          console.warn("Could not fetch /Details to resolve driver id", e);
+        }
+      }
+
+      if (!id) {
+        // no id available; surface a helpful message but don't throw
+        setError("Driver ID not found. Please log in again.");
+        return;
+      }
+
+      const res = await fetch(`http://localhost:8080/driver-earnings/${id}`);
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(`Failed to fetch earnings: ${res.status} ${txt}`);
+      }
       const data = await res.json();
       setEarnings(data);
       setError(null);
       setLastRefresh(new Date());
     } catch (err) {
-      setError(err.message);
+      console.error("fetchEarnings error:", err);
+      setError(err.message || "Failed to fetch earnings");
     }
-  }, [driverId]);
+  }, [driverId, token]);
 
   // Initial load
   useEffect(() => {
@@ -90,21 +117,74 @@ const DriverEarnings = () => {
   }
 
   // Prepare data for charts
-  const dailyChartData = earnings?.completedRides?.slice(-7).map((ride) => ({
-    date: new Date(ride.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-    earnings: parseFloat(ride.price),
-  })) || [];
-
-  const monthlyChartData = earnings?.completedRides?.reduce((acc, ride) => {
-    const monthYear = new Date(ride.date).toLocaleDateString("en-US", { month: "short", year: "2-digit" });
-    const existing = acc.find((item) => item.month === monthYear);
-    if (existing) {
-      existing.earnings += parseFloat(ride.price);
-    } else {
-      acc.push({ month: monthYear, earnings: parseFloat(ride.price) });
+  // Build daily data for the last 7 days (aggregate by day)
+  // Helper to parse price values coming from backend (supports number, string, and Decimal128-like objects)
+  const parsePriceValue = (val) => {
+    if (val == null) return 0;
+    if (typeof val === "number") return val;
+    if (typeof val === "string") {
+      const p = parseFloat(val.replace(/[^0-9.-]+/g, ""));
+      return Number.isFinite(p) ? p : 0;
     }
-    return acc;
-  }, []) || [];
+    if (typeof val === "object") {
+      // handle MongoDB Decimal128 representation: { $numberDecimal: "123.45" }
+      if (val.$numberDecimal) {
+        const p = parseFloat(String(val.$numberDecimal));
+        return Number.isFinite(p) ? p : 0;
+      }
+      // sometimes stored as {value: '123.45'} or other nested shapes
+      const str = JSON.stringify(val);
+      const m = str.match(/-?\d+(?:\.\d+)?/);
+      if (m) return parseFloat(m[0]);
+      return 0;
+    }
+    return 0;
+  };
+  const buildDailyData = () => {
+    const days = [];
+    const today = new Date();
+    // create keys for last 7 days (YYYY-MM-DD)
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const key = d.toISOString().slice(0, 10);
+      const label = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      days.push({ key, label, earnings: 0 });
+    }
+
+    (earnings?.completedRides || []).forEach((ride) => {
+      const k = new Date(ride.date).toISOString().slice(0, 10);
+      const item = days.find((d) => d.key === k);
+      if (item) item.earnings += parsePriceValue(ride.price);
+    });
+
+    return days.map((d) => ({ date: d.label, earnings: Number(d.earnings || 0) }));
+  };
+
+  const dailyChartData = buildDailyData();
+
+  // Build monthly data for the last 6 months (aggregate by month)
+  const buildMonthlyData = () => {
+    const months = [];
+    const now = new Date();
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const key = d.toISOString().slice(0, 7); // YYYY-MM
+      const label = d.toLocaleDateString("en-US", { month: "short", year: "2-digit" });
+      months.push({ key, label, earnings: 0 });
+    }
+
+    (earnings?.completedRides || []).forEach((ride) => {
+      const dt = new Date(ride.date);
+      const k = dt.toISOString().slice(0, 7);
+      const item = months.find((m) => m.key === k);
+      if (item) item.earnings += parsePriceValue(ride.price);
+    });
+
+    return months.map((m) => ({ month: m.label, earnings: Number(m.earnings || 0) }));
+  };
+
+  const monthlyChartData = buildMonthlyData();
 
   const ridesStats = [
     {
@@ -123,6 +203,18 @@ const DriverEarnings = () => {
     },
     { name: "Total", value: earnings?.completedRides?.length || 0, color: "#f59e0b" },
   ];
+
+  // Compute totals locally (more robust than trusting backend string fields)
+  const completedRides = earnings?.completedRides || [];
+  const totalEarningsLocal = completedRides.reduce((s, r) => s + parsePriceValue(r.price), 0);
+  const todayKey = new Date().toISOString().slice(0, 10);
+  const todayEarningsLocal = completedRides
+    .filter((r) => new Date(r.date).toISOString().slice(0, 10) === todayKey)
+    .reduce((s, r) => s + parsePriceValue(r.price), 0);
+  const monthKey = new Date().toISOString().slice(0, 7);
+  const monthEarningsLocal = completedRides
+    .filter((r) => new Date(r.date).toISOString().slice(0, 7) === monthKey)
+    .reduce((s, r) => s + parsePriceValue(r.price), 0);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
@@ -168,7 +260,7 @@ const DriverEarnings = () => {
               <div className="flex-1">
                 <p className="text-gray-600 text-xs md:text-sm font-medium uppercase tracking-wide">Total Earnings</p>
                 <h3 className="text-2xl md:text-4xl font-bold text-gray-900 mt-2">
-                  ₹{parseFloat(earnings?.totalEarnings || 0).toFixed(2)}
+                  ₹{totalEarningsLocal.toFixed(2)}
                 </h3>
               </div>
               <div className="text-3xl md:text-4xl">📊</div>
@@ -184,7 +276,7 @@ const DriverEarnings = () => {
               <div className="flex-1">
                 <p className="text-gray-600 text-xs md:text-sm font-medium uppercase tracking-wide">This Month</p>
                 <h3 className="text-2xl md:text-4xl font-bold text-gray-900 mt-2">
-                  ₹{parseFloat(earnings?.monthEarnings || 0).toFixed(2)}
+                  ₹{monthEarningsLocal.toFixed(2)}
                 </h3>
               </div>
               <div className="text-3xl md:text-4xl">📅</div>
@@ -206,7 +298,7 @@ const DriverEarnings = () => {
               <div className="flex-1">
                 <p className="text-gray-600 text-xs md:text-sm font-medium uppercase tracking-wide">Today</p>
                 <h3 className="text-2xl md:text-4xl font-bold text-gray-900 mt-2">
-                  ₹{parseFloat(earnings?.todayEarnings || 0).toFixed(2)}
+                  ₹{todayEarningsLocal.toFixed(2)}
                 </h3>
               </div>
               <div className="text-3xl md:text-4xl">📱</div>
@@ -232,13 +324,10 @@ const DriverEarnings = () => {
             {earnings && dailyChartData.length > 0 ? (
               <div className="w-full h-64 md:h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={dailyChartData}
-                    margin={{ top: 20, right: 20, left: -20, bottom: 5 }}
-                  >
+                  <ComposedChart data={dailyChartData} margin={{ top: 20, right: 20, left: -20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="date" stroke="#6b7280" style={{ fontSize: "0.75rem" }} />
-                    <YAxis stroke="#6b7280" style={{ fontSize: "0.75rem" }} />
+                    <XAxis dataKey="date" stroke="#6b7280" style={{ fontSize: "0.75rem" }} interval={0} tick={{ fill: '#374151' }} />
+                    <YAxis stroke="#6b7280" style={{ fontSize: "0.75rem" }} domain={[0, 'dataMax']} tickFormatter={(v) => `₹${v}`} />
                     <Tooltip
                       contentStyle={{
                         backgroundColor: "#1f2937",
@@ -247,10 +336,11 @@ const DriverEarnings = () => {
                         color: "#fff",
                       }}
                       formatter={(value) => `₹${value.toFixed(2)}`}
-                      cursor={{ fill: "rgba(0,0,0,0.1)" }}
+                      cursor={{ fill: "rgba(0,0,0,0.03)" }}
                     />
-                    <Bar dataKey="earnings" fill="#3b82f6" radius={[8, 8, 0, 0]} />
-                  </BarChart>
+                    <Bar dataKey="earnings" fill="#3b82f6" radius={[8, 8, 0, 0]} barSize={18} />
+                    <Line type="monotone" dataKey="earnings" stroke="#f59e0b" strokeWidth={2} dot={{ r: 3 }} />
+                  </ComposedChart>
                 </ResponsiveContainer>
               </div>
             ) : (
@@ -268,13 +358,10 @@ const DriverEarnings = () => {
             {earnings && monthlyChartData.length > 0 ? (
               <div className="w-full h-64 md:h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart
-                    data={monthlyChartData}
-                    margin={{ top: 20, right: 20, left: -20, bottom: 5 }}
-                  >
+                  <ComposedChart data={monthlyChartData} margin={{ top: 20, right: 20, left: -20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="month" stroke="#6b7280" style={{ fontSize: "0.75rem" }} />
-                    <YAxis stroke="#6b7280" style={{ fontSize: "0.75rem" }} />
+                    <XAxis dataKey="month" stroke="#6b7280" style={{ fontSize: "0.75rem" }} interval={0} tick={{ fill: '#374151' }} />
+                    <YAxis stroke="#6b7280" style={{ fontSize: "0.75rem" }} domain={[0, 'dataMax']} tickFormatter={(v) => `₹${v}`} />
                     <Tooltip
                       contentStyle={{
                         backgroundColor: "#1f2937",
@@ -285,16 +372,9 @@ const DriverEarnings = () => {
                       formatter={(value) => `₹${value.toFixed(2)}`}
                       cursor={{ stroke: "#3b82f6", strokeWidth: 1 }}
                     />
-                    <Line
-                      type="monotone"
-                      dataKey="earnings"
-                      stroke="#10b981"
-                      strokeWidth={3}
-                      dot={{ fill: "#10b981", r: 5 }}
-                      activeDot={{ r: 7 }}
-                      isAnimationActive={true}
-                    />
-                  </LineChart>
+                    <Bar dataKey="earnings" fill="#60a5fa" radius={[6, 6, 0, 0]} barSize={24} />
+                    <Line type="monotone" dataKey="earnings" stroke="#10b981" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                  </ComposedChart>
                 </ResponsiveContainer>
               </div>
             ) : (
