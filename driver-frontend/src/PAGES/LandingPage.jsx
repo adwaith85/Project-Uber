@@ -52,7 +52,7 @@ const LandingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 text-black overflow-hidden">
+    <div className="min-h-screen bg-gray-300 text-black overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
@@ -87,7 +87,7 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative z-10 max-w-6xl mx-auto px-6 md:px-12 py-12 md:py-24">
+      <section className="relative z-10 max-w-6xl mx-auto px-6 md:px-12 py-10 md:py-20">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
             Start Earning
@@ -130,9 +130,9 @@ const LandingPage = () => {
 
         {/* Hero Image */}
         <div className="mb-16 md:mb-24">
-          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-1 h-80 md:h-96 flex items-center justify-center border border-gray-700">
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-1 h-90 md:h-90 flex items-center justify-center border border-gray-700">
             <div className="w-full h-full bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-xl flex items-center justify-center">
-             <CurrentLocationMap/> {/* <div className="text-6xl md:text-8xl">🗺️</div> */}
+             <div className="w-full h-[100%]"><CurrentLocationMap/> </div>
             </div>
           </div>
         </div>

@@ -18,6 +18,7 @@ import RideAnalyticsChart from "./Components/RideAnalyticsChart";
 import UpdateDistanceRate from "./Components/updatedistancerate";
 import DriverEarnings from "./PAGES/DriverEarnings";
 import Supportpage from "./PAGES/Supportpage";
+import TripsPage from "./PAGES/TripsPage";
 
 function CustomRoute() {
     const token=DriverStore((state)=>state.token)
@@ -41,6 +42,7 @@ function CustomRoute() {
                 <Route path="/updatedistancerate" element={token?(<UpdateDistanceRate />):<Logouterror/>} />
                 <Route path="/driverearnings" element={token?(<DriverEarnings />):<Logouterror/>} />
                 <Route path="/support" element={token?(<Supportpage />):<Logouterror/>} />
+                <Route path="/tripspage" element={token?(<TripsPage />):<Logouterror/>} />
                 
             </Routes>
         </BrowserRouter>
