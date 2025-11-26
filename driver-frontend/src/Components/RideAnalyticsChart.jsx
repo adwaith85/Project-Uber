@@ -136,7 +136,7 @@ function RideAnalyticsChart({ rides }) {
 
             {/* LOADING SKELETON */}
             {loading ? (
-                <div className="w-full h-72 md:h-[200px] animate-pulse bg-gray-600 rounded-xl" />
+                <div className="w-full h-72  md:h-[200px] animate-pulse bg-gray-600 rounded-xl" />
             ) : (
                 <AnimatePresence mode="wait">
                     <motion.div

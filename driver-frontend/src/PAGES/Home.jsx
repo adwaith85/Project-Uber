@@ -72,7 +72,7 @@ function Home() {
 
             {/* Ride Notification */}
             {ridenotify && (
-              <div className="sticky top-20 z-30 animate-slide-down">
+              <div className="z-30 top-30">
                 <RiderReqMessage ride={rideData} socketRef={socketRef} />
               </div>
             )}

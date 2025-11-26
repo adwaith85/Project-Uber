@@ -73,29 +73,29 @@ const RiderReqMessage = ({ ride, socketRef }) => {
   if (!visible) return null;
 
   return (
-    <div className="w-[100%] md:w-[30%] md:absolute md:top-8 md:left-265 bg-white border border-gray-300 rounded-2xl shadow-md p-4 mt-10">
-      <h2 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">
-        🚘 Incoming Ride Requests
-      </h2>
+    // <div className="w-[100%] md:w-[30%] md:absolute md:top-8 md:left-265 bg-white border border-gray-300 rounded-2xl shadow-md p-4 mt-10">
+    //   <h2 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">
+    //     🚘 Incoming Ride Requests
+    //   </h2>
 
-      <div className="max-h-[300px] overflow-y-auto pr-2">
+      <div className="md:h-[100px] w-[100%] md:w-[25%] md:absolute md:top-20 md:left-275 bg-white border border-gray-300 rounded-2xl shadow-md overflow-y-auto ">
         <div
           key={rideId}
-          className="relative border border-gray-200 rounded-xl p-3 mb-3 flex justify-between items-center hover:bg-gray-50 transition"
+          className="relative border border-gray-200 rounded-xl p-3 flex justify-between items-center hover:bg-gray-50 transition"
         >
           <div className="flex flex-col">
             <p className="font-semibold text-gray-900">
               Ride ID: <span className="text-blue-600">{rideId}</span>
             </p>
-            <p className="text-sm text-gray-700">
-              <strong>Pickup:</strong> {pickup} <br />
-              <strong>Dropoff:</strong> {dropoff} <br />
-              <strong>Date:</strong> {moment(date).format("MMMM Do YYYY")} <br />
+            <p className="text-[10px] text-gray-700 w-[200px]">
+              <span className="line-clamp-1"><strong>Pickup:</strong> {pickup}</span> 
+              <span className="line-clamp-1"><strong>Dropoff:</strong> {dropoff}</span>
+              <strong>Date:</strong> {moment(date).format("MMMM Do YYYY")} //
               <strong>Time:</strong> {moment(time, "HH:mm").format("h:mm A")}
             </p>
           </div>
 
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-2 mr-2">
             <button
               onClick={handleAccept}
               className="bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-1 rounded-lg"
@@ -119,7 +119,7 @@ const RiderReqMessage = ({ ride, socketRef }) => {
           </div>
         </div>
       </div>
-    </div>
+    // </div>
   );
 };
 
