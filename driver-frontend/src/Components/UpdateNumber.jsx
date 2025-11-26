@@ -12,31 +12,6 @@ function UpdateNumber() {
   const navigate = useNavigate();
   const token = DriverStore((state) => state.token);
 
-  const UpdateData = async () => {
-    if (!number.trim() || !carnumber.trim()) {
-      alert("Please fill in both fields before updating.");
-      return;
-    }
-
-    try {
-      const response = await api.post(
-        "/UpdateDriver",
-        { number, carnumber },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      alert("Details updated successfully!");
-      console.log(response.data);
-      navigate("/Profile");
-    } catch (error) {
-      console.error("Error updating details:", error);
-      alert("Failed to update details. Please try again.");
-    }
-  };
-
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -68,17 +43,17 @@ function UpdateNumber() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
+    <div className="min-h-screen bg-white text-black">
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-orange-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: "2s"}}></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80  rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
 
       <div className="relative z-10 flex flex-col min-h-screen">
         {/* Header */}
         <div className="pt-8 px-4">
-          <Link to="/Profile" className="text-orange-400 hover:text-orange-300 transition text-sm font-semibold">
+          <Link to="/Profile" className="text-gray-600 hover:text-black transition text-sm font-semibold">
             ← Back to Profile
           </Link>
         </div>
@@ -87,14 +62,14 @@ function UpdateNumber() {
         <div className="flex-1 flex justify-center items-center px-4 py-12">
           <div className="w-full max-w-md">
             <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-2xl">
-              <h2 className="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">
+              <h2 className="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-black text-center">
                 Update Details
               </h2>
-              <p className="text-gray-400 mb-8">Update your phone and car number</p>
+              <p className="text-gray-700 text-center mb-8">Update your phone and car number</p>
 
               {/* Phone Number Field */}
               <div className="mb-4">
-                <label className="font-semibold mb-2 text-gray-300 flex items-center gap-2">
+                <label className="font-semibold mb-2 text-gray-200 flex items-center gap-2">
                   <Phone className="w-4 h-4 text-green-400" />
                   Phone Number
                 </label>
@@ -104,7 +79,7 @@ function UpdateNumber() {
                     value={number}
                     onChange={(e) => setNumber(e.target.value)}
                     placeholder="Enter new phone number"
-                    className="w-full bg-gray-700/30 border border-gray-600/50 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-green-500/50 focus:bg-gray-700/50 transition"
+                    className="w-full bg-gray-700/30 border border-gray-600/50 rounded-lg px-4 py-3 text-black placeholder-gray-300 focus:outline-none focus:border-green-500/50 focus:bg-gray-700/50 transition"
                   />
                   {number && (
                     <button
@@ -120,7 +95,7 @@ function UpdateNumber() {
 
               {/* Car Number Field */}
               <div className="mb-6">
-                <label className="font-semibold mb-2 text-gray-300 flex items-center gap-2">
+                <label className="font-semibold mb-2 text-gray-200 flex items-center gap-2">
                   <Car className="w-4 h-4 text-orange-400" />
                   Car Number
                 </label>
@@ -130,7 +105,7 @@ function UpdateNumber() {
                     value={carnumber}
                     onChange={(e) => setCarNumber(e.target.value)}
                     placeholder="Enter new car number"
-                    className="w-full bg-gray-700/30 border border-gray-600/50 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-orange-500/50 focus:bg-gray-700/50 transition"
+                    className="w-full bg-gray-700/30 border border-gray-600/50 rounded-lg px-4 py-3 text-black placeholder-gray-300 focus:outline-none focus:border-orange-500/50 focus:bg-gray-700/50 transition"
                   />
                   {carnumber && (
                     <button
@@ -148,7 +123,7 @@ function UpdateNumber() {
               <button
                 onClick={handleUpdate}
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-orange-400 to-orange-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-orange-500/50 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full bg-gradient-to-r from-blue-800 to-gray-900 text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-white transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -162,11 +137,10 @@ function UpdateNumber() {
 
               {/* Message */}
               {message && (
-                <div className={`mt-4 p-3 rounded-lg text-center font-medium ${
-                  message.type === 'success'
+                <div className={`mt-4 p-3 rounded-lg text-center font-medium ${message.type === 'success'
                     ? 'bg-green-500/20 text-green-400 border border-green-500/50'
                     : 'bg-red-500/20 text-red-400 border border-red-500/50'
-                }`}>
+                  }`}>
                   {message.text}
                 </div>
               )}

@@ -41,7 +41,7 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
   const [journeyStarted, setJourneyStarted] = useState(false);
   const location = useLocation();
 
-  const navigate=useNavigate()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!rideId && location?.state?.rideId) setRideId(location.state.rideId);
@@ -144,11 +144,11 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
     socketRef.current.on("otp:confirmed", (data) => {
       console.log("✅ otp:confirmed event", data);
       if (data?.rideId && String(data.rideId) === String(rideId)) {
-        if(data.success){
-        setJourneyStarted(true);
-        alert("OTP confirmed — journey started");
-        // navigate("/driverdestination")  
-      if (rideId) {
+        if (data.success) {
+          setJourneyStarted(true);
+          alert("OTP confirmed — journey started");
+          // navigate("/driverdestination")  
+          if (rideId) {
             window.location.href = `/driverdestination?rideId=${rideId}`;
           } else {
             window.location.href = "/driverdestination";
@@ -157,7 +157,7 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
           alert("❌ OTP verified incorrectly. Please try again.");
         }
       }
-  });
+    });
 
     return () => {
       if (!socketRef.current) return;
@@ -173,10 +173,10 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
   // Ensure we join the ride room once rideId and driverEmail are available
   useEffect(() => {
     if (!socketRef.current || !rideId || !driverEmail) {
-      console.log("⏳ Waiting to join room...", { 
-        socketReady: socketRef.current?.connected, 
-        rideId, 
-        driverEmail 
+      console.log("⏳ Waiting to join room...", {
+        socketReady: socketRef.current?.connected,
+        rideId,
+        driverEmail
       });
       return;
     }
@@ -242,8 +242,8 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
       if (data.routes?.length) {
         const route = data.routes[0];
         const coords = route.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
-        console.log("✅ Route fetched successfully", { 
-          distance: route.distance, 
+        console.log("✅ Route fetched successfully", {
+          distance: route.distance,
           duration: route.duration,
           coordsCount: coords.length
         });

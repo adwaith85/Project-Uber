@@ -57,7 +57,7 @@ const CurrentLocationMap = ({ socketRef }) => {
       (pos) => {
         const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         setLocation([coords.lat, coords.lng]);
-       
+
 
         if (socketRef.current && socketRef.current.connected && driverEmail) {
           socketRef.current.emit("driver:location:update", {

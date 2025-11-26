@@ -12,9 +12,9 @@ function AllRideDetails({ rides }) {
     queryKey: ["rides"],
     queryFn: async () => {
       const res = await api.get("/ridedetails", {
-        headers: { 
+        headers: {
           Authorization: `Bearer ${token}`
-         },
+        },
       });
       return res.data;
     },
@@ -40,7 +40,7 @@ function AllRideDetails({ rides }) {
 
   return (
     <div className="max-w-full mx-auto mt-2 px-4">
-     
+
       <h2 className="text-xl font-bold text-center">
         All Ride Details
       </h2>
@@ -103,9 +103,9 @@ function AllRideDetails({ rides }) {
                     ? "text-green-600"
                     : ride.status === "cancelled"
                       ? "text-red-600"
-                      :ride.status === "accepted"
-                      ?"text-blue-600"
-                      : "text-black"
+                      : ride.status === "accepted"
+                        ? "text-blue-600"
+                        : "text-black"
                     }`}
                 >
                   {ride.status}

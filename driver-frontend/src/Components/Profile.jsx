@@ -27,8 +27,8 @@ function Profile() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
         <div className="stick z-40">
-         <Navbar />
-       </div>
+          <Navbar />
+        </div>
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
@@ -55,7 +55,7 @@ function Profile() {
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gray-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gray-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: "2s"}}></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gray-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
 
       <div className="relative z-10 flex flex-col">
@@ -66,7 +66,7 @@ function Profile() {
           <div className="w-full max-w-2xl">
             {/* Profile Header Card */}
             <div className="bg-gray-100 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-2xl hover:border-black transition mb-8">
-              
+
               {/* Profile Image Section */}
               <div className="flex flex-col md:flex-row items-center gap-8 mb-8">
                 <div className="relative">
@@ -83,7 +83,13 @@ function Profile() {
                 </div>
 
                 <div className="text-center md:text-left">
-                  <h2 className="text-3xl md:text-4xl font-bold text-black mb-2">{data?.name ?? "Not found"}</h2>
+                  <h2 className="text-3xl md:text-4xl font-bold text-black mb-2 ml-4">{data?.name ?? "Not found"}
+                    <Link to="/UpdateName">
+                      <button className="relative inline-flex items-center justify-center pl-3 hover:bg-gray-700/50 rounded-lg transition">
+                        <Pencil className="w-4 h-4 text-gray-400 text-center hover:text-orange-400" />
+                      </button>
+                    </Link>
+                  </h2>
                   <p className="text-gray-900 text-lg mb-4">Professional Driver</p>
                   <div className="flex gap-2 flex-wrap justify-center md:justify-start">
                     <span className="bg-orange-500/20 text-orange-400 px-4 py-2 rounded-full text-sm font-semibold border border-orange-500/50">

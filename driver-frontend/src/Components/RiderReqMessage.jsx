@@ -78,47 +78,47 @@ const RiderReqMessage = ({ ride, socketRef }) => {
     //     🚘 Incoming Ride Requests
     //   </h2>
 
-      <div className="md:h-[100px] w-[100%] md:w-[25%] md:absolute md:top-20 md:left-275 bg-white border border-gray-300 rounded-2xl shadow-md overflow-y-auto ">
-        <div
-          key={rideId}
-          className="relative border border-gray-200 rounded-xl p-3 flex justify-between items-center hover:bg-gray-50 transition"
-        >
-          <div className="flex flex-col">
-            <p className="font-semibold text-gray-900">
-              Ride ID: <span className="text-blue-600">{rideId}</span>
-            </p>
-            <p className="text-[10px] text-gray-700 w-[200px]">
-              <span className="line-clamp-1"><strong>Pickup:</strong> {pickup}</span> 
-              <span className="line-clamp-1"><strong>Dropoff:</strong> {dropoff}</span>
-              <strong>Date:</strong> {moment(date).format("MMMM Do YYYY")} //
-              <strong>Time:</strong> {moment(time, "HH:mm").format("h:mm A")}
-            </p>
-          </div>
+    <div className="md:h-[100px] w-[100%] md:w-[25%] md:absolute md:top-20 md:left-275 bg-white border border-gray-300 rounded-2xl shadow-md overflow-y-auto ">
+      <div
+        key={rideId}
+        className="relative border border-gray-200 rounded-xl p-3 flex justify-between items-center hover:bg-gray-50 transition"
+      >
+        <div className="flex flex-col">
+          <p className="font-semibold text-gray-900">
+            Ride ID: <span className="text-blue-600">{rideId}</span>
+          </p>
+          <p className="text-[10px] text-gray-700 w-[200px]">
+            <span className="line-clamp-1"><strong>Pickup:</strong> {pickup}</span>
+            <span className="line-clamp-1"><strong>Dropoff:</strong> {dropoff}</span>
+            <strong>Date:</strong> {moment(date).format("MMMM Do YYYY")} //
+            <strong>Time:</strong> {moment(time, "HH:mm").format("h:mm A")}
+          </p>
+        </div>
 
-          <div className="flex flex-col items-center gap-2 mr-2">
-            <button
-              onClick={handleAccept}
-              className="bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-1 rounded-lg"
-            >
-              Accept
-            </button>
-            <button
-              onClick={handleReject}
-              className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded-lg"
-            >
-              Reject
-            </button>
-          </div>
+        <div className="flex flex-col items-center gap-2 mr-2">
+          <button
+            onClick={handleAccept}
+            className="bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-1 rounded-lg"
+          >
+            Accept
+          </button>
+          <button
+            onClick={handleReject}
+            className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded-lg"
+          >
+            Reject
+          </button>
+        </div>
 
-          {/* Bottom progress bar */}
-          <div className="absolute bottom-0 left-0 h-[4px] bg-gray-200 w-full rounded-b-xl overflow-hidden">
-            <div
-              className="h-full bg-green-500 transition-all duration-1000 ease-linear"
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
+        {/* Bottom progress bar */}
+        <div className="absolute bottom-0 left-0 h-[4px] bg-gray-200 w-full rounded-b-xl overflow-hidden">
+          <div
+            className="h-full bg-green-500 transition-all duration-1000 ease-linear"
+            style={{ width: `${progress}%` }}
+          ></div>
         </div>
       </div>
+    </div>
     // </div>
   );
 };

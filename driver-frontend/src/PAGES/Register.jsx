@@ -26,7 +26,7 @@ function Register() {
         number: numberRef.current.value,
         password: passwordRef.current.value,
       });
-      if(response.data){
+      if (response.data) {
         setMessage("✓ Registration successful! Redirecting to login...");
         setTimeout(() => navigate("/login"), 2000);
       }
@@ -42,7 +42,7 @@ function Register() {
       {/* Animated Background Blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-orange-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: "2s"}}></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
 
       <div className="w-full max-w-md relative z-10">

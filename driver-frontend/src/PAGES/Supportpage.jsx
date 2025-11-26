@@ -94,9 +94,7 @@ function Supportpage() {
               <a href="#" className="hover:text-white transition">LinkedIn</a>
             </div>
           </div>
-
         </div>
-
         <div className="text-center text-gray-500 text-sm mt-6">
           © {new Date().getFullYear()} Driver Support. All rights reserved.
         </div>

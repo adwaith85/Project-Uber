@@ -21,29 +21,31 @@ import Supportpage from "./PAGES/Supportpage";
 import TripsPage from "./PAGES/TripsPage";
 
 function CustomRoute() {
-    const token=DriverStore((state)=>state.token)
+    const token = DriverStore((state) => state.token)
+    
     return <>
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={ <LandingPage />} />
+
+                <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/home" element={token?(<Home />):<Logouterror/>} />
-                <Route path="/Navbar" element={token?(<Navbar />):<Logouterror/>} />
-                <Route path="/Profile" element={token?(<Profile />):<Logouterror/>} />
-                <Route path="/UpdateProfile" element={token?(<UpdateProfile />):<Logouterror/>} />
-                <Route path="/UpdateName" element={token?(<UpdateName />):<Logouterror/>} />
-                <Route path="/UpdateNumber" element={token?(<UpdateNumber />):<Logouterror/>} />
-                <Route path="/updatecartype" element={token?(<UpdateCartype/>):<Logouterror/>} />
-                <Route path="/ridinglocation" element={token?(<RidingLocation />):<Logouterror/>} />
-                <Route path="/driverdestination" element={token?(<DriverDestination />):<Logouterror/>} />
-                <Route path="/allridedetails" element={token?(<AllRideDetails />):<Logouterror/>} />
-                <Route path="/rideanalyticschart" element={token?(<RideAnalyticsChart />):<Logouterror/>} />
-                <Route path="/updatedistancerate" element={token?(<UpdateDistanceRate />):<Logouterror/>} />
-                <Route path="/driverearnings" element={token?(<DriverEarnings />):<Logouterror/>} />
-                <Route path="/support" element={token?(<Supportpage />):<Logouterror/>} />
-                <Route path="/tripspage" element={token?(<TripsPage />):<Logouterror/>} />
-                
+                <Route path="/home" element={token ? (<Home />) : <Logouterror />} />
+                <Route path="/Navbar" element={token ? (<Navbar />) : <Logouterror />} />
+                <Route path="/Profile" element={token ? (<Profile />) : <Logouterror />} />
+                <Route path="/UpdateProfile" element={token ? (<UpdateProfile />) : <Logouterror />} />
+                <Route path="/UpdateName" element={token ? (<UpdateName />) : <Logouterror />} />
+                <Route path="/UpdateNumber" element={token ? (<UpdateNumber />) : <Logouterror />} />
+                <Route path="/updatecartype" element={token ? (<UpdateCartype />) : <Logouterror />} />
+                <Route path="/ridinglocation" element={token ? (<RidingLocation />) : <Logouterror />} />
+                <Route path="/driverdestination" element={token ? (<DriverDestination />) : <Logouterror />} />
+                <Route path="/allridedetails" element={token ? (<AllRideDetails />) : <Logouterror />} />
+                <Route path="/rideanalyticschart" element={token ? (<RideAnalyticsChart />) : <Logouterror />} />
+                <Route path="/updatedistancerate" element={token ? (<UpdateDistanceRate />) : <Logouterror />} />
+                <Route path="/driverearnings" element={token ? (<DriverEarnings />) : <Logouterror />} />
+                <Route path="/support" element={token ? (<Supportpage />) : <Logouterror />} />
+                <Route path="/tripspage" element={token ? (<TripsPage />) : <Logouterror />} />
+
             </Routes>
         </BrowserRouter>
     </>

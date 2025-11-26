@@ -238,8 +238,8 @@ const DriverEarnings = () => {
             <button
               onClick={() => setAutoRefresh(!autoRefresh)}
               className={`flex-1 sm:flex-auto font-semibold py-2 px-3 md:px-4 rounded-lg transition text-sm md:text-base ${autoRefresh
-                  ? "bg-green-500 hover:bg-green-600 text-white"
-                  : "bg-gray-300 hover:bg-gray-400 text-gray-800"
+                ? "bg-green-500 hover:bg-green-600 text-white"
+                : "bg-gray-300 hover:bg-gray-400 text-gray-800"
                 }`}
             >
               {autoRefresh ? "📡 Auto" : "⏸ Auto"}

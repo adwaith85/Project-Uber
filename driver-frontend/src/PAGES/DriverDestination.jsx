@@ -26,13 +26,13 @@ const DriverDestination = () => {
   const mapRef = useRef(null);
   const navigate = useNavigate();
   const [distance, setDistance] = useState(null);
-  const[eta,setEta]=useState(null);
+  const [eta, setEta] = useState(null);
 
   // update ride status
   const markRideComplete = async () => {
     try {
       const params = new URLSearchParams(window.location.search);
-        const rideId = params.get("rideId");
+      const rideId = params.get("rideId");
 
       const res = await fetch(`http://localhost:8080/ridecomplete/${rideId}`);
       if (res.ok) {
@@ -118,7 +118,7 @@ const DriverDestination = () => {
           const coords = data.routes[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
           setRouteCoords(coords);
           setDistance((route.distance / 1000).toFixed(2)); // km
-        setEta(Math.ceil(route.duration / 60)); // min
+          setEta(Math.ceil(route.duration / 60)); // min
 
           // fit map to route
           if (mapRef.current) {
@@ -139,7 +139,7 @@ const DriverDestination = () => {
   }, [currentLocation, dropoffLocation]);
 
 
-  
+
 
   return (
     <div className="min-h-screen bg-gray-400 text-black flex flex-col">

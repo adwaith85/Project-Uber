@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
-import DriverStore from "../Store/DriverStore"; 
+import DriverStore from "../Store/DriverStore";
 import api from "../api/axiosClient";
 
 function Login() {
@@ -43,7 +43,7 @@ function Login() {
           console.log(response.data.token)
           if (response.data.token) {
             addToken(response.data.token); // store token
-            
+
             // Fetch driver details after login
             try {
               const detailsRes = await api.get('/Details', {
@@ -53,7 +53,7 @@ function Login() {
             } catch (err) {
               console.error("Error fetching driver details:", err);
             }
-            
+
             navigate("/home"); // redirect to dashboard
           } else {
             setMessage("Login failed. Please check your credentials.");
@@ -77,7 +77,7 @@ function Login() {
       {/* Animated Background Blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80  rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: "2s"}}></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
 
       <div className="w-full max-w-md relative z-10">

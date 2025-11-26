@@ -75,11 +75,11 @@ function Navbar() {
               )}
               <div className="flex flex-col">
                 <span className="font-medium text-black text-sm truncate max-w-[100px]">
-                {data.name || "Driver"}
-              </span>
+                  {data.name || "Driver"}
+                </span>
                 <span className="font-medium text-black text-xs truncate max-w-[100px]">
-                Rate-{data.distancerate || "NaN"}/<strong/>km
-              </span>
+                  Rate-{data.distancerate || "NaN"}/<strong />km
+                </span>
               </div>
             </div>
           ) : (
@@ -132,11 +132,10 @@ function Navbar() {
                   <Link
                     key={idx}
                     to={item.path}
-                    className={`rounded-lg px-4 py-2.5 transition-all font-medium ${
-                      location.pathname.startsWith(item.path)
+                    className={`rounded-lg px-4 py-2.5 transition-all font-medium ${location.pathname.startsWith(item.path)
                         ? "bg-gray-200 text-gray-900 border border-black"
                         : "text-gray-900 hover:text-black hover:bg-gray-700/50"
-                    }`}
+                      }`}
                     onClick={toggleDrawer}
                   >
                     {item.name}

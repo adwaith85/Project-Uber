@@ -132,7 +132,7 @@ const LandingPage = () => {
         <div className="mb-16 md:mb-24">
           <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-1 h-90 md:h-90 flex items-center justify-center border border-gray-700">
             <div className="w-full h-full bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-xl flex items-center justify-center">
-             <div className="w-full h-[100%]"><CurrentLocationMap/> </div>
+              <div className="w-full h-[100%]"><CurrentLocationMap /> </div>
             </div>
           </div>
         </div>

@@ -125,8 +125,8 @@ function RideAnalyticsChart({ rides }) {
                         key={mode}
                         onClick={() => setView(mode)}
                         className={`px-4 py-2 rounded-lg  text-white transition-all ${view === mode
-                                ? "bg-gradient-to-r  from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/40 scale-105"
-                                : "bg-gray-600 hovr:bg-gray-600"
+                            ? "bg-gradient-to-r  from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/40 scale-105"
+                            : "bg-gray-600 hovr:bg-gray-600"
                             }`}
                     >
                         {mode.charAt(0).toUpperCase() + mode.slice(1)}
