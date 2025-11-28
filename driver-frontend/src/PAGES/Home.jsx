@@ -97,10 +97,10 @@ function Home() {
 
               {/* Rides Table - Right Side */}
               <div className="lg:col-span-3 rounded-2xl shadow-2xl border border-gray-70 backdrop-blur-sm overflow-hidden hover:border-black transition">
-                <div className="w-full m-2 ">
+                <div className="w-full mb-4">
                   {!isLoading && rideList && <AllRideDetails rides={rideList} />}
                   {isLoading && (
-                    <div className="flex items-center justify-center h-96">
+                    <div className="flex items-center justify-center h-100">
                       <div className="text-center">
                         <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
                         <p className="mt-4 text-gray-400">Loading rides...</p>

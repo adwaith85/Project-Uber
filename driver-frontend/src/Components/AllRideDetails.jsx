@@ -3,6 +3,7 @@ import DriverStore from "../Store/DriverStore";
 import { useQuery } from "@tanstack/react-query";
 import api from "../api/axiosClient";
 import Navbar from "./Navbar";
+import moment from "moment";
 
 function AllRideDetails({ rides }) {
   const token = DriverStore((state) => state.token);
@@ -39,7 +40,7 @@ function AllRideDetails({ rides }) {
   }
 
   return (
-    <div className="max-w-full mx-auto mt-2 px-4">
+    <div className="max-w-full mx-auto mt-2 ">
 
       <h2 className="text-xl font-bold text-center">
         All Ride Details
@@ -68,54 +69,79 @@ function AllRideDetails({ rides }) {
           Reset
         </button>
       </div>
-
-      {/* SCROLLABLE CONTAINER */}
-      <div className="h-[300px] md:w-full overflow-y-auto shadow-lg border rounded-lg">
-        <table className="w-full text-sm md:text-base">
-          <thead className="bg-gray-900 text-white sticky top-0">
-            <tr className="">
-              <th className="p-3 border">Driver ID</th>
-              <th className="p-3 border">Pickup</th>
-              <th className="p-3 border">Dropoff</th>
-              <th className="p-3 border">Date</th>
-              <th className="p-3 border">Time</th>
-              <th className="p-3 border">distance</th>
-              <th className="p-3 border">ride rate</th>
-              <th className="p-3 border">Status</th>
+      {/* SCROLLABLE & RESPONSIVE TABLE */}
+      <div className="h-[300px] w-full overflow-y-auto overflow-x-hidden shadow-lg border rounded-lg">
+        <table className="w-full text-[10px] md:text-xs table-fixed">
+          <thead className="bg-gray-900 text-white sticky top-0 text-[10px] md:text-xs">
+            <tr>
+              {/* <th className="p-2 w-16">Driver</th> */}
+              <th className="p-2 w-15">Pickup</th>
+              <th className="p-2 w-15">Dropoff</th>
+              <th className="p-2 w-15">Date</th>
+              <th className="p-2 w-15">Time</th>
+              <th className="p-2 w-13">Km</th>
+              <th className="p-2 w-16">Rate</th>
+              <th className="p-2 w-20">Status</th>
             </tr>
           </thead>
 
           <tbody>
-            {sortedData.map((ride, index) => (
-              <tr
-                key={index}
-                className="hover:bg-gray-100 transition cursor-pointer"
-              >
-                <td className="p-1 border text-sm text-center">{ride.driverId}</td>
-                <td className="p-3 border text-sm text-center">{ride.pickup}</td>
-                <td className="p-3 border text-sm text-center">{ride.dropoff}</td>
-                <td className="p-3 border text-sm text-center">{ride.date}</td>
-                <td className="p-3 border text-sm text-center">{ride.time}</td>
-                <td className="p-3 border text-sm text-center">{ride.distance}km</td>
-                <td className="p-3 border text-sm text-center">₨.{ride.price}</td>
-                <td
-                  className={`p-3 border text-center text-sm font-semibold ${ride.status === "completed"
-                    ? "text-green-600"
-                    : ride.status === "cancelled"
-                      ? "text-red-600"
-                      : ride.status === "accepted"
-                        ? "text-blue-600"
-                        : "text-black"
-                    }`}
+            {sortedData.map((ride, index) => {
+              const pickupShort =
+                ride.pickup?.split(" ")[0] +
+                (ride.pickup?.split(" ").length > 1 ? "..." : "");
+
+              const dropoffShort =
+                ride.dropoff?.split(" ")[0] +
+                (ride.dropoff?.split(" ").length > 1 ? "..." : "");
+
+              return (
+                <tr
+                  key={index}
+                  className="hover:bg-gray-100 transition cursor-pointer border-b"
                 >
-                  {ride.status}
-                </td>
-              </tr>
-            ))}
+                  {/* <td className="p-2 text-center truncate ">{ride.driverId}
+
+            </td> */}
+
+                  <td className="p-2 text-center truncate">{pickupShort}</td>
+
+                  <td className="p-2 text-center truncate">{dropoffShort}</td>
+
+                  <td className="p-2 text-center">
+                    {moment(ride.date).format("DD MMM, YYYY")}
+                  </td>
+
+                  <td className="p-2 text-center truncate">
+                    {moment(ride.time).format("hh:mm A")}
+                  </td>
+
+                  <td className="p-2 text-center truncate">
+                    {ride.distance} km
+                  </td>
+
+                  <td className=" text-center truncate">
+                    ₨.{ride.price}
+                  </td>
+
+                  <td
+                    className={` text-center font-semibold  whitespace-nowrap truncate ${ride.status === "completed"
+                      ? "text-green-600"
+                      : ride.status === "cancelled"
+                        ? "text-red-600"
+                        : ride.status === "accepted"
+                          ? "text-blue-600"
+                          : "text-black"
+                      }`}
+                  >
+                    {ride.status}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
-
     </div>
 
   );

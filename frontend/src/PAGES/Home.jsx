@@ -1,22 +1,34 @@
 import React from 'react'
 import Navbar from '../Components/Navbar'
 import Location from '../Components/Location'
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Suggestions from '../Components/Suggestions'
+import Userhomemap from '../Components/Userhomemap'
 
 function Home() {
+  const navigate=useNavigate()
+  const handleclick=()=>{
+    navigate('/UserHome')
+  }
   return (<>
     <Navbar />
     <div className="p-5  h-1/4 bg-white flex items-center ">
       <h1 className=" m-3 text-[2.4rem] font-semibold md:-mb-2 md:text-[2rem]">Go anywhere with Uber</h1>
     </div>
-    <Location />
-    <div className="p-5 -ml-4 flex flex-wrap">
-      <Link to="/BookRide" className='border rounded-lg p-3 bg-black text-md text-white ml-5  md:text-[14px]'>See Prices</Link>
+   <div className="md:flex md:w-[100%] gap-3">
+     <div className="">
+      <Location />
+    <div className="p-5  flex flex-wrap">
+      <Link to="/UserHome" className='border rounded-lg p-3 bg-black text-md text-white ml-5  md:text-[14px]'>See Prices</Link>
       {/* <button className='border rounded-xl bg-black text-m text-white ml-5  h-12 w-36'>See prices</button> */}
       <Link to={'/Login'} className='ml-10 underline underline-offset-8 md:ml-3 md:text-[15px]'>log in to see your recent activity</Link>
       {/* <button className='ml-10 underline underline-offset-8'>log in to see your recent activity</button> */}
     </div>
+     </div>
+    <div className=" md: md:m-3 md:w-[70%] md:h-[400px]">
+      <Userhomemap />
+    </div>
+   </div>
     <Suggestions />
     <div className="w-[100%] mx-auto text-center py-12 ">
 
@@ -35,9 +47,10 @@ function Home() {
         {/* <button className="bg-black text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-900 transition">
           Log in to your account
         </button> */}
-        <button className="text-black text-lg font-medium border-b border-gray-400 hover:border-black transition">
+        <Link to={'/Register'} className='text-black text-lg font-medium border-b border-gray-400 hover:border-black transition'>Create an account</Link>
+        {/* <button className="text-black text-lg font-medium border-b border-gray-400 hover:border-black transition">
           Create an account
-        </button>
+        </button> */}
       </div>
     </div>
 
@@ -105,7 +118,11 @@ function Home() {
         </div>
 
         {/* Button */}
-        <button
+        {/* <Link to={'/Register'} 
+        className="w-[90%] bg-black text-white py-3 rounded-md font-semibold hover:bg-gray-800 transition">
+          Next
+          </Link> */}
+        <button onClick={handleclick}
           className="w-[90%] bg-black text-white py-3 rounded-md font-semibold hover:bg-gray-800 transition">
           Next
         </button>

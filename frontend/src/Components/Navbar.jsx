@@ -8,7 +8,8 @@ function Navbar() {
 
         <Link to={'/Login'} className=' text-right text-white'>log in</Link>
         {/* <button className=' text-right text-white'>Log in</button> */}
-        <button className='border rounded-4xl p-2 bg-white text-right text-black'>Sign up</button>
+        {/* <button className='border rounded-4xl p-2 bg-white text-right text-black'>Sign up</button> */}
+        <Link to={'/Register'} className='border rounded-4xl p-2 bg-white text-right text-black'>Sign up</Link>
       </div>
 
     </div>

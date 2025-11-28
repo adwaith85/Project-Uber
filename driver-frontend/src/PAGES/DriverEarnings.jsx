@@ -407,23 +407,23 @@ const DriverEarnings = () => {
         </div>
 
         {/* Recent Rides Table - Fully Responsive */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 w-full h-[80vh] flex flex-col">
+        <div className="bg-white rounded-2xl shadow-lg p-2 w-full h-[80vh] flex flex-col">
           {/* Heading */}
           <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
             <span className="text-2xl mr-2">🚗</span> Recent Rides
           </h2>
 
           {/* Scrollable Table Container */}
-          <div className="flex-1 overflow-y-auto rounded-xl border border-gray-200">
+          <div className=" overflow-y-hidden w-full rounded-xl border border-gray-200">
             <table className="w-full border-collapse">
               <thead className="sticky top-0 bg-gray-100 z-10">
                 <tr className="border-b border-gray-300">
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Date</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Pickup</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Dropoff</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Distance</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Earnings</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Status</th>
+                  <th className="md:px-6 md:py-1 md:text-sm px-2 text-left text-xs font-semibold text-gray-800">Date</th>
+                  <th className="md:px-6 md:py-1 md:text-sm px-2 text-left text-xs font-semibold text-gray-800">Pickup</th>
+                  <th className="md:px-6 md:py-1 md:text-sm px-2 text-left text-xs font-semibold text-gray-800">Dropoff</th>
+                  <th className="md:px-6 md:py-1 md:text-sm px-2 text-left text-xs font-semibold text-gray-800">Distance</th>
+                  <th className="md:px-6 md:py-1 md:text-sm px-2 text-left text-xs font-semibold text-gray-800">Earnings</th>
+                  <th className="md:px-6 md:py-1 md:text-sm px-2 text-left text-xs font-semibold text-gray-800">Status</th>
                 </tr>
               </thead>
 
@@ -433,7 +433,7 @@ const DriverEarnings = () => {
                     key={idx}
                     className="border-b border-gray-100 hover:bg-gray-50 transition-colors even:bg-gray-50/50"
                   >
-                    <td className="px-6 py-4 text-sm text-gray-700">
+                    <td className="md:px-6 md:py-1 px-2 md:text-sm text-xs text-gray-700">
                       {new Date(ride.date).toLocaleDateString("en-US", {
                         year: "2-digit",
                         month: "short",
@@ -443,25 +443,25 @@ const DriverEarnings = () => {
                       })}
                     </td>
 
-                    <td className="px-6 py-4 text-sm text-gray-700">
+                    <td className="md:px-6 md:py-1 md:text-sm text-xs text-gray-700">
                       <span className="line-clamp-1">{ride.pickup}</span>
                     </td>
 
-                    <td className="px-6 py-4 text-sm text-gray-700">
+                    <td className="md:px-6 md:py-1 md:text-sm text-xs text-gray-700">
                       <span className="line-clamp-1">{ride.dropoff}</span>
                     </td>
 
-                    <td className="px-6 py-4 text-sm text-gray-700">
+                    <td className="md:px-6 md:py-1 md:text-sm text-xs text-gray-700">
                       {ride.distance?.toFixed(2)} km
                     </td>
 
-                    <td className="px-6 py-4 text-sm font-semibold text-green-600">
+                    <td className="md:px-6 md:py-1 md:text-sm text-xs font-semibold text-green-600">
                       ₹{parseFloat(ride.price).toFixed(2)}
                     </td>
 
-                    <td className="px-6 py-4">
-                      <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
-                        ✓ Completed
+                    <td className="md:px-6 md:py-1 md:text-sm">
+                      <span className="bg-green-100 text-green-800 md:px-3 py-1 rounded-full text-xs font-semibold">
+                         Completed
                       </span>
                     </td>
                   </tr>

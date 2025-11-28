@@ -118,6 +118,42 @@ function UserHome() {
           <Suggestions />
         </div>
       </div>
+      <footer className="bg-gray-900 text-gray-300 py-8 mt-12">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* About */}
+          <div>
+            <h3 className="text-white text-lg font-semibold mb-3">About Driver Support</h3>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              Providing drivers with real-time ride management tools, analytics, and reliable support to help you drive smarter and earn more.
+            </p>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h3 className="text-white text-lg font-semibold mb-3">Contact Us</h3>
+            <ul className="space-y-2 text-gray-400 text-sm">
+              <li>Email: <a href="mailto:support@example.com" className="hover:text-white">support@example.com</a></li>
+              <li>Phone: <a href="tel:+18001234567" className="hover:text-white">+1 (800) 123-4567</a></li>
+              <li>Address: 123 Driver Lane, Transport City</li>
+            </ul>
+          </div>
+
+          {/* Social */}
+          <div>
+            <h3 className="text-white text-lg font-semibold mb-3">Follow Us</h3>
+            <div className="flex space-x-6 text-gray-400">
+              <a href="#" className="hover:text-white transition">Facebook</a>
+              <a href="#" className="hover:text-white transition">Twitter</a>
+              <a href="#" className="hover:text-white transition">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 border-t border-gray-700 pt-4 text-center text-gray-500 text-sm">
+          &copy; {new Date().getFullYear()} Driver Support. All rights reserved.
+        </div>
+      </footer>
+
     </>
   )
 }
