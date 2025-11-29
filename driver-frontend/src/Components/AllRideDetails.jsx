@@ -187,8 +187,8 @@ function AllRideDetails({ rides, enableSorting = true, limit = null, showViewAll
                   <div className={`font-bold text-sm ${ride.status === "completed" ? "text-green-600" : ride.status === "cancelled" ? "text-red-600" : "text-blue-600"}`}>
                     {ride.status}
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">
-                    {ride.date} • {ride.time}
+                  <div className="text-xs text-gray-500 mt-1"> 
+                    {moment(ride.date).format("DD MMM YYYY")} •{moment(ride.time).format("h:mm A")}
                   </div>
                 </div>
                 <div className="flex items-center gap-3">

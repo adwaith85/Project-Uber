@@ -97,8 +97,8 @@ function RideAnalyticsChart({ rides }) {
                 : weeklyData;
 
     return (
-        <div className="md:h-[350px] z-0 h-110 p-3 bg-gray-200 rounded-2xl shadow-2xl border border-gray-700">
-            <h2 className="text-2xl font-bold text-center text-gray-600 mb-4">
+        <div className="md:h-[350px] z-0 h-110 md:p-8 p-2 bg-gray-200 rounded-2xl shadow-2xl border border-gray-700">
+            <h2 className="text-2xl font-bold text-center text-gray-600 m-2 ">
                 Ride Analytics
             </h2>
 

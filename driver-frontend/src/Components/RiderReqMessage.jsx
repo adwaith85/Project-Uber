@@ -78,7 +78,7 @@ const RiderReqMessage = ({ ride, socketRef }) => {
     //     🚘 Incoming Ride Requests
     //   </h2>
 
-    <div className="md:h-[120px] w-[100%] md:w-[30%] md:absolute  md:left-200 bg-white border border-gray-300 rounded-2xl shadow-md overflow-y-auto ">
+    <div className="md:h-[120px] w-[100%] md:w-[30%] md:absolute md:top-10 md:left-200 bg-white border border-gray-300 rounded-2xl shadow-md overflow-y-auto ">
       <div
         key={rideId}
         className="relative border border-gray-200 rounded-xl p-3 flex justify-between items-center hover:bg-gray-50 transition"

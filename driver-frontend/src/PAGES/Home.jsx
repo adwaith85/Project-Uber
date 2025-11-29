@@ -114,16 +114,16 @@ function Home() {
             {/* Grid Layout for Chart and Details */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Chart - Left Side */}
-              <div className="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
-                <div className="p-6 border-b border-gray-100">
+              <div className="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-gray-200  overflow-hidden ">
+                <div className="p-6 border-b border-gray-100 ">
                   <h2 className="text-lg font-bold text-gray-900">Earnings Overview</h2>
                   <p className="text-sm text-gray-500">Your performance this week</p>
                 </div>
-                <div className="p-4 flex-1 flex items-center justify-center bg-gray-50/50">
+                <div className="p-8 md:p-2 mb-4 items-center justify-center bg-gray-50/50">
                   {!isLoading && rideList ? (
                     <RideAnalyticsChart rides={rideList} />
                   ) : (
-                    <div className="h-64 w-full flex items-center justify-center text-gray-400">
+                    <div className="h-64 w-full items-center justify-center text-gray-400">
                       Loading chart...
                     </div>
                   )}
