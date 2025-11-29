@@ -61,12 +61,12 @@ const LandingPage = () => {
       </div>
 
       {/* Navigation Bar */}
-      <nav className="relative z-50 flex justify-between items-center px-6 md:px-12 py-6">
+      <nav className="relative z-50 bg-gray-400 flex justify-between items-center px-6 md:px-12 py-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-gradient-to-r from-orange-200 to-orange-300 rounded-full flex items-center justify-center font-bold text-lg">
             🚗
           </div>
-          <span className="text-2xl font-bold bg-orange-600 bg-clip-text text-transparent">
+          <span className="text-2xl font-bold bg-gradient-to-r from-blue-700 to-gray-900 bg-clip-text text-transparent">
             DriveEarn
           </span>
         </div>
@@ -183,8 +183,8 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-gray-900 mt-16 md:mt-24 py-8 md:py-12 px-6 md:px-12">
-        <div className="max-w-6xl mx-auto text-center text-gray-700">
+      <footer className="relative z-10 bg-gray-400 border-t border-gray-900 mt-16 md:mt-24 py-8 md:py-12 px-6 md:px-12">
+        <div className="max-w-6xl mx-auto text-center text-gray-900">
           <p className="mb-4">
             © 2024 DriveEarn. All rights reserved. Driving the future of transportation.
           </p>

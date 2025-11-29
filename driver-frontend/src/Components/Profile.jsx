@@ -83,7 +83,7 @@ function Profile() {
                 </div>
 
                 <div className="text-center md:text-left">
-                  <h2 className="text-3xl md:text-4xl font-bold text-black mb-2 ml-4">{data?.name ?? "Not found"}
+                  <h2 className="text-3xl md:text-4xl font-bold text-black mb-2  ml-">{data?.name ?? "Not found"}
                     <Link to="/UpdateName">
                       <button className="relative inline-flex items-center justify-center pl-3 hover:bg-gray-700/50 rounded-lg transition">
                         <Pencil className="w-4 h-4 text-gray-400 text-center hover:text-orange-400" />
