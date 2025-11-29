@@ -98,7 +98,7 @@ function Home() {
               {/* Rides Table - Right Side */}
               <div className="lg:col-span-3 rounded-2xl shadow-2xl border border-gray-70 backdrop-blur-sm overflow-hidden hover:border-black transition">
                 <div className="w-full m-2 ">
-                  {!isLoading && rideList && <AllRideDetails rides={rideList} />}
+                  {!isLoading && rideList && <AllRideDetails rides={rideList} enableSorting={false} limit={6} showViewAllLink={true} />}
                   {isLoading && (
                     <div className="flex items-center justify-center h-96">
                       <div className="text-center">
