@@ -3,6 +3,7 @@ import { ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 import DriverStore from "../Store/DriverStore";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
+import { BanknotesIcon, CalendarDaysIcon, ClockIcon, ArrowPathIcon, PauseIcon, PlayIcon } from "@heroicons/react/24/outline";
 
 const DriverEarnings = () => {
   const [earnings, setEarnings] = useState(null);
@@ -89,9 +90,9 @@ const DriverEarnings = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
           <p className="mt-4 text-gray-600 font-medium">Loading earnings...</p>
         </div>
       </div>
@@ -100,14 +101,14 @@ const DriverEarnings = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md text-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md text-center border border-gray-200">
           <div className="text-red-500 text-5xl mb-4">⚠️</div>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Error</h2>
           <p className="text-gray-600">{error}</p>
           <button
             onClick={() => navigate("/home")}
-            className="mt-6 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-lg transition"
+            className="mt-6 bg-gray-900 hover:bg-black text-white font-semibold py-2 px-6 rounded-lg transition"
           >
             Back to Home
           </button>
@@ -192,16 +193,16 @@ const DriverEarnings = () => {
         const month = new Date(r.date).toISOString().slice(0, 7);
         const currentMonth = new Date().toISOString().slice(0, 7);
         return month === currentMonth;
-      }).length || 0, color: "#3b82f6"
+      }).length || 0, color: "bg-blue-500", icon: <CalendarDaysIcon className="w-6 h-6 text-white" />
     },
     {
       name: "This Year", value: earnings?.completedRides?.filter((r) => {
         const year = new Date(r.date).getFullYear();
         const currentYear = new Date().getFullYear();
         return year === currentYear;
-      }).length || 0, color: "#10b981"
+      }).length || 0, color: "bg-green-500", icon: <CalendarDaysIcon className="w-6 h-6 text-white" />
     },
-    { name: "Total", value: earnings?.completedRides?.length || 0, color: "#f59e0b" },
+    { name: "Total Rides", value: earnings?.completedRides?.length || 0, color: "bg-orange-500", icon: <BanknotesIcon className="w-6 h-6 text-white" /> },
   ];
 
   // Compute totals locally (more robust than trusting backend string fields)
@@ -217,251 +218,211 @@ const DriverEarnings = () => {
     .reduce((s, r) => s + parsePriceValue(r.price), 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
       <Navbar />
 
-      <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 md:py-8">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header with Refresh Button */}
-        <div className="mb-6 md:mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">💰 Earnings Dashboard</h1>
-            <p className="text-sm md:text-base text-gray-600">Track your daily, monthly, and annual earnings</p>
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Earnings Dashboard</h1>
+            <p className="text-gray-500 mt-1">Overview of your financial performance</p>
           </div>
-          <div className="flex gap-3 w-full sm:w-auto">
+          <div className="flex items-center gap-3 w-full md:w-auto">
             <button
               onClick={() => fetchEarnings()}
-              className="flex-1 sm:flex-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 md:px-6 rounded-lg transition text-sm md:text-base"
+              className="flex-1 md:flex-auto flex items-center justify-center gap-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition shadow-sm"
               disabled={loading}
             >
-              {loading ? "Refreshing..." : "🔄 Refresh"}
+              <ArrowPathIcon className={`w-5 h-5 ${loading ? "animate-spin" : ""}`} />
+              {loading ? "Refreshing..." : "Refresh"}
             </button>
             <button
               onClick={() => setAutoRefresh(!autoRefresh)}
-              className={`flex-1 sm:flex-auto font-semibold py-2 px-3 md:px-4 rounded-lg transition text-sm md:text-base ${autoRefresh
-                ? "bg-green-500 hover:bg-green-600 text-white"
-                : "bg-gray-300 hover:bg-gray-400 text-gray-800"
+              className={`flex-1 md:flex-auto flex items-center justify-center gap-2 font-medium py-2 px-4 rounded-lg transition shadow-sm ${autoRefresh
+                ? "bg-green-50 border border-green-200 text-green-700"
+                : "bg-gray-100 border border-gray-200 text-gray-600"
                 }`}
             >
-              {autoRefresh ? "📡 Auto" : "⏸ Auto"}
+              {autoRefresh ? <PauseIcon className="w-5 h-5" /> : <PlayIcon className="w-5 h-5" />}
+              {autoRefresh ? "Auto On" : "Auto Off"}
             </button>
           </div>
         </div>
 
         {/* Last Refresh Time */}
-        <div className="mb-6 text-xs md:text-sm text-gray-500">
+        <div className="mb-6 text-xs text-gray-400 text-right">
           Last updated: {lastRefresh.toLocaleTimeString()}
         </div>
 
         {/* Key Metrics Cards - Responsive Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {/* Total Earnings */}
-          <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-5 md:p-8 border-l-4 border-orange-500 hover:shadow-xl transition">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition">
             <div className="flex justify-between items-start">
-              <div className="flex-1">
-                <p className="text-gray-600 text-xs md:text-sm font-medium uppercase tracking-wide">Total Earnings</p>
-                <h3 className="text-2xl md:text-4xl font-bold text-gray-900 mt-2">
+              <div>
+                <p className="text-gray-500 text-sm font-medium uppercase tracking-wider">Total Earnings</p>
+                <h3 className="text-3xl font-bold text-gray-900 mt-2">
                   ₹{totalEarningsLocal.toFixed(2)}
                 </h3>
               </div>
-              <div className="text-3xl md:text-4xl">📊</div>
+              <div className="p-3 bg-orange-100 rounded-lg">
+                <BanknotesIcon className="w-6 h-6 text-orange-600" />
+              </div>
             </div>
-            <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-gray-200">
-              <p className="text-xs text-gray-500">{earnings?.completedRides?.length || 0} completed rides</p>
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <p className="text-sm text-gray-500 flex items-center gap-1">
+                <span className="font-semibold text-gray-900">{earnings?.completedRides?.length || 0}</span> completed rides
+              </p>
             </div>
           </div>
 
           {/* This Month */}
-          <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-5 md:p-8 border-l-4 border-blue-500 hover:shadow-xl transition">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition">
             <div className="flex justify-between items-start">
-              <div className="flex-1">
-                <p className="text-gray-600 text-xs md:text-sm font-medium uppercase tracking-wide">This Month</p>
-                <h3 className="text-2xl md:text-4xl font-bold text-gray-900 mt-2">
+              <div>
+                <p className="text-gray-500 text-sm font-medium uppercase tracking-wider">This Month</p>
+                <h3 className="text-3xl font-bold text-gray-900 mt-2">
                   ₹{monthEarningsLocal.toFixed(2)}
                 </h3>
               </div>
-              <div className="text-3xl md:text-4xl">📅</div>
+              <div className="p-3 bg-blue-100 rounded-lg">
+                <CalendarDaysIcon className="w-6 h-6 text-blue-600" />
+              </div>
             </div>
-            <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-gray-200">
-              <p className="text-xs text-gray-500">
-                {earnings?.completedRides?.filter((r) => {
-                  const month = new Date(r.date).toISOString().slice(0, 7);
-                  const currentMonth = new Date().toISOString().slice(0, 7);
-                  return month === currentMonth;
-                }).length || 0} rides this month
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <p className="text-sm text-gray-500">
+                Current billing cycle
               </p>
             </div>
           </div>
 
           {/* Today */}
-          <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-5 md:p-8 border-l-4 border-green-500 hover:shadow-xl transition sm:col-span-2 lg:col-span-1">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition">
             <div className="flex justify-between items-start">
-              <div className="flex-1">
-                <p className="text-gray-600 text-xs md:text-sm font-medium uppercase tracking-wide">Today</p>
-                <h3 className="text-2xl md:text-4xl font-bold text-gray-900 mt-2">
+              <div>
+                <p className="text-gray-500 text-sm font-medium uppercase tracking-wider">Today</p>
+                <h3 className="text-3xl font-bold text-gray-900 mt-2">
                   ₹{todayEarningsLocal.toFixed(2)}
                 </h3>
               </div>
-              <div className="text-3xl md:text-4xl">📱</div>
+              <div className="p-3 bg-green-100 rounded-lg">
+                <ClockIcon className="w-6 h-6 text-green-600" />
+              </div>
             </div>
-            <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-gray-200">
-              <p className="text-xs text-gray-500">
-                {earnings?.completedRides?.filter((r) => {
-                  const today = new Date().toISOString().slice(0, 10);
-                  return new Date(r.date).toISOString().slice(0, 10) === today;
-                }).length || 0} rides today
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <p className="text-sm text-gray-500">
+                <span className="font-semibold text-gray-900">
+                  {earnings?.completedRides?.filter((r) => {
+                    const today = new Date().toISOString().slice(0, 10);
+                    return new Date(r.date).toISOString().slice(0, 10) === today;
+                  }).length || 0}
+                </span> rides today
               </p>
             </div>
           </div>
         </div>
 
-        {/* Charts Section - Full Responsive */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Daily Earnings Chart */}
-          <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-4 md:p-8">
-            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4 md:mb-6 flex items-center">
-              <span className="text-2xl mr-2">📈</span> <span className="line-clamp-1">Daily Earnings (Last 7 Days)</span>
-            </h2>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-lg font-bold text-gray-900 mb-6">Daily Earnings (Last 7 Days)</h2>
             {earnings && dailyChartData.length > 0 ? (
-              <div className="w-full h-64 md:h-80">
+              <div className="w-full h-72">
                 <ResponsiveContainer width="100%" height="100%">
-                  <ComposedChart data={dailyChartData} margin={{ top: 20, right: 20, left: -20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="date" stroke="#6b7280" style={{ fontSize: "0.75rem" }} interval={0} tick={{ fill: '#374151' }} />
-                    <YAxis stroke="#6b7280" style={{ fontSize: "0.75rem" }} domain={[0, 'dataMax']} tickFormatter={(v) => `₹${v}`} />
+                  <ComposedChart data={dailyChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
+                    <XAxis dataKey="date" stroke="#9ca3af" fontSize={12} tickLine={false} axisLine={false} dy={10} />
+                    <YAxis stroke="#9ca3af" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `₹${v}`} />
                     <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#1f2937",
-                        border: "none",
-                        borderRadius: "8px",
-                        color: "#fff",
-                      }}
+                      contentStyle={{ backgroundColor: "#1f2937", border: "none", borderRadius: "8px", color: "#fff", fontSize: "12px" }}
                       formatter={(value) => `₹${value.toFixed(2)}`}
-                      cursor={{ fill: "rgba(0,0,0,0.03)" }}
+                      cursor={{ fill: "#f9fafb" }}
                     />
-                    <Bar dataKey="earnings" fill="#3b82f6" radius={[8, 8, 0, 0]} barSize={18} />
-                    <Line type="monotone" dataKey="earnings" stroke="#f59e0b" strokeWidth={2} dot={{ r: 3 }} />
+                    <Bar dataKey="earnings" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={30} />
                   </ComposedChart>
                 </ResponsiveContainer>
               </div>
             ) : (
-              <div className="h-64 md:h-80 flex items-center justify-center text-gray-500">
-                No earnings data available
+              <div className="h-72 flex items-center justify-center text-gray-400 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+                No data available
               </div>
             )}
           </div>
 
           {/* Monthly Earnings Chart */}
-          <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-4 md:p-8">
-            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4 md:mb-6 flex items-center">
-              <span className="text-2xl mr-2">📊</span> <span className="line-clamp-1">Monthly Earnings Trend</span>
-            </h2>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-lg font-bold text-gray-900 mb-6">Monthly Earnings Trend</h2>
             {earnings && monthlyChartData.length > 0 ? (
-              <div className="w-full h-64 md:h-80">
+              <div className="w-full h-72">
                 <ResponsiveContainer width="100%" height="100%">
-                  <ComposedChart data={monthlyChartData} margin={{ top: 20, right: 20, left: -20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="month" stroke="#6b7280" style={{ fontSize: "0.75rem" }} interval={0} tick={{ fill: '#374151' }} />
-                    <YAxis stroke="#6b7280" style={{ fontSize: "0.75rem" }} domain={[0, 'dataMax']} tickFormatter={(v) => `₹${v}`} />
+                  <ComposedChart data={monthlyChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
+                    <XAxis dataKey="month" stroke="#9ca3af" fontSize={12} tickLine={false} axisLine={false} dy={10} />
+                    <YAxis stroke="#9ca3af" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `₹${v}`} />
                     <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#1f2937",
-                        border: "none",
-                        borderRadius: "8px",
-                        color: "#fff",
-                      }}
+                      contentStyle={{ backgroundColor: "#1f2937", border: "none", borderRadius: "8px", color: "#fff", fontSize: "12px" }}
                       formatter={(value) => `₹${value.toFixed(2)}`}
-                      cursor={{ stroke: "#3b82f6", strokeWidth: 1 }}
+                      cursor={{ stroke: "#e5e7eb", strokeWidth: 1 }}
                     />
-                    <Bar dataKey="earnings" fill="#60a5fa" radius={[6, 6, 0, 0]} barSize={24} />
-                    <Line type="monotone" dataKey="earnings" stroke="#10b981" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                    <Line type="monotone" dataKey="earnings" stroke="#10b981" strokeWidth={3} dot={{ r: 4, fill: "#10b981", strokeWidth: 2, stroke: "#fff" }} activeDot={{ r: 6 }} />
                   </ComposedChart>
                 </ResponsiveContainer>
               </div>
             ) : (
-              <div className="h-64 md:h-80 flex items-center justify-center text-gray-500">
-                No earnings data available
+              <div className="h-72 flex items-center justify-center text-gray-400 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+                No data available
               </div>
             )}
           </div>
         </div>
 
-        {/* Rides Statistics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
-          {ridesStats.map((stat, idx) => (
-            <div key={idx} className="bg-white rounded-xl md:rounded-2xl shadow-lg p-5 md:p-8">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex-1">
-                  <p className="text-gray-600 text-xs md:text-sm font-medium">{stat.name}</p>
-                  <p className="text-2xl md:text-4xl font-bold text-gray-900 mt-2">{stat.value}</p>
-                  <p className="text-xs text-gray-500 mt-2">Completed Rides</p>
-                </div>
-                <div
-                  className="w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-white font-bold text-lg md:text-xl flex-shrink-0"
-                  style={{ backgroundColor: stat.color }}
-                >
-                  {stat.value > 0 ? `${stat.value}` : "0"}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* Recent Rides Table */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-200">
+            <h2 className="text-lg font-bold text-gray-900">Recent Transactions</h2>
+          </div>
 
-        {/* Recent Rides Table - Fully Responsive */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 w-full h-[80vh] flex flex-col">
-          {/* Heading */}
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-            <span className="text-2xl mr-2">🚗</span> Recent Rides
-          </h2>
-
-          {/* Scrollable Table Container */}
-          <div className="flex-1 overflow-y-auto rounded-xl border border-gray-200">
-            <table className="w-full border-collapse">
-              <thead className="sticky top-0 bg-gray-100 z-10">
-                <tr className="border-b border-gray-300">
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Date</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Pickup</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Dropoff</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Distance</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Earnings</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Status</th>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead className="bg-gray-50 text-gray-500 font-medium border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-3">Date</th>
+                  <th className="px-6 py-3">Pickup</th>
+                  <th className="px-6 py-3">Dropoff</th>
+                  <th className="px-6 py-3">Distance</th>
+                  <th className="px-6 py-3">Amount</th>
+                  <th className="px-6 py-3">Status</th>
                 </tr>
               </thead>
 
-              <tbody>
+              <tbody className="divide-y divide-gray-100">
                 {earnings?.completedRides?.slice(-15).reverse().map((ride, idx) => (
-                  <tr
-                    key={idx}
-                    className="border-b border-gray-100 hover:bg-gray-50 transition-colors even:bg-gray-50/50"
-                  >
-                    <td className="px-6 py-4 text-sm text-gray-700">
+                  <tr key={idx} className="hover:bg-gray-50 transition">
+                    <td className="px-6 py-4 text-gray-600">
                       {new Date(ride.date).toLocaleDateString("en-US", {
-                        year: "2-digit",
                         month: "short",
                         day: "numeric",
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
                     </td>
-
-                    <td className="px-6 py-4 text-sm text-gray-700">
-                      <span className="line-clamp-1">{ride.pickup}</span>
+                    <td className="px-6 py-4 text-gray-900 font-medium max-w-xs truncate">
+                      {ride.pickup}
                     </td>
-
-                    <td className="px-6 py-4 text-sm text-gray-700">
-                      <span className="line-clamp-1">{ride.dropoff}</span>
+                    <td className="px-6 py-4 text-gray-900 font-medium max-w-xs truncate">
+                      {ride.dropoff}
                     </td>
-
-                    <td className="px-6 py-4 text-sm text-gray-700">
+                    <td className="px-6 py-4 text-gray-600">
                       {ride.distance?.toFixed(2)} km
                     </td>
-
-                    <td className="px-6 py-4 text-sm font-semibold text-green-600">
+                    <td className="px-6 py-4 text-gray-900 font-bold">
                       ₹{parseFloat(ride.price).toFixed(2)}
                     </td>
-
                     <td className="px-6 py-4">
-                      <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
-                        ✓ Completed
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Completed
                       </span>
                     </td>
                   </tr>
@@ -469,10 +430,9 @@ const DriverEarnings = () => {
               </tbody>
             </table>
 
-            {/* Empty State */}
             {(!earnings?.completedRides || earnings.completedRides.length === 0) && (
-              <div className="text-center py-12 text-gray-500">
-                <p>No completed rides yet</p>
+              <div className="text-center py-12 text-gray-400">
+                No recent transactions found
               </div>
             )}
           </div>
