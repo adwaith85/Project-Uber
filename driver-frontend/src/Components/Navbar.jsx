@@ -53,9 +53,9 @@ function Navbar() {
     { name: "driver" }.name;
 
   return (
-    <div className="flex flex-col">
+    <div className="sticky top-0 z-50 flex flex-col w-full">
       {/* Navbar */}
-      <header className="sticky top-0 z-10 flex items-center justify-between px-6 py-3 bg-gray-100 border-b border-black shadow-1x2 backdrop-blur-sm">
+      <header className="flex items-center justify-between px-6 py-3 bg-gray-100/80 border-b border-black shadow-sm backdrop-blur-md">
         {/* Left Section */}
         <div className="flex items-center gap-3 ">
           <button onClick={toggleDrawer} className="p-2 rounded hover:bg-orange-500/20 transition text-black">
@@ -133,8 +133,8 @@ function Navbar() {
                     key={idx}
                     to={item.path}
                     className={`rounded-lg px-4 py-2.5 transition-all font-medium ${location.pathname.startsWith(item.path)
-                        ? "bg-gray-200 text-gray-900 border border-black"
-                        : "text-gray-900 hover:text-black hover:bg-gray-700/50"
+                      ? "bg-gray-200 text-gray-900 border border-black"
+                      : "text-gray-900 hover:text-black hover:bg-gray-700/50"
                       }`}
                     onClick={toggleDrawer}
                   >

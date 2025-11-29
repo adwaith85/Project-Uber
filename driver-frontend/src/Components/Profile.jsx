@@ -80,14 +80,14 @@ function Profile() {
               {/* Name & Badges */}
               <div className="flex-1 text-center md:text-left mb-2">
                 <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
-                  <h1 className="text-3xl font-bold text-gray-900">{data?.name ?? "Driver Name"}</h1>
+                  <h1 className="text-3xl font-bold text-gray-400">{data?.name ?? "Driver Name"}</h1>
                   <Link to="/UpdateName">
                     <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition">
                       <Pencil className="w-4 h-4" />
                     </button>
                   </Link>
                 </div>
-                <p className="text-gray-500 font-medium mb-3">Professional Driver</p>
+                <p className="text-gray-500 font-medium mb-1">Professional Driver</p>
                 <div className="flex gap-3 justify-center md:justify-start">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
                     <ShieldCheck className="w-3.5 h-3.5" /> Verified

@@ -59,7 +59,7 @@ function AllRideDetails({ rides, enableSorting = true, limit = null, showViewAll
 
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">
-          {limit ? `Latest ${limit} Rides` : "All Ride Details"}
+          {limit ? `Latest Rides` : "All Ride Details"}
         </h2>
         {showViewAllLink && (
           <Link to="/tripspage" className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition font-medium">

@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom'
 
 function TripsPage() {
   return (
-    <div className="">
-      <div className="">
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      
         <Navbar />
-      </div>
+      
 
       <div className='w-full h-full'>
         <AllRideDetails className="w-full" enableSorting={true} />

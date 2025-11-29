@@ -16,10 +16,11 @@ import RiderReqMessage from "../Components/RiderReqMessage";
 import AllRideDetails from "../Components/AllRideDetails";
 import RideAnalyticsChart from "../Components/RideAnalyticsChart";
 import { io } from "socket.io-client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../api/axiosClient";
 
 function Home() {
+  const queryClient = useQueryClient();
   const socketRef = useRef(null);
   const [ridenotify, Setridenotify] = useState(false);
   const [rideData, SetrideData] = useState({});
@@ -51,6 +52,7 @@ function Home() {
     socketRef.current.on("ride:alert", (msg) => {
       SetrideData(msg);
       Setridenotify(true);
+      queryClient.invalidateQueries({ queryKey: ["rides"] });
 
       setTimeout(() => Setridenotify(false), 25000);
     });
@@ -91,6 +93,13 @@ function Home() {
               </div>
             </div>
 
+            {/* Ride Notification */}
+            {ridenotify && (
+              <div className=" z-50 w-full max-w-md">
+                <RiderReqMessage ride={rideData} socketRef={socketRef} />
+              </div>
+            )}
+            
             {/* Map Section */}
             <div className="w-full rounded-2xl overflow-hidden shadow-lg border border-gray-200 bg-white">
               <div className="p-4 border-b border-gray-100 flex justify-between items-center">
@@ -104,12 +113,7 @@ function Home() {
               </div>
             </div>
 
-            {/* Ride Notification */}
-            {ridenotify && (
-              <div className=" z-50 w-full max-w-md">
-                <RiderReqMessage ride={rideData} socketRef={socketRef} />
-              </div>
-            )}
+
 
             {/* Grid Layout for Chart and Details */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

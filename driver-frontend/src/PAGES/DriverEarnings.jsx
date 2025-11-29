@@ -384,7 +384,8 @@ const DriverEarnings = () => {
             <h2 className="text-lg font-bold text-gray-900">Recent Transactions</h2>
           </div>
 
-          <div className="overflow-x-auto">
+          {/* Desktop View (Table) */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-sm text-left">
               <thead className="bg-gray-50 text-gray-500 font-medium border-b border-gray-200">
                 <tr>
@@ -429,13 +430,65 @@ const DriverEarnings = () => {
                 ))}
               </tbody>
             </table>
-
-            {(!earnings?.completedRides || earnings.completedRides.length === 0) && (
-              <div className="text-center py-12 text-gray-400">
-                No recent transactions found
-              </div>
-            )}
           </div>
+
+          {/* Mobile View (Cards) */}
+          <div className="md:hidden">
+            {earnings?.completedRides?.slice(-15).reverse().map((ride, idx) => (
+              <div key={idx} className="p-4 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition">
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <p className="text-xs text-gray-500 mb-1">
+                      {new Date(ride.date).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                      Completed
+                    </span>
+                  </div>
+                  <p className="text-lg font-bold text-gray-900">
+                    ₹{parseFloat(ride.price).toFixed(2)}
+                  </p>
+                </div>
+
+                <div className="space-y-2 mt-3">
+                  <div className="flex items-start gap-2">
+                    <div className="mt-1 min-w-[16px]">
+                      <div className="h-2 w-2 rounded-full bg-gray-300 ring-2 ring-gray-100"></div>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase tracking-wide">Pickup</p>
+                      <p className="text-sm font-medium text-gray-900 line-clamp-1">{ride.pickup}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2">
+                    <div className="mt-1 min-w-[16px]">
+                      <div className="h-2 w-2 rounded-full bg-black ring-2 ring-gray-100"></div>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase tracking-wide">Dropoff</p>
+                      <p className="text-sm font-medium text-gray-900 line-clamp-1">{ride.dropoff}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-3 pt-3 border-t border-gray-50 flex justify-between items-center text-xs text-gray-500">
+                  <span>Distance: {ride.distance?.toFixed(2)} km</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {(!earnings?.completedRides || earnings.completedRides.length === 0) && (
+            <div className="text-center py-12 text-gray-400">
+              No recent transactions found
+            </div>
+          )}
         </div>
 
       </div>
