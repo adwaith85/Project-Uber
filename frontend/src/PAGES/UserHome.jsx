@@ -72,7 +72,7 @@ function UserHome() {
       <div className="pt-[70px]">
 
         {/* Hero Section */}
-        <div ref={sectionRefs.drive} className="bg-gradient-to-r from-gray-50 to-white px-8 py-12">
+        <div ref={sectionRefs.drive} className="scroll-mt-[80px] bg-gradient-to-r from-gray-50 to-white px-8 py-12">
           <div className="max-w-7xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Get ready for your first trip 😊</h1>
             <p className="text-lg text-gray-600 max-w-2xl">
@@ -164,7 +164,7 @@ function UserHome() {
         </div>
 
         {/* Features Section */}
-        <div ref={sectionRefs.ride} className="bg-gray-50 py-16 px-8">
+        <div ref={sectionRefs.ride} className="scroll-mt-[80px] bg-gray-50 py-16 px-8">
           <div className="max-w-7xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12">Your ride, your way</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -260,8 +260,9 @@ function UserHome() {
         </div>
 
       </div>
-
-      <Footer ref={sectionRefs.about} />
+      <div ref={sectionRefs.about} className="scroll-mt-[80px]">
+        <Footer />
+      </div>
     </>
   )
 }

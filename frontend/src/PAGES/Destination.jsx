@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { MapContainer, TileLayer, Marker, useMap, Polyline } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import Confetti from "react-confetti";
-// removed leaflet-routing-machine to avoid its UI and markers
 import NavbarX from "../Components/NavbarX";
+import Footer from "../Components/Footer";
 import { useNavigate } from "react-router-dom";
+import { MapPin, Clock, Navigation, Star, X, CheckCircle, Send } from "lucide-react";
+import useWindowSize from 'react-use/lib/useWindowSize';
 
 const userIcon = new L.Icon({
   iconUrl: "/carimg.png",
@@ -19,8 +21,6 @@ const destinationIcon = new L.Icon({
   iconAnchor: [20, 40],
 });
 
-// We'll fetch a route geometry (GeoJSON) from OSRM and draw it as a Polyline
-
 const Destination = () => {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [dropoffLocation, setDropoffLocation] = useState(null);
@@ -32,7 +32,8 @@ const Destination = () => {
   const [showFeedback, setShowFeedback] = useState(true);
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState("");
-
+  const [hoveredStar, setHoveredStar] = useState(0);
+  const { width, height } = useWindowSize();
 
   // 1️⃣ Get user GPS
   useEffect(() => {
@@ -64,7 +65,6 @@ const Destination = () => {
   useEffect(() => {
     const fetchDropoff = async () => {
       try {
-        // read rideId from query params
         const params = new URLSearchParams(window.location.search);
         const rideId = params.get("rideId");
         if (!rideId) {
@@ -79,20 +79,17 @@ const Destination = () => {
         }
         const trip = await res.json();
 
-        // Prefer coordinates stored as GeoJSON Point in the trip data
         if (trip.dropoffLocation && trip.dropoffLocation.coordinates && trip.dropoffLocation.coordinates.length === 2) {
-          const [lng, lat] = trip.dropoffLocation.coordinates; // GeoJSON: [lng, lat]
+          const [lng, lat] = trip.dropoffLocation.coordinates;
           setDropoffLocation({ lat: Number(lat), lng: Number(lng) });
           return;
         }
 
-        // Backwards-compat: if older fields exist use them
         if (trip.dropoffLat && trip.dropoffLng) {
           setDropoffLocation({ lat: Number(trip.dropoffLat), lng: Number(trip.dropoffLng) });
           return;
         }
 
-        // Last resort: fallback to geocoding the dropoff address (may fail for special characters)
         if (trip.dropoff) {
           try {
             const geoRes = await fetch(
@@ -119,7 +116,7 @@ const Destination = () => {
 
   const center = currentLocation || { lat: 11.9635, lng: 75.3208 };
 
-  // fetch route from OSRM demo server (or replace serviceUrl with your own)
+  // Fetch route from OSRM
   useEffect(() => {
     const fetchRoute = async () => {
       if (!currentLocation || !dropoffLocation) return;
@@ -133,10 +130,9 @@ const Destination = () => {
           const route = data.routes[0];
           const coords = data.routes[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
           setRouteCoords(coords);
-          setDistance((route.distance / 1000).toFixed(2)); // km
-          setEta(Math.ceil(route.duration / 60)); // min
+          setDistance((route.distance / 1000).toFixed(2));
+          setEta(Math.ceil(route.duration / 60));
 
-          // fit map to route
           if (mapRef.current) {
             try {
               const bounds = L.latLngBounds(coords.map(([lat, lng]) => L.latLng(lat, lng)));
@@ -154,111 +150,233 @@ const Destination = () => {
     fetchRoute();
   }, [currentLocation, dropoffLocation]);
 
+  const handleSubmitFeedback = () => {
+    console.log("Rating:", rating);
+    console.log("Feedback:", feedback);
+    // Here you would typically send this to your backend
+    setShowFeedback(false);
+    navigate('/UserHome');
+  };
+
   return (
     <>
       <NavbarX />
-      {/* {Number(distance) && <Confetti recycle={false} numberOfPieces={300} />} */}
-      <div className="rounded-2xl overflow-hidden shadow-md mt-4 md:w-[100%]">
-        <MapContainer
-          center={[center.lat || center[0], center.lng || center[1]]}
-          zoom={13}
-          scrollWheelZoom
-          className="h-[400px] w-full z-0"
-          whenCreated={(map) => (mapRef.current = map)}
-        >
-          <TileLayer
-            attribution="&copy; OpenStreetMap"
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
 
-          {currentLocation && (
-            <Marker
-              position={[currentLocation.lat, currentLocation.lng]}
-              icon={userIcon}
-            />
-          )}
-
-          {dropoffLocation && (
-            <Marker
-              position={[dropoffLocation.lat, dropoffLocation.lng]}
-              icon={destinationIcon}
-            />
-          )}
-          {routeCoords && routeCoords.length > 0 && (
-            <Polyline positions={routeCoords} pathOptions={{ color: "blue", weight: 5 }} />
-          )}
-        </MapContainer>
-      </div>
-      {distance && eta && (
-
-        <div className="absolute top-20 left-2 bg-orange-400 text-white px-4 py-5 rounded shadow-lg text-sm font-bold z-0">
-          <div>� Heading to Pickup</div>
-          <div className="text-xs mt-1">📍 {distance} km away | ⏱ {eta} min</div>
-        </div>
-      )}
-      {
-        distance && Number(distance) <= 0.5 && showFeedback && (
-          <>
-            {/* BACKGROUND BLUR */}
-            <div className="fixed inset-0 bg-black/40 backdrop-brightness-50  z-[100]" />
-            <Confetti recycle={false} numberOfPieces={2000} className="w-full h-full" />
-            <div className="
-        fixed top-70 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[90%] md:w-[400px] p-6 rounded-2xl shadow-2xl flex flex-col items-center z-[300] ">
-              {/* CLOSE BUTTON */}
-              <button
-                className="absolute top-3 right-3 text-gray-600 hover:text-black text-xl"
-                onClick={() => {
-                  setShowFeedback(false)
-                  navigate('/UserHome')
-                }}
-              >
-                ✕
-              </button>
-              <h2 className="text-xl font-semibold mt-2 mb-4">
-                Arrived at Your Destination
-              </h2>
-              {/* STAR RATING */}
-              <div className="flex gap-2 mb-4">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <span
-                    key={star}
-                    onClick={() => setRating(star)}
-                    className={`text-3xl cursor-pointer transition ${rating >= star ? "text-yellow-400" : "text-gray-300"
-                      }`}
-                  >
-                    ★
-                  </span>
-                ))}
+      <div className="min-h-screen bg-gray-50 pt-[70px]">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          {/* Status Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {/* Current Location */}
+            <div className={`rounded-xl p-4 ${currentLocation ? 'bg-blue-50 border-2 border-blue-200' : 'bg-gray-100 border-2 border-gray-200'}`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${currentLocation ? 'bg-blue-500' : 'bg-gray-400'}`}>
+                  <Navigation className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Current Location</p>
+                  <p className={`font-bold ${currentLocation ? 'text-blue-700' : 'text-gray-500'}`}>
+                    {currentLocation ? '✓ Tracking' : '⏳ Loading...'}
+                  </p>
+                </div>
               </div>
+            </div>
 
-              {/* FEEDBACK BOX */}
-              <textarea
-                className="w-full h-24 border border-gray-300 rounded-lg p-2 text-sm
-                     focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                placeholder="Write your feedback..."
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
+            {/* Destination */}
+            <div className={`rounded-xl p-4 ${dropoffLocation ? 'bg-green-50 border-2 border-green-200' : 'bg-gray-100 border-2 border-gray-200'}`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${dropoffLocation ? 'bg-green-500' : 'bg-gray-400'}`}>
+                  <MapPin className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Destination</p>
+                  <p className={`font-bold ${dropoffLocation ? 'text-green-700' : 'text-gray-500'}`}>
+                    {dropoffLocation ? '✓ Set' : '⏳ Loading...'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* ETA */}
+            <div className={`rounded-xl p-4 ${distance && eta ? 'bg-amber-50 border-2 border-amber-200' : 'bg-gray-100 border-2 border-gray-200'}`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${distance && eta ? 'bg-amber-500' : 'bg-gray-400'}`}>
+                  <Clock className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">ETA</p>
+                  <p className={`font-bold ${distance && eta ? 'text-amber-700' : 'text-gray-500'}`}>
+                    {distance && eta ? `${eta} min` : 'Calculating...'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Map Container */}
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+            {/* Journey Banner */}
+            {distance && eta && (
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Navigation className="w-6 h-6" />
+                    <div>
+                      <p className="font-bold text-lg">En Route to Destination</p>
+                      <p className="text-sm text-blue-100">Follow the blue route on the map</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-2xl font-bold">{distance} km</p>
+                    <p className="text-sm text-blue-100">{eta} min away</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Map */}
+            <MapContainer
+              center={[center.lat || center[0], center.lng || center[1]]}
+              zoom={13}
+              scrollWheelZoom
+              className="h-[500px] w-full z-0"
+              whenCreated={(map) => (mapRef.current = map)}
+            >
+              <TileLayer
+                attribution="&copy; OpenStreetMap"
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
 
-              {/* BUTTONS */}
-              <div className="flex gap-3 w-full mt-4">
+              {currentLocation && (
+                <Marker
+                  position={[currentLocation.lat, currentLocation.lng]}
+                  icon={userIcon}
+                />
+              )}
+
+              {dropoffLocation && (
+                <Marker
+                  position={[dropoffLocation.lat, dropoffLocation.lng]}
+                  icon={destinationIcon}
+                />
+              )}
+
+              {routeCoords && routeCoords.length > 0 && (
+                <Polyline positions={routeCoords} pathOptions={{ color: "blue", weight: 5 }} />
+              )}
+            </MapContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* Feedback Modal */}
+      {distance && Number(distance) <= 0.5 && showFeedback && (
+        <>
+          {/* Confetti - Professional look */}
+          <Confetti
+            width={width}
+            height={height}
+            recycle={false}
+            numberOfPieces={500}
+            gravity={0.3}
+            colors={['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6']}
+          />
+
+          {/* Backdrop */}
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]" />
+
+          {/* Feedback Card */}
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md z-[200]">
+            <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-6 text-white relative">
                 <button
-                  className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl"
+                  className="absolute top-4 right-4 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition"
                   onClick={() => {
-                    console.log("Rating:", rating);
-                    console.log("Feedback:", feedback);
                     setShowFeedback(false);
                     navigate('/UserHome');
                   }}
                 >
-                  Submit
+                  <X className="w-5 h-5" />
                 </button>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                    <CheckCircle className="w-7 h-7" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold">Trip Completed!</h2>
+                    <p className="text-green-100 text-sm">You've arrived at your destination</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-6">
+                {/* Rating Section */}
+                <div className="mb-6">
+                  <label className="block text-gray-700 font-semibold mb-3">
+                    How was your ride?
+                  </label>
+                  <div className="flex gap-2 justify-center">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        onClick={() => setRating(star)}
+                        onMouseEnter={() => setHoveredStar(star)}
+                        onMouseLeave={() => setHoveredStar(0)}
+                        className="transition-transform hover:scale-110"
+                      >
+                        <Star
+                          className={`w-12 h-12 ${star <= (hoveredStar || rating)
+                              ? 'fill-yellow-400 text-yellow-400'
+                              : 'text-gray-300'
+                            } transition-colors`}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                  {rating > 0 && (
+                    <p className="text-center text-sm text-gray-600 mt-2">
+                      {rating === 5 ? 'Excellent!' : rating === 4 ? 'Great!' : rating === 3 ? 'Good' : rating === 2 ? 'Fair' : 'Poor'}
+                    </p>
+                  )}
+                </div>
+
+                {/* Feedback Textarea */}
+                <div className="mb-6">
+                  <label className="block text-gray-700 font-semibold mb-2">
+                    Share your experience (Optional)
+                  </label>
+                  <textarea
+                    className="w-full h-28 border-2 border-gray-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-green-400 focus:border-green-400 focus:outline-none resize-none"
+                    placeholder="Tell us about your trip..."
+                    value={feedback}
+                    onChange={(e) => setFeedback(e.target.value)}
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  onClick={handleSubmitFeedback}
+                  disabled={rating === 0}
+                  className={`w-full py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 ${rating > 0
+                      ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl'
+                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    }`}
+                >
+                  <Send className="w-5 h-5" />
+                  Submit Feedback
+                </button>
+
+                <p className="text-xs text-gray-500 text-center mt-4">
+                  Your feedback helps us improve our service
+                </p>
               </div>
             </div>
-          </>
-        )
-      }
+          </div>
+        </>
+      )}
 
+      <Footer />
     </>
   );
 };

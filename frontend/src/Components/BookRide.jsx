@@ -6,6 +6,8 @@ import TimerCountDown from './Timer'
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import api from '../Api/Axiosclient'
+import { MapPin, Calendar, Clock, User, DollarSign, Navigation } from 'lucide-react'
+import Footer from './Footer'
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
   if (!lat1 || !lon1 || !lat2 || !lon2) return null
@@ -51,7 +53,7 @@ function BookRide() {
         .then(data => setDrivers(data.drivers || []))
         .catch(err => console.error("Error fetching drivers:", err))
     }
-  }, [lat, lng])
+  }, [lat, lng, distance])
 
   const handleBookRide = async (e) => {
     e.preventDefault()
@@ -86,8 +88,6 @@ function BookRide() {
       const orderId = response.data.rideId
       console.log("Ride booked successfully:", orderId)
 
-      // alert(`Ride booked with ${selectedDriverName} at ${time} and ${date}!`)
-
       // ✅ Now update state *after* the async call returns
       setShowCounter({ showCounter: true, orderId })
     } catch (error) {
@@ -96,122 +96,199 @@ function BookRide() {
     }
   }
 
+  if (showCounter.showCounter) {
+    return <TimerCountDown orderId={showCounter.orderId} setCounter={setShowCounter} />
+  }
+
   return (
-    <div className='h-[100%] mb-8'>
+    <div className='min-h-screen bg-gray-50'>
       <NavbarX />
 
-      {/* Map Section */}
-      <div className="w-full bg-gray-50 p-2">
-        <CurrentLocationMap
-          center={{ lat, lng }}
-          drivers={drivers}
-          selectedDriver={selectedDriver}
-          selectedDriverLocation={selectedDriverLocation}
-          locdriver={locdriver}
-          drivermarkers={drivermarkers}
-        />
-      </div>
-      <div className="md:flex md:w-[100%]">
-        {/* Driver List */}
-        <div className="md:w-[100%] p-4 ">
-          {lat && lng && (
-            <p className="text-gray-700 mb-4 text-sm md:text-base md:w-[100%] md:mr-50 text-center">
-              Uber found within 5km radius of <strong>latitude:</strong> {lat}, <strong>longitude:</strong> {lng}
-            </p>
-          )}
-
-          {drivers.length > 0 ? (
-            <div className=" flex flex-col gap-4">
-              {drivers.map((d) => {
-                const driverLat = d?.location?.coordinates?.[1]
-                const driverLng = d?.location?.coordinates?.[0]
-                const dis = calculateDistance(lat, lng, driverLat, driverLng)
-
-                return (
-                  <div
-                    key={d._id}
-                    className={`md:w-[100%] flex justify-between items-center bg-white rounded-2xl shadow p-4 hover:shadow-lg transition-shadow ${selectedDriver === d._id ? 'ring-2 ring-blue-500' : ''}`}>
-                    <button
-                      onClick={() => {
-                        setSelectedDriver(d._id)
-                        setSelectedDriverName(d.name)
-                        setSelectedDriverLocation({
-                          lat: d.location.coordinates[1],
-                          lng: d.location.coordinates[0]
-                        })
-                        setLocdriver(d.location.coordinates)
-
-                        const marker = drivermarkers.current[d._id]
-                        if (marker) marker.openPopup()
-                      }}
-                    >
-                      <div className="flex items-center gap-4">
-                        <img
-                          src={d.profileimg ? `http://localhost:8080${d.profileimg}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
-                          alt="Driver"
-                          className="w-14 h-14 rounded-full border"
-                        />
-                        <div className="flex flex-row flex-wrap gap-3 text-gray-700 text-sm">
-                          <span><strong>Name:</strong> {d.name}</span>
-                          <span><strong>📞</strong> {d.number}</span>
-                          <span><strong>🚘</strong> {d.cartype || "Unknown"}</span>
-                          <span><strong>🔢</strong> {d.carnumber}</span>
-                          <span><strong>km/</strong> {d.distancerate}</span>
-                          {dis && <span><strong>📍</strong> {dis} km away</span>}
-                        </div>
-                      </div>
-                    </button>
-                  </div>
-                )
-              })}
-            </div>
-          ) : (
-            <p className="text-gray-500 text-center">No drivers found within 5 km radius.</p>
-          )}
+      {/* Main Content with padding for sticky navbar */}
+      <div className="pt-[70px]">
+        {/* Map Section */}
+        <div className="w-full bg-white shadow-md">
+          <CurrentLocationMap
+            center={{ lat, lng }}
+            drivers={drivers}
+            selectedDriver={selectedDriver}
+            selectedDriverLocation={selectedDriverLocation}
+            locdriver={locdriver}
+            drivermarkers={drivermarkers}
+          />
         </div>
 
-        {/* Show Timer if Ride Booked */}
-        <div className="w-[100%]">
-          {showCounter.showCounter ? (
-            <TimerCountDown orderId={showCounter.orderId} setCounter={setShowCounter} />
-          ) : (
-            <div className='border-white rounded-2xl md:mt-[0px] md:w-[100%]'>
-              <h2 className='px-[28px] py-[14px] font-bold text-xl md:ml-82 md:mb-4'>Get a ride</h2>
-              <div className="bg-white mx-6 md:mx-10 mb-6 p-6 rounded-2xl shadow-lg md:ml-20">
-                <form onSubmit={handleBookRide} className="flex flex-col gap-4">
-                  <div className="flex flex-col md:flex-row justify-between gap-4">
-                    <div className="flex-1">
-                      <label className="block text-gray-600 text-sm font-medium">From</label>
-                      <input type="text" value={pickup} readOnly className="w-full border border-gray-300 rounded-lg p-2 mt-1 bg-gray-100 text-gray-700" />
-                    </div>
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          {/* Location Info Banner */}
+          {lat && lng && (
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+              <div className="flex items-center gap-2 text-blue-800">
+                <Navigation className="w-5 h-5" />
+                <p className="text-sm md:text-base font-medium">
+                  Searching within 5km radius of your location
+                </p>
+              </div>
+            </div>
+          )}
 
-                    <div className="flex-1">
-                      <label className="block text-gray-600 text-sm font-medium">To</label>
-                      <input type="text" value={dropoff} readOnly className="w-full border border-gray-300 rounded-lg p-2 mt-1 bg-gray-100 text-gray-700" />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Driver List - Takes 2 columns on large screens */}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-xl shadow-md p-6">
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                  <User className="w-6 h-6" />
+                  Available Drivers
+                </h2>
+
+                {drivers.length > 0 ? (
+                  <div className="flex flex-col gap-4">
+                    {drivers.map((d) => {
+                      const driverLat = d?.location?.coordinates?.[1]
+                      const driverLng = d?.location?.coordinates?.[0]
+                      const dis = calculateDistance(lat, lng, driverLat, driverLng)
+                      const isSelected = selectedDriver === d._id
+
+                      return (
+                        <button
+                          key={d._id}
+                          onClick={() => {
+                            setSelectedDriver(d._id)
+                            setSelectedDriverName(d.name)
+                            setSelectedDriverLocation({
+                              lat: d.location.coordinates[1],
+                              lng: d.location.coordinates[0]
+                            })
+                            setLocdriver(d.location.coordinates)
+
+                            const marker = drivermarkers.current[d._id]
+                            if (marker) marker.openPopup()
+                          }}
+                          className={`w-full text-left bg-white rounded-xl border-2 p-4 hover:shadow-lg transition-all ${isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+                            }`}
+                        >
+                          <div className="flex items-center gap-4">
+                            <img
+                              src={d.profileimg ? `http://localhost:8080${d.profileimg}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+                              alt="Driver"
+                              className="w-16 h-16 rounded-full border-2 border-gray-200 object-cover"
+                            />
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-2">
+                                <h3 className="font-bold text-lg">{d.name}</h3>
+                                {isSelected && (
+                                  <span className="px-3 py-1 bg-blue-500 text-white text-xs rounded-full font-medium">
+                                    Selected
+                                  </span>
+                                )}
+                              </div>
+                              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm text-gray-600">
+                                <span className="flex items-center gap-1">
+                                  📞 {d.number}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  🚘 {d.cartype || "Unknown"}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  🔢 {d.carnumber}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  💰 ₹{d.distancerate}/km
+                                </span>
+                                {dis && (
+                                  <span className="flex items-center gap-1 text-blue-600 font-medium">
+                                    📍 {dis} km away
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <User className="w-10 h-10 text-gray-400" />
                     </div>
+                    <p className="text-gray-500 text-lg">No drivers found within 5 km radius</p>
+                    <p className="text-gray-400 text-sm mt-2">Try adjusting your pickup location</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Booking Form - Takes 1 column on large screens */}
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-xl shadow-md overflow-hidden sticky top-24">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-gray-900 to-black p-6 text-white">
+                  <h2 className="text-2xl font-bold">Book Your Ride</h2>
+                  <p className="text-gray-300 text-sm mt-1">Fill in the details below</p>
+                </div>
+
+                <form onSubmit={handleBookRide} className="p-6 space-y-4">
+                  {/* From */}
+                  <div>
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                      <MapPin className="w-4 h-4 text-green-600" />
+                      From
+                    </label>
+                    <input
+                      type="text"
+                      value={pickup}
+                      readOnly
+                      className="w-full border-2 border-gray-200 rounded-lg p-3 bg-gray-50 text-gray-700 text-sm"
+                    />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 w-full mt-4">
+                  {/* To */}
+                  <div>
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                      <MapPin className="w-4 h-4 text-red-600" />
+                      To
+                    </label>
+                    <input
+                      type="text"
+                      value={dropoff}
+                      readOnly
+                      className="w-full border-2 border-gray-200 rounded-lg p-3 bg-gray-50 text-gray-700 text-sm"
+                    />
+                  </div>
+
+                  {/* Driver & Distance */}
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-gray-600 text-sm font-medium">Driver</label>
+                      <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                        <User className="w-4 h-4" />
+                        Driver
+                      </label>
                       <input
                         type="text"
-                        value={selectedDriverName || "No driver selected"}
+                        value={selectedDriverName || "Not selected"}
                         readOnly
-                        className="w-full border border-gray-300 rounded-lg p-2 mt-1 bg-gray-100 text-gray-700"
+                        className="w-full border-2 border-gray-200 rounded-lg p-3 bg-gray-50 text-gray-700 text-sm"
                       />
                     </div>
 
-                    <div className="flex flex-col">
-                      <label className="block text-gray-600 text-sm font-medium mb-1">Distance to Travel</label>
-                      <div className="flex items-center border border-gray-300 rounded-lg p-2 text-gray-700 bg-white">
-                        <span className="flex-1">{distance || "not found"}</span>
+                    <div>
+                      <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                        <Navigation className="w-4 h-4" />
+                        Distance
+                      </label>
+                      <div className="border-2 border-gray-200 rounded-lg p-3 bg-white text-gray-700 text-sm font-medium">
+                        {distance ? `${distance} km` : "N/A"}
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 w-full mt-4">
-                    <div className="flex flex-col">
-                      <label className="block text-gray-600 text-sm font-medium mb-1">Pickup Time</label>
+
+                  {/* Time & Date */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                        <Clock className="w-4 h-4" />
+                        Time
+                      </label>
                       <DatePicker
                         selected={time}
                         onChange={(t) => setTime(t)}
@@ -221,36 +298,65 @@ function BookRide() {
                         timeCaption="Time"
                         dateFormat="h:mm aa"
                         placeholderText="Select time"
-                        className="w-full border border-gray-300 rounded-lg p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        popperPlacement="bottom-start"
+                        className="w-full border-2 border-gray-200 rounded-lg p-3 text-gray-700 text-sm focus:outline-none focus:border-black"
                       />
                     </div>
-                    <div className="flex flex-col">
-                      <label className="block text-gray-600 text-sm font-medium mb-1">Pickup Date</label>
+
+                    <div>
+                      <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                        <Calendar className="w-4 h-4" />
+                        Date
+                      </label>
                       <DatePicker
-                        selected={date} // only when value has changed
-                        onChange={(t)=>setDate(t)}
-                        minDate={new Date()} // ⬅️ disables all days before today
+                        selected={date}
+                        onChange={(t) => setDate(t)}
+                        minDate={new Date()}
                         dateFormat="yyyy/MM/dd"
                         placeholderText="Select date"
-                        className="w-full border border-gray-300 rounded-lg p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        popperPlacement="bottom-start"
+                        className="w-full border-2 border-gray-200 rounded-lg p-3 text-gray-700 text-sm focus:outline-none focus:border-black"
                       />
                     </div>
                   </div>
 
+                  {/* Price Estimate */}
+                  {selectedDriver && distance && (
+                    <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
+                      <div className="flex items-center justify-between">
+                        <span className="flex items-center gap-2 text-green-800 font-semibold">
+                          <DollarSign className="w-5 h-5" />
+                          Estimated Fare
+                        </span>
+                        <span className="text-2xl font-bold text-green-700">
+                          ₹{(distance * (drivers.find(d => d._id === selectedDriver)?.distancerate || 10)).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Submit Button */}
                   <button
                     type="submit"
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg py-2 mt-3 transition-all"
+                    disabled={!selectedDriver || !time || !date}
+                    className={`w-full py-4 rounded-lg font-bold text-lg transition-all shadow-md ${selectedDriver && time && date
+                        ? 'bg-black text-white hover:bg-gray-800 hover:shadow-lg'
+                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      }`}
                   >
-                    Book Ride
+                    Book Ride Now
                   </button>
+
+                  {/* Info */}
+                  <p className="text-xs text-gray-500 text-center mt-4">
+                    By booking, you agree to our terms and conditions
+                  </p>
                 </form>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   )
 }

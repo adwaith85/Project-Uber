@@ -6,6 +6,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import UserStore from "../Store/UserStore";
 import "leaflet/dist/leaflet.css";
 import NavbarX from "./NavbarX";
+import { Navigation, Clock, MapPin, Key, CheckCircle } from "lucide-react";
+import Footer from "./Footer";
 
 const driverIcon = new L.Icon({
   iconUrl: "/carimg.png",
@@ -32,7 +34,9 @@ const UserRideMap = () => {
   const [userEmail, setUserEmail] = useState(null);
   const [otpReceived, setOtpReceived] = useState(null);
   const [journeyStarted, setJourneyStarted] = useState(false);
-  const navigate=useNavigate()
+  const [driverArrived, setDriverArrived] = useState(false);
+  const navigate = useNavigate();
+  const otpSectionRef = useRef(null);
 
   // Connect socket
   useEffect(() => {
@@ -46,7 +50,6 @@ const UserRideMap = () => {
 
     socketRef.current.on("connect", () => {
       console.log("✅ Socket connected to server:", socketRef.current.id);
-      // Now that socket is connected, try to join room if rideId is available
       if (rideId && userEmail) {
         console.log("📌 [CONNECT] Attempting to join room immediately with rideId:", rideId);
         socketRef.current.emit("ride:join", { rideId, role: "user", email: userEmail });
@@ -72,18 +75,23 @@ const UserRideMap = () => {
     });
 
     socketRef.current.on("ride:accepted", (data) => {
-      // when backend tells the room the ride is accepted, we can ensure rideId is set
       console.log("✅ Ride accepted event received:", data);
       if (data?.rideId) setRideId(String(data.rideId));
     });
 
-    // When driver arrives, backend sends OTP to room
     socketRef.current.on("driver:arrived", (data) => {
       console.log("🔔 Driver arrived event:", data);
       if (data?.rideId && String(data.rideId) === String(rideId)) {
-          setOtpReceived(data.otp);
-          // Let user know OTP was generated and is shown below
-          alert("Driver has arrived. Please note the OTP shown below and give it to the driver.");
+        setDriverArrived(true);
+        setOtpReceived(data.otp);
+        setDistance("0.0");
+        setEta(0);
+        alert("Driver has arrived. Please note the OTP shown below and give it to the driver.");
+
+        // Scroll to OTP section after a short delay
+        setTimeout(() => {
+          otpSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 500);
       }
     });
 
@@ -93,8 +101,6 @@ const UserRideMap = () => {
         if (data.success) {
           setJourneyStarted(true);
           alert("✅ OTP confirmed. Journey started!");
-          // navigate with a full reload so destination page state is fresh
-          // include rideId so Destination page can fetch the correct trip
           if (rideId) {
             window.location.href = `/destination?rideId=${rideId}`;
           } else {
@@ -114,7 +120,7 @@ const UserRideMap = () => {
     };
   }, [rideId, userEmail]);
 
-  // Join room whenever rideId changes (from query string or ride:accepted event)
+  // Join room whenever rideId changes
   useEffect(() => {
     if (!socketRef.current) {
       console.log("⏳ Socket not ready yet");
@@ -133,8 +139,6 @@ const UserRideMap = () => {
       console.log("⏳ Socket connecting... will join room on connect");
     }
   }, [rideId, userEmail]);
-
-  // User no longer confirms OTP — driver will confirm it. Keep socket listener for otp:confirmed.
 
   // Send user's location
   useEffect(() => {
@@ -155,8 +159,7 @@ const UserRideMap = () => {
       (pos) => {
         const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         setUserLocation(coords);
-        
-        // Only emit location if socket is connected and rideId is available
+
         if (socketRef.current?.connected && rideId) {
           socketRef.current.emit("user:location:update:onride", {
             coordinates: coords,
@@ -202,8 +205,8 @@ const UserRideMap = () => {
           coordsCount: coords.length
         });
         setRouteCoords(coords);
-        setDistance((route.distance / 1000).toFixed(2)); // km
-        setEta(Math.ceil(route.duration / 60)); // minutes
+        setDistance((route.distance / 1000).toFixed(2));
+        setEta(Math.ceil(route.duration / 60));
         console.log("📌 State updated with route coords, distance, and ETA");
       } else {
         console.warn("⚠️ No routes returned from OSRM", data);
@@ -223,7 +226,6 @@ const UserRideMap = () => {
   }, [driverLocation, userLocation]);
 
   useEffect(() => {
-    // read rideId from query string
     const params = new URLSearchParams(location.search);
     const q = params.get("rideId");
     if (q) setRideId(q);
@@ -244,107 +246,196 @@ const UserRideMap = () => {
 
   const center = userLocation || driverLocation || { lat: 11.9635, lng: 75.3208 };
 
-  return (<>
-    <div className="">
-      <NavbarX/>
-    </div>
-    <div className="m-4 rounded-2xl overflow-hidden shadow-md mt-4 md:w-[100%] md:mx-auto relative">
-      {journeyStarted && distance && eta && (
-        <div className="absolute top-2 left-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-3 rounded shadow-lg text-sm font-bold z-10">
-          <div>🚗 En Route to Destination</div>
-          <div className="text-xs mt-1">📍 {distance} km away | ⏱ {eta} min</div>
-        </div>
-      )}
+  return (
+    <>
+      <NavbarX />
 
-      {distance && eta && !journeyStarted && (
-        <div className="absolute top-2 left-2 bg-yellow-400 text-gray-900 px-4 py-3 rounded shadow-lg text-sm font-bold z-10">
-          <div>� Driver Arriving</div>
-          <div className="text-xs mt-1">📍 {distance} km away | ⏱ {eta} min</div>
-        </div>
-      )}
+      <div className="min-h-screen bg-gray-50 pt-[70px]">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          {/* Status Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {/* Driver Status */}
+            <div className={`rounded-xl p-4 ${driverLocation ? 'bg-green-50 border-2 border-green-200' : 'bg-gray-100 border-2 border-gray-200'}`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${driverLocation ? 'bg-green-500' : 'bg-gray-400'}`}>
+                  <Navigation className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Driver</p>
+                  <p className={`font-bold ${driverLocation ? 'text-green-700' : 'text-gray-500'}`}>
+                    {driverLocation ? '✓ Connected' : '⏳ Waiting...'}
+                  </p>
+                </div>
+              </div>
+            </div>
 
-      <MapContainer center={[center.lat, center.lng]} zoom={13} className="h-[400px] w-full z-0">
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+            {/* User Status */}
+            <div className={`rounded-xl p-4 ${userLocation ? 'bg-blue-50 border-2 border-blue-200' : 'bg-gray-100 border-2 border-gray-200'}`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${userLocation ? 'bg-blue-500' : 'bg-gray-400'}`}>
+                  <MapPin className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Your Location</p>
+                  <p className={`font-bold ${userLocation ? 'text-blue-700' : 'text-gray-500'}`}>
+                    {userLocation ? '✓ Tracking' : '⏳ Waiting...'}
+                  </p>
+                </div>
+              </div>
+            </div>
 
-        {driverLocation && (
-          <>
-            <Marker position={[driverLocation.lat, driverLocation.lng]} icon={driverIcon}>
-              <Popup>Driver 🚗</Popup>
-            </Marker>
-            <CircleMarker
-              center={[driverLocation.lat, driverLocation.lng]}
-              radius={5}
-              color="blue"
-              fill={true}
-              fillColor="blue"
-              fillOpacity={0.5}
-            />
-          </>
-        )}
-
-        {userLocation && (
-          <>
-            <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
-              <Popup>You 📍</Popup>
-            </Marker>
-            <CircleMarker
-              center={[userLocation.lat, userLocation.lng]}
-              radius={6}
-              color="red"
-              fill={true}
-              fillColor="red"
-              fillOpacity={0.5}
-            />
-          </>
-        )}
-
-        {routeCoords.length > 0 && (
-          <Polyline positions={routeCoords} color="blue" weight={4} opacity={0.7} />
-        )}
-      </MapContainer>
-
-      {/* Status info box */}
-      <div className="absolute bottom-2 left-2 right-2 bg-gray-800 text-white p-3 rounded text-xs z-10">
-        <div className="flex justify-between gap-4">
-          <div>
-            <span>🚗 Driver: </span>
-            {driverLocation ? (
-              <span className="text-green-400">✓ Connected</span>
-            ) : (
-              <span className="text-red-400">✗ Waiting...</span>
-            )}
+            {/* ETA */}
+            <div className={`rounded-xl p-4 ${driverArrived
+              ? 'bg-green-50 border-2 border-green-200'
+              : distance && eta
+                ? 'bg-amber-50 border-2 border-amber-200'
+                : 'bg-gray-100 border-2 border-gray-200'
+              }`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${driverArrived
+                  ? 'bg-green-500'
+                  : distance && eta
+                    ? 'bg-amber-500'
+                    : 'bg-gray-400'
+                  }`}>
+                  <Clock className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Arrival Time</p>
+                  <p className={`font-bold ${driverArrived
+                    ? 'text-green-700'
+                    : distance && eta
+                      ? 'text-amber-700'
+                      : 'text-gray-500'
+                    }`}>
+                    {driverArrived
+                      ? 'Arrived!'
+                      : distance && eta
+                        ? `${eta} min`
+                        : 'Calculating...'}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div>
-            <span>👤 You: </span>
-            {userLocation ? (
-              <span className="text-green-400">✓ Connected</span>
-            ) : (
-              <span className="text-red-400">✗ Waiting...</span>
+
+          {/* Map Container */}
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+            {/* Journey Status Banner */}
+            {journeyStarted && distance && eta && (
+              <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-6 h-6" />
+                    <div>
+                      <p className="font-bold text-lg">En Route to Destination</p>
+                      <p className="text-sm text-green-100">Journey in progress</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-2xl font-bold">{distance} km</p>
+                    <p className="text-sm text-green-100">{eta} min away</p>
+                  </div>
+                </div>
+              </div>
             )}
-          </div>
-          <div>
-            <span>🗺️ Route: </span>
-            {routeCoords.length > 0 ? (
-              <span className="text-green-400">✓ Active</span>
-            ) : (
-              <span className="text-yellow-400">⏳ Loading...</span>
+
+            {distance && eta && !journeyStarted && (
+              <div className="bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Navigation className="w-6 h-6" />
+                    <div>
+                      <p className="font-bold text-lg">Driver Arriving</p>
+                      <p className="text-sm">Please wait at your pickup location</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-2xl font-bold">{distance} km</p>
+                    <p className="text-sm">{eta} min away</p>
+                  </div>
+                </div>
+              </div>
             )}
+
+            {/* Map */}
+            <div className="relative">
+              <MapContainer center={[center.lat, center.lng]} zoom={13} className="h-[500px] w-full z-0">
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+
+                {driverLocation && (
+                  <>
+                    <Marker position={[driverLocation.lat, driverLocation.lng]} icon={driverIcon}>
+                      <Popup>Driver 🚗</Popup>
+                    </Marker>
+                    <CircleMarker
+                      center={[driverLocation.lat, driverLocation.lng]}
+                      radius={5}
+                      color="blue"
+                      fill={true}
+                      fillColor="blue"
+                      fillOpacity={0.5}
+                    />
+                  </>
+                )}
+
+                {userLocation && (
+                  <>
+                    <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
+                      <Popup>You 📍</Popup>
+                    </Marker>
+                    <CircleMarker
+                      center={[userLocation.lat, userLocation.lng]}
+                      radius={6}
+                      color="red"
+                      fill={true}
+                      fillColor="red"
+                      fillOpacity={0.5}
+                    />
+                  </>
+                )}
+
+                {routeCoords.length > 0 && (
+                  <Polyline positions={routeCoords} color="blue" weight={4} opacity={0.7} />
+                )}
+              </MapContainer>
+            </div>
           </div>
+
+          {/* OTP Card */}
+          {otpReceived && !journeyStarted && (
+            <div ref={otpSectionRef} className="mt-6 bg-white rounded-2xl shadow-lg overflow-hidden max-w-md mx-auto">
+              <div className="bg-gradient-to-r from-gray-900 to-black p-6 text-white">
+                <div className="flex items-center gap-3">
+                  <Key className="w-8 h-8" />
+                  <div>
+                    <h3 className="text-xl font-bold">Driver Arrived</h3>
+                    <p className="text-gray-300 text-sm">Share this OTP with your driver</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-8">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border-2 border-blue-200">
+                  <p className="text-center text-sm text-gray-600 mb-3 font-medium">Your OTP Code</p>
+                  <div className="text-center">
+                    <span className="text-5xl font-bold font-mono text-blue-600 tracking-wider">
+                      {otpReceived}
+                    </span>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-500 text-center mt-4">
+                  The driver will enter this code to start your journey
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* OTP display for rider (read-only) */}
-      {otpReceived && !journeyStarted && (
-        <div className="absolute top-20 left-4 bg-white p-4 rounded shadow z-20 w-[90%] md:w-[40%]">
-          <h3 className="font-semibold mb-2">Driver arrived — OTP</h3>
-          <p className="text-sm mb-2">Provide the OTP below to the driver so they can confirm pickup.</p>
-          <div className="p-3 bg-gray-100 rounded text-center font-mono text-lg">{otpReceived}</div>
-        </div>
-      )}
-    </div>
+      <Footer />
     </>
   );
 };
