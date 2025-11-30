@@ -1,47 +1,110 @@
 import React, { useState } from 'react'
 import { Link } from "react-router-dom"
 import Profiledropdown from './Profiledropdown'
-import { IoCloseSharp } from "react-icons/io5";
-function NavbarX() {
+import { IoCloseSharp } from "react-icons/io5"
+
+function NavbarX({ onScrollToSection }) {
     const [isOpen, setIsOpen] = useState(false)
+
     return (
         <>
-            <div className='border-b-1 p-[10px] w-[100%] h-[60px] bg-white flex justify-between items-center'>
-                <div className='flex gap-5 mt-2 p-2 -ml-15'>
-                    <button>
-                        <Link to="/UserHome" className='ml-15 mb-3 text-2xl text-black font-medium'>Uber</Link>
-                    </button>
-                    {/* <h2 className='ml-15 mb-3 text-2xl text-black font-medium'>Uber</h2> */}
-                    <div className={`fixed flex flex-col items-center  bg-white gap-5 top-0 right-0 w-[100%] h-[45vh] z-0 md:h-auto md:w-auto md:flex-row md:gap-8 md:relative ${isOpen ? " -translate-x-0" : "-translate-x-full md:-translate-x-0"}`}>
-                        <div className='w-full flex justify-end p-[20px]  '>
-                            <IoCloseSharp onClick={() => setIsOpen(false)} className=' text-2xl md:hidden ' />
-                        </div>
-                        <Link to="/BookRide" className='text-lg mt-1 hover:font-medium'>Ride</Link>
-                        {/* <h3 className='text-lg mt-1 hover:font-medium'>Ride</h3> */}
-                        <h3 className='text-lg mt-1 hover:font-medium'>Drive</h3>
-                        <h3 className='text-lg mt-1 hover:font-medium'>About</h3>
+            <nav className='fixed top-0 left-0 right-0 w-full h-[70px] bg-white shadow-md flex justify-between items-center px-6 z-50 border-b border-gray-200'>
+                {/* Left Section - Logo and Nav Links */}
+                <div className='flex items-center gap-8'>
+                    <Link to="/UserHome" className='text-3xl text-black font-bold hover:text-gray-700 transition-colors'>
+                        Uber
+                    </Link>
+
+                    {/* Desktop Navigation */}
+                    <div className='hidden md:flex items-center gap-6'>
+                        <a href='' onClick={() => onScrollToSection("ride")} className='text-base font-medium text-gray-700 hover:text-black transition-colors'>
+                            Ride
+                        </a>
+                        <a href="" onClick={() => onScrollToSection("drive")} className='text-base font-medium text-gray-700 hover:text-black transition-colors'>
+                            Drive
+                        </a>
+                        <a href="" onClick={() => onScrollToSection("about")} className='text-base font-medium text-gray-700 hover:text-black transition-colors'>
+                            About
+                        </a>
                     </div>
                 </div>
-                {/* <div className=" flex items-center gap-[20px]"> */}
-                <div className="w-[30%] flex justify-end items-center">
-                    {/* Profile Dropdown */}
-                    <div className="flex items-center gap-3">
+
+                {/* Right Section - Profile and Menu */}
+                <div className="flex items-center gap-4">
+                    {/* Desktop Profile Dropdown */}
+                    <div className="hidden md:block">
                         <Profiledropdown />
                     </div>
-                    {/* Hamburger button (only mobile) */}
-                    <div
+
+                    {/* Mobile Menu Button */}
+                    <button
                         onClick={() => setIsOpen(true)}
-                        className="flex flex-col justify-center items-center gap-[5px] pr-4 pl-3 cursor-pointer md:hidden"
-                    ></div>
-                    {/* <button className='border rounded-3xl bg-black text-md text-white ml-5 h-10 w-30'>Sign up</button> */}
-                    <div onClick={() => setIsOpen(true)} className='flex flex-col justify-center items-center gap-1 cursor-pointer pl-2 md:hidden'>
-                        <span className='w-[20px] h-[2px] bg-black'></span>
-                        <span className='w-[16px] h-[2px] bg-black'></span>
-                        <span className='w-[20px] h-[2px] bg-black'></span>
+                        className='flex flex-col justify-center items-center gap-1.5 cursor-pointer p-2 md:hidden hover:bg-gray-100 rounded-lg transition'
+                        aria-label="Open menu"
+                    >
+                        <span className='w-6 h-0.5 bg-black rounded'></span>
+                        <span className='w-5 h-0.5 bg-black rounded'></span>
+                        <span className='w-6 h-0.5 bg-black rounded'></span>
+                    </button>
+                </div>
+
+                {/* Mobile Sidebar Menu */}
+                <div className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden ${isOpen ? "translate-x-0" : "translate-x-full"}`}>
+                    <div className='flex flex-col h-full'>
+                        {/* Close Button */}
+                        <div className='flex justify-between items-center p-6 border-b border-gray-200'>
+                            <h3 className='text-xl font-bold'>Menu</h3>
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className='p-2 hover:bg-gray-100 rounded-lg transition'
+                                aria-label="Close menu"
+                            >
+                                <IoCloseSharp className='text-2xl' />
+                            </button>
+                        </div>
+
+                        {/* Mobile Profile Section - At Top */}
+                        <div className='p-6 border-b border-gray-200'>
+                            <Profiledropdown isMobile={true} onClose={() => setIsOpen(false)} />
+                        </div>
+
+                        {/* Mobile Navigation Links */}
+                        {/* <div className='flex flex-col p-6 gap-4'>
+                           <a 
+                           href="#"
+                                onClick={() => setIsOpen(false)}
+                                className='text-lg font-medium text-gray-700 hover:text-black py-3 px-4 hover:bg-gray-50 rounded-lg transition'
+                            >
+                                Ride
+                            </a>
+                            <a
+                             href="#"
+                                onClick={() => setIsOpen(false)}
+                                className='text-lg font-medium text-gray-700 hover:text-black py-3 px-4 hover:bg-gray-50 rounded-lg transition'
+                            >
+                                Drive
+                            </a>
+                            <a
+                                href="#"
+                                onClick={() => setIsOpen(false)}
+                                className='text-lg font-medium text-gray-700 hover:text-black py-3 px-4 hover:bg-gray-50 rounded-lg transition'
+                            >
+                                About
+                            </a>
+                        </div> */}
                     </div>
                 </div>
-            </div>
+
+                {/* Overlay */}
+                {isOpen && (
+                    <div
+                        onClick={() => setIsOpen(false)}
+                        className='fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden'
+                    />
+                )}
+            </nav>
         </>
     )
 }
+
 export default NavbarX

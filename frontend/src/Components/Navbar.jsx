@@ -1,20 +1,28 @@
 import React from 'react'
 import { Link } from "react-router-dom"
+
 function Navbar() {
-  return (<>
-    <div className='p-[10px] w-[100%] h-[60px] bg-black flex justify-between items-center'>
-      <h2 className='p-[10px] text-3xl pr-3xl text-amber-50'>Uber</h2>
-      <div className="p-[60px] flex items-center gap-[10px]">
+  return (
+    <nav className='fixed top-0 left-0 right-0 w-full h-[70px] bg-black flex justify-between items-center px-8 shadow-lg z-50'>
+      <Link to="/" className='text-3xl font-bold text-white hover:text-gray-300 transition-colors'>
+        Uber
+      </Link>
 
-        <Link to={'/Login'} className=' text-right text-white'>log in</Link>
-        {/* <button className=' text-right text-white'>Log in</button> */}
-        <button className='border rounded-4xl p-2 bg-white text-right text-black'>Sign up</button>
+      <div className="flex items-center gap-6">
+        <Link
+          to={'/Login'}
+          className='text-white font-medium hover:text-gray-300 transition-colors px-4 py-2'
+        >
+          Log in
+        </Link>
+        <Link
+          to={'/Register'}
+          className='bg-white text-black font-semibold px-6 py-2.5 rounded-lg hover:bg-gray-200 transition-all shadow-md'
+        >
+          Sign up
+        </Link>
       </div>
-
-    </div>
-
-  </>
-
+    </nav>
   )
 }
 

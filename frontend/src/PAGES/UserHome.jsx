@@ -2,6 +2,7 @@ import NavbarX from '../Components/NavbarX'
 import Location from '../Components/Location'
 import { Link } from "react-router-dom"
 import Suggestions from '../Components/Suggestions'
+import Footer from '../Components/Footer'
 
 import { useEffect, useRef, useState } from 'react'
 import L from "leaflet"
@@ -54,70 +55,213 @@ function UserHome() {
     }
   }
 
+  const sectionRefs = {
+    ride: useRef(null),
+    drive: useRef(null),
+    about: useRef(null),
+  };
+  const scrollToSection = (key) => {
+    sectionRefs[key]?.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <>
-      <div>
-        <div className="relative z-10">
-          <NavbarX />
+      <NavbarX onScrollToSection={scrollToSection} />
+
+      {/* Main content with padding for sticky navbar */}
+      <div className="pt-[70px]">
+
+        {/* Hero Section */}
+        <div ref={sectionRefs.drive} className="bg-gradient-to-r from-gray-50 to-white px-8 py-12">
+          <div className="max-w-7xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Get ready for your first trip 😊</h1>
+            <p className="text-lg text-gray-600 max-w-2xl">
+              Discover the convenience of requesting a ride now, or schedule one for later directly from your browser.
+            </p>
+          </div>
         </div>
 
-        <div className="p-5 m-2 -mt-3 h-1/4 bg-white">
-          <h1 className="text-[2rem] font-semibold">Get ready for your first trip 😊</h1>
-          <p className="mt-4 text-sm -mb-4">
-            Discover the convenience of requesting a ride now, or schedule one for later directly from your browser.
-          </p>
-        </div>
+        {/* Ride Booking Section */}
+        <div className="bg-white py-12 px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col lg:flex-row items-start justify-center gap-10">
+              {/* Location Input Section */}
+              <div className="w-full lg:w-2/5 flex flex-col">
+                <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                  <h2 className="text-2xl font-bold mb-6">Plan your ride</h2>
 
-        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-10 p-4">
-          <div className="w-full lg:w-1/3 flex flex-col items-start md:items-start">
-            <Location
-              pickuplocationnameref={pickuplocationnameref}
-              dropofflocationnameref={dropofflocationnameref}
-              onPickupSelect={(loc) => setPickupLocation(loc)}
-              onDropoffSelect={(loc) => setDropoffLocation(loc)}
-            />
+                  <Location
+                    pickuplocationnameref={pickuplocationnameref}
+                    dropofflocationnameref={dropofflocationnameref}
+                    onPickupSelect={(loc) => setPickupLocation(loc)}
+                    onDropoffSelect={(loc) => setDropoffLocation(loc)}
+                  />
 
-            <div className="flex flex-row gap-3 mt-4 ml-4 ">
-              <button
-                onClick={showRoute}
-                className="border rounded-xl p-3 bg-black text-md text-white w-36 hover:bg-gray-800 transition"
-              >
-                Show Route
-              </button>
+                  <div className="flex flex-col sm:flex-row gap-3 mt-6">
+                    <button
+                      onClick={showRoute}
+                      className="flex-1 bg-black text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-all shadow-md"
+                    >
+                      Show Route
+                    </button>
 
-              {/* ✅ Pass pickup & dropoff coordinates and distance to BookRide page */}
-              <Link
-                to={`/BookRide?lat=${pickupLocation?.lat || ""}&lng=${pickupLocation?.lng || ""}&dropLat=${dropoffLocation?.lat || ""}&dropLng=${dropoffLocation?.lng || ""}&dis=${distance || ""}&drop=${dropofflocationnameref.current.value || ""}&pickup=${pickuplocationnameref.current.value}`}
-              >
-                <button
-                  className="border rounded-xl p-3 bg-gray-700 text-md text-white w-36 hover:bg-gray-600 transition"
-                >
-                  Book Ride
-                </button>
-              </Link>
-            </div>
+                    <Link
+                      to={`/BookRide?lat=${pickupLocation?.lat || ""}&lng=${pickupLocation?.lng || ""}&dropLat=${dropoffLocation?.lat || ""}&dropLng=${dropoffLocation?.lng || ""}&dis=${distance || ""}&drop=${dropofflocationnameref.current.value || ""}&pickup=${pickuplocationnameref.current.value}`}
+                      className="flex-1"
+                    >
+                      <button className="w-full bg-gray-700 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-600 transition-all shadow-md">
+                        Book Ride
+                      </button>
+                    </Link>
+                  </div>
 
-            {distance && (
-              <div className="mt-3 ml-6 text-lg font-semibold text-gray-800">
-                Distance: {distance} km
+                  {distance && (
+                    <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-600 font-medium">Estimated Distance:</span>
+                        <span className="text-2xl font-bold text-black">{distance} km</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Quick Tips */}
+                <div className="mt-6 bg-blue-50 rounded-xl p-6 border border-blue-100">
+                  <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                    <span className="text-2xl">💡</span>
+                    Quick Tips
+                  </h3>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-600 mt-1">•</span>
+                      <span>Enter your pickup and destination to see available rides</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-600 mt-1">•</span>
+                      <span>View route on map before booking</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-600 mt-1">•</span>
+                      <span>Compare prices and choose the best option for you</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
-            )}
-          </div>
 
-          <div className="w-full lg:w-2/3 h-80 lg:h-[400px] md:w-[50%] md:-mt-[16px]">
-            <Userhomemap
-              pickupLocation={pickupLocation}
-              dropoffLocation={dropoffLocation}
-              currentLocation={currentLocation}
-              route={route}
-            />
+              {/* Map Section */}
+              <div className="w-full lg:w-3/5">
+                <div className="rounded-2xl overflow-hidden shadow-lg border border-gray-200 h-[420px]">
+                  <Userhomemap
+                    pickupLocation={pickupLocation}
+                    dropoffLocation={dropoffLocation}
+                    currentLocation={currentLocation}
+                    route={route}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className='mt-3 mb-2'>
-          <Suggestions />
+        {/* Features Section */}
+        <div ref={sectionRefs.ride} className="bg-gray-50 py-16 px-8">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-3xl font-bold text-center mb-12">Your ride, your way</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <div className="w-14 h-14 bg-black rounded-full flex items-center justify-center mb-4">
+                  <span className="text-3xl">🚗</span>
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Multiple ride options</h3>
+                <p className="text-gray-600">
+                  Choose from economy to premium rides based on your budget and preferences.
+                </p>
+              </div>
+
+              <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <div className="w-14 h-14 bg-black rounded-full flex items-center justify-center mb-4">
+                  <span className="text-3xl">📍</span>
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Real-time tracking</h3>
+                <p className="text-gray-600">
+                  Track your driver's location in real-time and get accurate arrival estimates.
+                </p>
+              </div>
+
+              <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <div className="w-14 h-14 bg-black rounded-full flex items-center justify-center mb-4">
+                  <span className="text-3xl">⭐</span>
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Rated drivers</h3>
+                <p className="text-gray-600">
+                  All our drivers are verified, rated, and committed to your safety and comfort.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
+
+        {/* Ride Options */}
+        <div className="bg-white py-16 px-8">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-3xl font-bold mb-8">Explore ride options</h2>
+            <Suggestions />
+          </div>
+        </div>
+
+        {/* Safety Section */}
+        <div className="bg-gray-50 py-16 px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h2 className="text-4xl font-bold mb-6">Your safety is our priority</h2>
+                <p className="text-lg text-gray-600 mb-8">
+                  We're committed to making every ride safe and secure with advanced safety features and 24/7 support.
+                </p>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-white text-xl">✓</span>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg mb-1">Emergency assistance</h3>
+                      <p className="text-gray-600">Quick access to emergency services directly from the app</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-white text-xl">✓</span>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg mb-1">Share trip details</h3>
+                      <p className="text-gray-600">Let friends and family track your ride in real-time</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-white text-xl">✓</span>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg mb-1">Driver verification</h3>
+                      <p className="text-gray-600">All drivers undergo thorough background checks</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white p-8 rounded-2xl shadow-lg">
+                <img
+                  src="https://tb-static.uber.com/prod/udam-assets/850e6b6d-a29e-4960-bcab-46de99547d24.svg"
+                  alt="Safety illustration"
+                  className="w-full h-auto"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
+
+      <Footer ref={sectionRefs.about} />
     </>
   )
 }
