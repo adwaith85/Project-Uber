@@ -22,7 +22,7 @@ import TripsPage from "./PAGES/TripsPage";
 
 function CustomRoute() {
     const token = DriverStore((state) => state.token)
-    
+
     return <>
         <BrowserRouter>
             <Routes>
