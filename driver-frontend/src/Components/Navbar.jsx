@@ -16,7 +16,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query';
 import DriverStore from "../Store/DriverStore";
-import api from "../api/axiosClient";
+import api from "../API/AxiosClient";
 
 function Navbar() {
   const navigate = useNavigate();

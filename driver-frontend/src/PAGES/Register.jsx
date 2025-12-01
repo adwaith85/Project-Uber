@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Phone, Lock, Eye, EyeOff, ArrowRight, CheckCircle } from "lucide-react";
 import DriverStore from "../Store/DriverStore.js";
-import api from "../api/axiosClient.js";
+import api from "../API/AxiosClient.js";
 
 function Register() {
   const nameRef = useRef("");

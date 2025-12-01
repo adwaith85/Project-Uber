@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import DriverStore from "../Store/DriverStore";
-import api from "../api/axiosClient";
+import api from "../API/AxiosClient";
 
 
 function UpdateProfile() {
@@ -119,10 +119,10 @@ function UpdateProfile() {
               {/* Status Message */}
               {uploadStatus && (
                 <div className={`mt-4 p-3 rounded-lg text-center font-medium ${uploadStatus.includes('successfully')
-                    ? 'bg-green-500/20 text-green-400 border border-green-500/50'
-                    : uploadStatus.includes('Uploading')
-                      ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50'
-                      : 'bg-red-500/20 text-red-400 border border-red-500/50'
+                  ? 'bg-green-500/20 text-green-400 border border-green-500/50'
+                  : uploadStatus.includes('Uploading')
+                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50'
+                    : 'bg-red-500/20 text-red-400 border border-red-500/50'
                   }`}>
                   {uploadStatus}
                 </div>

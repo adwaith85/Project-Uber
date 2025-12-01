@@ -4,7 +4,7 @@ import { Pencil, Edit3, Car, Phone, MapPin, Zap, User, Star, ShieldCheck } from 
 import { useQuery } from '@tanstack/react-query';
 import DriverStore from "../Store/DriverStore";
 import { Link } from "react-router-dom";
-import api from "../api/axiosClient";
+import api from "../API/AxiosClient";
 
 function Profile() {
   const token = DriverStore((state) => state.token);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Car } from 'lucide-react'
 import DriverStore from "../Store/DriverStore"
-import api from '../api/axiosClient'
+import api from "../API/AxiosClient"
 import { useNavigate } from 'react-router-dom'
 
 function UpdateCartype() {
