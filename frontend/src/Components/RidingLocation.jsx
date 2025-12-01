@@ -40,8 +40,8 @@ const UserRideMap = () => {
 
   // Connect socket
   useEffect(() => {
-    console.log("🔌 Creating socket connection to http://localhost:8080");
-    socketRef.current = io("http://localhost:8080", {
+    console.log("🔌 Creating socket connection to https://project-uber.onrender.com");
+    socketRef.current = io("https://project-uber.onrender.com", {
       transports: ["websocket"],
       reconnection: true,
       reconnectionDelay: 1000,

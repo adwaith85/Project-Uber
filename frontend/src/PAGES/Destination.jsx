@@ -72,7 +72,7 @@ const Destination = () => {
           return;
         }
 
-        const res = await fetch(`http://localhost:8080/trip/${rideId}`);
+        const res = await fetch(`https://project-uber.onrender.com/trip/${rideId}`);
         if (!res.ok) {
           console.error("Failed to fetch trip", res.statusText);
           return;

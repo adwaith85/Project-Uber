@@ -9,7 +9,7 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     // Create socket once and keep it alive across navigation
     if (!socketRef.current) {
-      socketRef.current = io("http://localhost:8080", {
+      socketRef.current = io("https://project-uber.onrender.com", {
         transports: ["websocket"],
         reconnection: true,
         reconnectionDelay: 1000,

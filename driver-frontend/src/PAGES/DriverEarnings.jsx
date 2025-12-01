@@ -23,7 +23,7 @@ const DriverEarnings = () => {
       // If driverId not present in store but token exists, fetch driver details to obtain id
       if (!id && token) {
         try {
-          const det = await fetch("http://localhost:8080/Details", {
+          const det = await fetch("https://project-uber.onrender.com/Details", {
             headers: { Authorization: `Bearer ${token}` },
           });
           if (det.ok) {
@@ -41,7 +41,7 @@ const DriverEarnings = () => {
         return;
       }
 
-      const res = await fetch(`http://localhost:8080/driver-earnings/${id}`);
+      const res = await fetch(`https://project-uber.onrender.com/driver-earnings/${id}`);
       if (!res.ok) {
         const txt = await res.text();
         throw new Error(`Failed to fetch earnings: ${res.status} ${txt}`);

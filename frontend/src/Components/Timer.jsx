@@ -16,7 +16,7 @@ const TimerCountDown = ({ orderId, setCounter }) => {
 
   // ---- Initialize socket ----
   useEffect(() => {
-    socketRef.current = io("http://localhost:8080", {
+    socketRef.current = io("https://project-uber.onrender.com", {
       transports: ["websocket"],
     });
 

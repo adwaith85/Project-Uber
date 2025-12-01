@@ -34,7 +34,7 @@ const DriverDestination = () => {
       const params = new URLSearchParams(window.location.search);
       const rideId = params.get("rideId");
 
-      const res = await fetch(`http://localhost:8080/ridecomplete/${rideId}`);
+      const res = await fetch(`https://project-uber.onrender.com/ridecomplete/${rideId}`);
       if (res.ok) {
         // alert("Ride marked as completed!.....ready for next ride");
         navigate("/home")
@@ -81,7 +81,7 @@ const DriverDestination = () => {
           console.warn("No rideId in query params");
           return;
         }
-        const res = await fetch(`http://localhost:8080/trip/${rideId}`);
+        const res = await fetch(`https://project-uber.onrender.com/trip/${rideId}`);
         if (!res.ok) {
           console.error("Failed to fetch trip", res.statusText);
           return;

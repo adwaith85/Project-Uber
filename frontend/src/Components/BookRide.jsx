@@ -48,7 +48,7 @@ function BookRide() {
   // Fetch nearby drivers
   useEffect(() => {
     if (lat && lng) {
-      fetch(`http://localhost:8080/nearby?lat=${lat}&lng=${lng}&dis=${distance}`)
+      fetch(`https://project-uber.onrender.com/nearby?lat=${lat}&lng=${lng}&dis=${distance}`)
         .then(res => res.json())
         .then(data => setDrivers(data.drivers || []))
         .catch(err => console.error("Error fetching drivers:", err))
@@ -168,7 +168,7 @@ function BookRide() {
                         >
                           <div className="flex items-center gap-4">
                             <img
-                              src={d.profileimg ? `http://localhost:8080${d.profileimg}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+                              src={d.profileimg ? `https://project-uber.onrender.com${d.profileimg}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
                               alt="Driver"
                               className="w-16 h-16 rounded-full border-2 border-gray-200 object-cover"
                             />

@@ -17,7 +17,7 @@ import AllRideDetails from "../Components/AllRideDetails";
 import RideAnalyticsChart from "../Components/RideAnalyticsChart";
 import { io } from "socket.io-client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import api from "../api/axiosClient";
+import api from "../API/AxiosClient";
 
 function Home() {
   const queryClient = useQueryClient();
@@ -41,7 +41,7 @@ function Home() {
   });
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:8080", {
+    socketRef.current = io("https://project-uber.onrender.com", {
       transports: ["websocket"],
     });
 
