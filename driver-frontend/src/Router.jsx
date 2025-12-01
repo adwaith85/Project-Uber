@@ -15,7 +15,7 @@ import RidingLocation from "./Components/RidingLocation";
 import DriverDestination from "./PAGES/DriverDestination";
 import AllRideDetails from "./Components/AllRideDetails";
 import RideAnalyticsChart from "./Components/RideAnalyticsChart";
-import UpdateDistanceRate from "./Components/updatedistancerate";
+import UpdateDistanceRate from "./Components/UpdateDistanceRate";
 import DriverEarnings from "./PAGES/DriverEarnings";
 import Supportpage from "./PAGES/Supportpage";
 import TripsPage from "./PAGES/TripsPage";
