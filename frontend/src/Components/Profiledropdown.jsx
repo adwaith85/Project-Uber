@@ -81,7 +81,10 @@ function Profiledropdown({ isMobile = false, onClose }) {
             <Wallet className="w-6 h-6 mb-1" />
             <span className="text-xs font-medium">Wallet</span>
           </button>
-          <button className="flex flex-col items-center p-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition">
+          <button
+            onClick={() => handleNavigate("/ridehistory")}
+            className="flex flex-col items-center p-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition"
+          >
             <BookOpen className="w-6 h-6 mb-1" />
             <span className="text-xs font-medium">Activity</span>
           </button>
@@ -166,7 +169,10 @@ function Profiledropdown({ isMobile = false, onClose }) {
                 <Wallet className="w-6 h-6 mb-1 text-gray-700" />
                 <span className="text-xs font-medium">Wallet</span>
               </button>
-              <button className="flex flex-col items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition">
+              <button
+                onClick={() => handleNavigate("/ridehistory")}
+                className="flex flex-col items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition"
+              >
                 <BookOpen className="w-6 h-6 mb-1 text-gray-700" />
                 <span className="text-xs font-medium">Activity</span>
               </button>

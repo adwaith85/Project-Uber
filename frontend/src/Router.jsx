@@ -15,6 +15,7 @@ import Logouterror from "./Components/Logouterror";
 import Rider from "./Components/Rider";
 import RidingLocation from "./Components/RidingLocation";
 import Destination from "./PAGES/Destination";
+import RideHistory from "./PAGES/RideHistory";
 
 function CustomRoute() {
     const token = UserStore((state) => state.token)
@@ -35,6 +36,7 @@ function CustomRoute() {
                 <Route path="/rider" element={token ? (<Rider />) : <Logouterror />} />
                 <Route path="/ridinglocation" element={token ? (<RidingLocation />) : <Logouterror />} />
                 <Route path="/destination" element={token ? (<Destination />) : <Logouterror />} />
+                <Route path="/ridehistory" element={token ? (<RideHistory />) : <Logouterror />} />
             </Routes>
         </BrowserRouter>
     </>

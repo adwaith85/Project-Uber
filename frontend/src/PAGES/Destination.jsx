@@ -8,6 +8,7 @@ import Footer from "../Components/Footer";
 import { useNavigate } from "react-router-dom";
 import { MapPin, Clock, Navigation, Star, X, CheckCircle, Send } from "lucide-react";
 import useWindowSize from 'react-use/lib/useWindowSize';
+import api from "../Api/Axiosclient";
 
 const userIcon = new L.Icon({
   iconUrl: "/carimg.png",
@@ -72,12 +73,8 @@ const Destination = () => {
           return;
         }
 
-        const res = await fetch(`https://project-uber.onrender.com/trip/${rideId}`);
-        if (!res.ok) {
-          console.error("Failed to fetch trip", res.statusText);
-          return;
-        }
-        const trip = await res.json();
+        const res = await api.get(`/trip/${rideId}`);
+        const trip = res.data;
 
         if (trip.dropoffLocation && trip.dropoffLocation.coordinates && trip.dropoffLocation.coordinates.length === 2) {
           const [lng, lat] = trip.dropoffLocation.coordinates;
@@ -327,8 +324,8 @@ const Destination = () => {
                       >
                         <Star
                           className={`w-12 h-12 ${star <= (hoveredStar || rating)
-                              ? 'fill-yellow-400 text-yellow-400'
-                              : 'text-gray-300'
+                            ? 'fill-yellow-400 text-yellow-400'
+                            : 'text-gray-300'
                             } transition-colors`}
                         />
                       </button>
@@ -359,8 +356,8 @@ const Destination = () => {
                   onClick={handleSubmitFeedback}
                   disabled={rating === 0}
                   className={`w-full py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 ${rating > 0
-                      ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl'
-                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                     }`}
                 >
                   <Send className="w-5 h-5" />

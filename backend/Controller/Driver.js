@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import DriverModel from "../Model/Driver.js";
 import { io } from '../index.js'
 import RideModel from "../Model/Ride.js";
+import UserModel from "../Model/User.js";
 
 
 export const DriverLogin = async (req, res) => {
@@ -268,6 +269,15 @@ export const acceptride = async (req, res) => {
 
 export const bookride = async (req, res) => {
   console.log(req.body)
+
+  if (!req.user || !req.user.email) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const user = await UserModel.findOne({ email: req.user.email });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
   const driver = await DriverModel.findOne({ onlinestatus: "loggin" });
 
   if (!driver) {
@@ -294,6 +304,7 @@ export const bookride = async (req, res) => {
       coordinates: [dropoffLng, dropoffLat] // [lng, lat] format for GeoJSON
     },
     driverId: req.body.driverId,
+    userId: user._id,
     date: req.body.date,
     time: req.body.time,
     distance: distance,
@@ -312,7 +323,7 @@ export const bookride = async (req, res) => {
 
 
 // PUT /updatedistancerate
-export const updatedistancerate= async (req, res) => {
+export const updatedistancerate = async (req, res) => {
   try {
     const { distancerate } = req.body;
 
@@ -347,8 +358,8 @@ function getDistanceInKm(lat1, lon1, lat2, lon2) {
   const a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) ** 2;
+    Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLon / 2) ** 2;
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
