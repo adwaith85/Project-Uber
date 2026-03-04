@@ -51,16 +51,16 @@ io.on("connection", (socket) => {
   socket.on("ride:join", ({ rideId, role, email }) => {
     if (!rideId || !role) return;
 
-  const roomName = `ride_${rideId}`;
-  socket.join(roomName);
-  console.log(`🔹 ${role} (${email || 'unknown'}) joined room: ${roomName} socket:${socket.id}`);
+    const roomName = `ride_${rideId}`;
+    socket.join(roomName);
+    console.log(`🔹 ${role} (${email || 'unknown'}) joined room: ${roomName} socket:${socket.id}`);
 
-  // store socket id for this role
-  const key = String(rideId);
-  const entry = rideSockets.get(key) || {};
-  if (role === "driver") entry.driver = socket.id;
-  if (role === "user") entry.user = socket.id;
-  rideSockets.set(key, entry);
+    // store socket id for this role
+    const key = String(rideId);
+    const entry = rideSockets.get(key) || {};
+    if (role === "driver") entry.driver = socket.id;
+    if (role === "user") entry.user = socket.id;
+    rideSockets.set(key, entry);
 
     // Confirm to client
     socket.emit("ride:joined", { rideId, room: roomName });
@@ -93,7 +93,7 @@ io.on("connection", (socket) => {
 
       const roomName = `ride_${rideId}`;
       io.to(roomName).emit("driver:location", coordinates);
-      
+
       console.log(`📍 Driver (${email}) in ride ${rideId}:`, coordinates);
       console.log(`  📢 Broadcasting 'driver:location' to room: ${roomName}`);
       // store latest driver coords for this ride
@@ -205,8 +205,8 @@ io.on("connection", (socket) => {
       };
 
       const distanceKm = haversineKm(driverCoords, userCoords);
-      // allow tiny tolerance (1 meter) to account for GPS noise
-      if (!isFinite(distanceKm) || distanceKm > 0.001) {
+      // allow 50 meters tolerance (0.05km) to account for GPS noise
+      if (!isFinite(distanceKm) || distanceKm > 0.05) {
         io.to(entry.driver || socket.id).emit("otp:confirmed", { rideId, success: false, message: "Driver not at pickup location" });
         console.log(`❌ OTP confirm rejected - driver not at pickup for ride ${rideId}. distanceKm=${distanceKm}`);
         return;

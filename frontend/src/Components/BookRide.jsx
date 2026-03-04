@@ -48,9 +48,8 @@ function BookRide() {
   // Fetch nearby drivers
   useEffect(() => {
     if (lat && lng) {
-      fetch(`https://project-uber.onrender.com/nearby?lat=${lat}&lng=${lng}&dis=${distance}`)
-        .then(res => res.json())
-        .then(data => setDrivers(data.drivers || []))
+      api.get(`/nearby?lat=${lat}&lng=${lng}&dis=${distance}`)
+        .then(res => setDrivers(res.data.drivers || []))
         .catch(err => console.error("Error fetching drivers:", err))
     }
   }, [lat, lng, distance])
@@ -338,8 +337,8 @@ function BookRide() {
                     type="submit"
                     disabled={!selectedDriver || !time || !date}
                     className={`w-full py-4 rounded-lg font-bold text-lg transition-all shadow-md ${selectedDriver && time && date
-                        ? 'bg-black text-white hover:bg-gray-800 hover:shadow-lg'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      ? 'bg-black text-white hover:bg-gray-800 hover:shadow-lg'
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                       }`}
                   >
                     Book Ride Now

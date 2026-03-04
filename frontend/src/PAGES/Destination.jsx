@@ -266,7 +266,7 @@ const Destination = () => {
       </div>
 
       {/* Feedback Modal */}
-      {distance && Number(distance) <= 0.5 && showFeedback && (
+      {distance && Number(distance) <= 0.05 && showFeedback && (
         <>
           {/* Confetti - Professional look */}
           <Confetti

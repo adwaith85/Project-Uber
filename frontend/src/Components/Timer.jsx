@@ -133,10 +133,10 @@ const TimerCountDown = ({ orderId, setCounter }) => {
                   <div className="text-center">
                     <div
                       className={`text-5xl md:text-6xl font-bold font-mono ${orderAccepted
-                          ? "text-green-600"
-                          : timeRemaining <= 5
-                            ? "text-amber-500 animate-pulse"
-                            : "text-blue-600"
+                        ? "text-green-600"
+                        : timeRemaining <= 5
+                          ? "text-amber-500 animate-pulse"
+                          : "text-blue-600"
                         }`}
                     >
                       {formattedTime}

@@ -213,7 +213,7 @@ const DriverDestination = () => {
       </main>
 
       {/* Completion modal shown when close to destination */}
-      {distance && Number(distance) <= 0.5 && (
+      {distance && Number(distance) <= 0.05 && (
         <div>
           <div className="fixed inset-0 bg-black/40 z-[100]" />
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white text-slate-900 w-[90%] md:w-[420px] p-6 rounded-2xl shadow-2xl z-[300]">

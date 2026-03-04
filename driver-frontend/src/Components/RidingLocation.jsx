@@ -154,7 +154,7 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
             window.location.href = "/driverdestination";
           }
         } else {
-          alert("❌ OTP verified incorrectly. Please try again.");
+          alert(`❌ OTP Error: ${data.message || "Please try again."}`);
         }
       }
     });
@@ -287,8 +287,8 @@ const RidingLocation = ({ socketRef: _socketRef, rideId: propRideId }) => {
   useEffect(() => {
     if (!driverLocation || !userLocation || arrivedSent) return;
     const dKm = haversineKm(driverLocation, userLocation);
-    // arrival threshold: treat as 0 km with a tiny tolerance (1 meter) to allow for GPS noise
-    if (dKm <= 0.001) {
+    // arrival threshold: 0.05 km (50 meters)
+    if (dKm <= 0.05) {
       setArrivalReady(true);
     }
   }, [driverLocation, userLocation, arrivedSent, rideId, driverEmail]);

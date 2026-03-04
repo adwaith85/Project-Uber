@@ -3,6 +3,8 @@ import { MapContainer, TileLayer, Marker, Polyline, Popup, useMap } from "react-
 import L from "leaflet";
 import io from "socket.io-client";
 import "leaflet/dist/leaflet.css";
+import UserStore from "../Store/UserStore";
+
 
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
@@ -85,7 +87,9 @@ function FollowDriver({ driverLocation }) {
   return null;
 }
 
+
 const Userhomemap = ({
+
   currentLocation,
   pickupLocation,
   dropoffLocation,
@@ -95,33 +99,42 @@ const Userhomemap = ({
   selectedDriverLocation,
 }) => {
   const [driverLocation, setDriverLocation] = useState(null);
+  const token = UserStore((state) => state.token);
   const socketRef = useRef(null);
 
   // Connect to Socket.IO for driver location updates
   useEffect(() => {
-    socketRef.current = io("https://project-uber.onrender.com", {
+    if (!token) return;
+
+    const socket = io("https://project-uber.onrender.com", {
+      auth: { token },
       transports: ["websocket"],
       reconnection: true,
     });
 
-    socketRef.current.on("connect", () => {
-      console.log("✅ Connected to Socket.IO:", socketRef.current.id);
+    socketRef.current = socket;
+
+    socket.on("connect", () => {
+      console.log("✅ Connected to Socket.IO:", socket.id);
     });
 
-    socketRef.current.on("disconnect", () => {
-      console.log("❌ Disconnected from Socket.IO");
+    socket.on("disconnect", (reason) => {
+      console.log("❌ Disconnected from Socket.IO:", reason);
     });
 
-    socketRef.current.on("driver:location", (location) => {
+    socket.on("driver:location", (location) => {
       if (location?.lat && location?.lng) {
         setDriverLocation(location);
       }
     });
 
     return () => {
-      socketRef.current.disconnect();
+      if (socket) {
+        socket.off();
+        socket.disconnect();
+      }
     };
-  }, []);
+  }, [token]);
 
   const center =
     driverLocation
