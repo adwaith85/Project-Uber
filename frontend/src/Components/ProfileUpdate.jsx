@@ -59,7 +59,7 @@ function ProfileUpdate() {
         },
       });
 
-      console.log(response.data);
+      // console.log(response.data);
       setUploadStatus("Profile updated successfully!");
 
       setTimeout(() => {

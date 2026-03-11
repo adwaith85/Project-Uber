@@ -19,7 +19,7 @@ function Login() {
         password: PasswordRef.current.value,
       })
       addToken(response.data.token)
-      console.log("logged in:", response.data.token);
+      // console.log("logged in:", response.data.token);
       if (response.data.token) {
         nav("/UserHome")
       } else {

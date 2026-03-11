@@ -85,7 +85,7 @@ function BookRide() {
       })
 
       const orderId = response.data.rideId
-      console.log("Ride booked successfully:", orderId)
+      // console.log("Ride booked successfully:", orderId)
 
       // ✅ Now update state *after* the async call returns
       setShowCounter({ showCounter: true, orderId })

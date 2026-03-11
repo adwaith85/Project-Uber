@@ -3,7 +3,7 @@ import UserStore from "../Store/UserStore";
 
 const api = axios.create({
     // baseURL: "http://localhost:8080",
-    baseURL: "https://project-uber.onrender.com",
+    baseURL: "https://uber-api.adwaithh.online",
 })
 
 // Add an interceptor to include the token in every request

@@ -45,7 +45,7 @@ function UpdateNumber() {
       );
 
       setUpdateStatus("Phone number updated successfully!");
-      console.log(response.data);
+      // console.log(response.data);
 
       setTimeout(() => {
         navigate("/AccountManager");

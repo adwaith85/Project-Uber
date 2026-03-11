@@ -159,12 +159,12 @@ function Home() {
         </main>
       </div>
 
-      <footer className="bg-white border-t border-gray-200 py-12">
+      <footer className="bg-black border-t border-gray-200 py-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4 sm:px-6 lg:px-8">
 
           {/* About */}
           <div>
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Driver Support</h3>
+            <h3 className="text-lg font-bold text-gray-500 mb-4">Driver Support</h3>
             <p className="text-gray-500 text-sm leading-relaxed">
               We're here to help you succeed. Access resources, troubleshooting guides, and 24/7 support.
             </p>
@@ -172,7 +172,7 @@ function Home() {
 
           {/* Contact */}
           <div>
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Contact Us</h3>
+            <h3 className="text-lg font-bold text-gray-500 mb-4">Contact Us</h3>
             <div className="space-y-3 text-gray-600">
               <p className="flex items-center gap-3 text-sm">
                 <EnvelopeIcon className="h-5 w-5 text-gray-400" /> support@example.com
@@ -185,7 +185,7 @@ function Home() {
 
           {/* Social */}
           <div>
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Follow Us</h3>
+            <h3 className="text-lg font-bold text-gray-500 mb-4">Follow Us</h3>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-blue-600 transition">Facebook</a>
               <a href="#" className="text-gray-400 hover:text-blue-400 transition">Twitter</a>

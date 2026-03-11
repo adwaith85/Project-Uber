@@ -148,8 +148,8 @@ const Destination = () => {
   }, [currentLocation, dropoffLocation]);
 
   const handleSubmitFeedback = () => {
-    console.log("Rating:", rating);
-    console.log("Feedback:", feedback);
+    // console.log("Rating:", rating);
+    // console.log("Feedback:", feedback);
     // Here you would typically send this to your backend
     setShowFeedback(false);
     navigate('/UserHome');

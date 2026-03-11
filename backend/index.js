@@ -17,7 +17,7 @@ const server = http.createServer(app); // ✅ create raw HTTP server
 
 export const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173", "http://localhost:5174"], // rider (5173) and driver (5174)
+    origin: ["*"], // rider (5173) and driver (5174)
     methods: ["GET", "POST"],
   },
 });
@@ -28,7 +28,7 @@ const rideOtps = new Map();
 const rideSockets = new Map();
 
 const MONGO_URL = process.env.MONGO_URL;
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 4000;
 
 mongoose.connect(MONGO_URL);
 

@@ -40,7 +40,7 @@ function Login() {
             }
           );
 
-          console.log(response.data.token)
+          // console.log(response.data.token)
           if (response.data.token) {
             addToken(response.data.token); // store token
 

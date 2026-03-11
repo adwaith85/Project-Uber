@@ -21,7 +21,7 @@ function Register() {
         password: passwordRef.current.value,
         number: numberRef.current.value,
       });
-      console.log("Registered:", response.data);
+      // console.log("Registered:", response.data);
       alert("Registration successful!");
       navigate("/Login");
     } catch (error) {

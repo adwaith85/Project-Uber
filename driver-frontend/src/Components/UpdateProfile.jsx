@@ -44,7 +44,7 @@ function UpdateProfile() {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response.data);
+      // console.log(response.data);
       setUploadStatus("Profile updated successfully!");
     } catch (error) {
       console.error(error);
