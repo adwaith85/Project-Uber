@@ -41,7 +41,7 @@ function Home() {
   });
 
   useEffect(() => {
-    socketRef.current = io("https://project-uber.onrender.com", {
+    socketRef.current = io("https://uber-api.adwaithh.online", {
       transports: ["websocket"],
     });
 
