@@ -4,6 +4,8 @@ import AccountHome from "../Components/AccountHome";
 import PersonalInfo from "../Components/PersonalInfo";
 import Footer from "../Components/Footer";
 
+import RideHistory from "../Components/RideHistory";
+
 function AccountManager() {
     const [isActive, setIsActive] = useState("home");
 
@@ -37,6 +39,15 @@ function AccountManager() {
                                 Personal info
                             </button>
                             <button
+                                onClick={() => setIsActive("rideHistory")}
+                                className={`flex-1 min-w-[120px] py-4 px-6 font-medium transition-all ${isActive === "rideHistory"
+                                        ? "text-black border-b-4 border-black"
+                                        : "text-gray-600 hover:text-black hover:bg-gray-50"
+                                    }`}
+                            >
+                                Ride history
+                            </button>
+                            <button
                                 onClick={() => setIsActive("security")}
                                 className={`flex-1 min-w-[120px] py-4 px-6 font-medium transition-all ${isActive === "security"
                                         ? "text-black border-b-4 border-black"
@@ -60,8 +71,9 @@ function AccountManager() {
 
                 {/* Content Section */}
                 <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-                    {isActive === "home" && <AccountHome />}
+                    {isActive === "home" && <AccountHome onTabChange={setIsActive} />}
                     {isActive === "personalInfo" && <PersonalInfo />}
+                    {isActive === "rideHistory" && <RideHistory />}
                     {isActive === "security" && (
                         <div className="bg-white rounded-xl shadow-md p-8">
                             <h2 className="text-2xl font-bold mb-4">Security</h2>
