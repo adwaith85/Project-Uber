@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
+import api from "../API/AxiosClient";
 
 const SocketContext = createContext(null);
 
@@ -9,7 +10,7 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     // Create socket once and keep it alive across navigation
     if (!socketRef.current) {
-      socketRef.current = io("https://uber-api.adwaithh.online", {
+      socketRef.current = io(api.defaults.baseURL, {
         transports: ["websocket"],
         reconnection: true,
         reconnectionDelay: 1000,

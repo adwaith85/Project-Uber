@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Polyline, Popup, useMap } from "react-
 import L from "leaflet";
 import io from "socket.io-client";
 import "leaflet/dist/leaflet.css";
+import api from "../Api/Axiosclient";
 
 // default leaflet icons
 import iconUrl from "leaflet/dist/images/marker-icon.png";
@@ -110,7 +111,7 @@ const CurrentLocationMap = ({
 
   // socket.io live driver updates
   useEffect(() => {
-    socketRef.current = io("https://project-uber.onrender.com", {
+    socketRef.current = io(api.defaults.baseURL, {
       transports: ["websocket"],
       reconnection: true,
     });

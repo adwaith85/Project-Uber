@@ -4,6 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 // removed leaflet-routing-machine to avoid its UI and markers
 import { useNavigate } from "react-router-dom";
+import api from "../API/AxiosClient";
 
 const userIcon = new L.Icon({
   iconUrl: "/car.png",
@@ -34,11 +35,8 @@ const DriverDestination = () => {
       const params = new URLSearchParams(window.location.search);
       const rideId = params.get("rideId");
 
-      const res = await fetch(`https://uber-api.adwaithh.online/ridecomplete/${rideId}`);
-      if (res.ok) {
-        // alert("Ride marked as completed!.....ready for next ride");
-        navigate("/home")
-      }
+      await api.get(`/ridecomplete/${rideId}`);
+      navigate("/home");
     } catch (err) {
       console.log("Error marking ride complete:", err);
     }
@@ -81,12 +79,8 @@ const DriverDestination = () => {
           console.warn("No rideId in query params");
           return;
         }
-        const res = await fetch(`https://uber-api.adwaithh.online/trip/${rideId}`);
-        if (!res.ok) {
-          console.error("Failed to fetch trip", res.statusText);
-          return;
-        }
-        const trip = await res.json();
+        const res = await api.get(`/trip/${rideId}`);
+        const trip = res.data;
         // Use dropoff coordinates stored as GeoJSON Point in database
         if (trip.dropoffLocation && trip.dropoffLocation.coordinates && trip.dropoffLocation.coordinates.length === 2) {
           const [lng, lat] = trip.dropoffLocation.coordinates;

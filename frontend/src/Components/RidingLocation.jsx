@@ -8,6 +8,7 @@ import "leaflet/dist/leaflet.css";
 import NavbarX from "./NavbarX";
 import { Navigation, Clock, MapPin, Key, CheckCircle } from "lucide-react";
 import Footer from "./Footer";
+import api from "../Api/Axiosclient";
 
 const driverIcon = new L.Icon({
   iconUrl: "/carimg.png",
@@ -40,8 +41,8 @@ const UserRideMap = () => {
 
   // Connect socket
   useEffect(() => {
-    console.log("🔌 Creating socket connection to https://project-uber.onrender.com");
-    socketRef.current = io("https://project-uber.onrender.com", {
+    console.log(`🔌 Creating socket connection to ${api.defaults.baseURL}`);
+    socketRef.current = io(api.defaults.baseURL, {
       transports: ["websocket"],
       reconnection: true,
       reconnectionDelay: 1000,

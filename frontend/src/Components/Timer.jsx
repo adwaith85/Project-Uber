@@ -3,6 +3,7 @@ import { io } from "socket.io-client";
 import Confetti from "react-confetti";
 import { useNavigate } from "react-router-dom";
 import { Clock, CheckCircle, XCircle, RefreshCw } from "lucide-react";
+import api from "../Api/Axiosclient";
 
 const TimerCountDown = ({ orderId, setCounter }) => {
   console.log("🚀 TimerCountDown orderId:", orderId);
@@ -16,7 +17,7 @@ const TimerCountDown = ({ orderId, setCounter }) => {
 
   // ---- Initialize socket ----
   useEffect(() => {
-    socketRef.current = io("https://project-uber.onrender.com", {
+    socketRef.current = io(api.defaults.baseURL, {
       transports: ["websocket"],
     });
 

@@ -5,6 +5,8 @@ import io from "socket.io-client";
 import "leaflet/dist/leaflet.css";
 import UserStore from "../Store/UserStore";
 
+import api from "../Api/Axiosclient";
+
 
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
@@ -106,7 +108,7 @@ const Userhomemap = ({
   useEffect(() => {
     if (!token) return;
 
-    const socket = io("https://project-uber.onrender.com", {
+    const socket = io(api.defaults.baseURL, {
       auth: { token },
       transports: ["websocket"],
       reconnection: true,

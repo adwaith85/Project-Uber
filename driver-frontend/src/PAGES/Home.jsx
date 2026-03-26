@@ -41,7 +41,7 @@ function Home() {
   });
 
   useEffect(() => {
-    socketRef.current = io("https://uber-api.adwaithh.online", {
+    socketRef.current = io(api.defaults.baseURL, {
       transports: ["websocket"],
     });
 

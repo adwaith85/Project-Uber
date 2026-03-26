@@ -4,6 +4,7 @@ import DriverStore from "../Store/DriverStore";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import { BanknotesIcon, CalendarDaysIcon, ClockIcon, ArrowPathIcon, PauseIcon, PlayIcon } from "@heroicons/react/24/outline";
+import api from "../API/AxiosClient";
 
 const DriverEarnings = () => {
   const [earnings, setEarnings] = useState(null);
@@ -23,13 +24,10 @@ const DriverEarnings = () => {
       // If driverId not present in store but token exists, fetch driver details to obtain id
       if (!id && token) {
         try {
-          const det = await fetch("https://uber-api.adwaithh.online/Details", {
+          const det = await api.get("/Details", {
             headers: { Authorization: `Bearer ${token}` },
           });
-          if (det.ok) {
-            const jd = await det.json();
-            id = jd._id || jd.id || null;
-          }
+          id = det.data._id || det.data.id || null;
         } catch (e) {
           console.warn("Could not fetch /Details to resolve driver id", e);
         }
@@ -41,13 +39,8 @@ const DriverEarnings = () => {
         return;
       }
 
-      const res = await fetch(`https://uber-api.adwaithh.online/driver-earnings/${id}`);
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(`Failed to fetch earnings: ${res.status} ${txt}`);
-      }
-      const data = await res.json();
-      setEarnings(data);
+      const res = await api.get(`/driver-earnings/${id}`);
+      setEarnings(res.data);
       setError(null);
       setLastRefresh(new Date());
     } catch (err) {

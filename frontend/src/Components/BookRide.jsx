@@ -167,7 +167,7 @@ function BookRide() {
                         >
                           <div className="flex items-center gap-4">
                             <img
-                              src={d.profileimg ? `https://project-uber.onrender.com${d.profileimg}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+                              src={d.profileimg ? `${api.defaults.baseURL}${d.profileimg}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
                               alt="Driver"
                               className="w-16 h-16 rounded-full border-2 border-gray-200 object-cover"
                             />
